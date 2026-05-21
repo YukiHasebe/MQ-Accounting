@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQ Analyzer - Firestore Cloud</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --pq-bg: #f0f7ff; --vq-bg: #fef2f2; --mq-bg: #eff6ff; --f-bg: #fffbeb; --g-bg: #f0fdf4; --border-color: #1e293b; }
+        .mq-visual-container { display: grid; grid-template-columns: 140px 100px 220px; grid-template-rows: 50px 90px 50px; gap: 10px; width: fit-content; margin: auto; }
+        .mq-box { border: 2px solid var(--border-color); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); background: white; }
+        .box-pq { grid-row: 1 / 4; grid-column: 1; background-color: var(--pq-bg); }
+        .box-vq { grid-row: 1; grid-column: 2 / 4; background-color: var(--vq-bg); }
+        .box-mq { grid-row: 2 / 4; grid-column: 2; background-color: var(--mq-bg); }
+        .box-f  { grid-row: 2; grid-column: 3; background-color: var(--f-bg); }
+        .box-g  { grid-row: 3; grid-column: 3; background-color: var(--g-bg); }
+        .label { font-size: 0.65rem; font-weight: 700; color: #64748b; margin-bottom: 2px; }
+        .value { font-size: 0.95rem; font-weight: 800; color: #1e293b; }
+        .active-tab { background-color: #1e40af !important; color: white !important; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<div class="flex flex-col lg:flex-row h-screen overflow-hidden">
+    <!-- サイドバー -->
+    <aside class="w-full lg:w-80 bg-white border-r p-5 overflow-y-auto shadow-xl z-10">
+        <div class="flex items-center gap-2 mb-8">
+            <div class="bg-blue-600 p-2 rounded-lg text-white font-black text-xl">MQ</div>
+            <h1 class="text-lg font-black tracking-tighter text-slate-800">MANAGEMENT</h1>
+        </div>
+
+        <div class="space-y-6 mb-8">
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">Target Month</label>
+                <select id="selectMonth" class="w-full border-2 border-slate-100 rounded-lg p-2 text-sm font-bold bg-slate-50 outline-none">
+                    <option value="2026-05">2026年 5月度</option>
+                    <option value="2026-04">2026年 4月度</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">Department</label>
+                <div class="grid grid-cols-1 gap-1" id="deptTabs">
+                    <button onclick="changeDept('koubai')" id="tab-koubai" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 active-tab transition-all">購買課管理</button>
+                    <button onclick="changeDept('shikaku')" id="tab-shikaku" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all">資格教育</button>
+                    <button onclick="changeDept('total')" id="tab-total" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all italic">部門合計</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <label class="text-[10px] font-bold text-slate-500 uppercase block">PQ 累計売上</label>
+            <input type="number" id="inPQ" class="w-full border-b-2 border-slate-200 p-1 text-base font-black outline-none focus:border-blue-500">
+            <label class="text-[10px] font-bold text-slate-500 uppercase block">VQ 累計変動費</label>
+            <input type="number" id="inVQ" class="w-full border-b-2 border-slate-200 p-1 text-base font-black outline-none focus:border-blue-500">
+            <label class="text-[10px] font-bold text-slate-500 uppercase block">F 累計固定費</label>
+            <input type="number" id="inF" class="w-full border-b-2 border-slate-200 p-1 text-base font-black outline-none focus:border-blue-500">
+            
+            <button onclick="saveCurrentData()" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold text-sm shadow-lg hover:scale-[1.02] transition-all mt-4">クラウドに保存</button>
+            <p id="statusMsg" class="text-center text-[10px] font-bold text-blue-600 mt-2"></p>
+        </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-6 lg:p-10">
+        <div class="max-w-5xl mx-auto space-y-8">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-4xl font-black text-slate-800" id="displayDeptName">購買課管理</h2>
+                    <p id="displayMonth" class="text-slate-500 font-medium italic">2026-05 Analysis</p>
+                </div>
+                <div class="bg-blue-600 p-6 rounded-3xl shadow-xl text-white min-w-[200px] text-right">
+                    <p class="text-[10px] font-bold opacity-70 uppercase">Cumulative Profit (G)</p>
+                    <p class="text-3xl font-black" id="totalG">¥0</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-100 flex flex-col items-center relative">
+                <div class="absolute top-0 right-0 p-8 text-right">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">MQ Ratio</p>
+                    <p class="text-2xl font-black text-blue-600"><span id="outMQRate">0</span>%</p>
+                </div>
+                <div class="mq-visual-container">
+                    <div class="mq-box box-pq"><span class="label">PQ 売上</span><span class="value" id="dPQ">0</span></div>
+                    <div class="mq-box box-vq"><span class="label text-red-500">VQ 変動費</span><span class="value text-red-500" id="dVQ">0</span></div>
+                    <div class="mq-box box-mq"><span class="label text-blue-600">MQ 付加価値</span><span class="value text-blue-600" id="dMQ">0</span></div>
+                    <div class="mq-box box-f"><span class="label">F 固定費</span><span class="value" id="dF">0</span></div>
+                    <div class="mq-box box-g"><span class="label text-green-600">G 利益</span><span class="value text-green-600" id="dG">0</span></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8">
+                <div class="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-700 mb-6 flex items-center gap-2">売上構成累計推移</h3>
+                    <div class="h-[300px]"><canvas id="stackedChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Firebase SDK 連携部分 (Firestore対応版) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAEAWd3ZfdEJlnTEM7nyZl2zSMFSYadMWA",
+        authDomain: "mq-accounting-16544.firebaseapp.com",
+        projectId: "mq-accounting-16544",
+        storageBucket: "mq-accounting-16544.firebasestorage.app",
+        messagingSenderId: "520087428350",
+        appId: "1:520087428350:web:750249fa763a9655fed9af"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.currentMonth = "2026-05";
+    window.currentDept = "koubai";
+    let localData = { "2026-05": { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} } };
+
+    const ctx = document.getElementById('stackedChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: ['購買課管理', '資格教育', '部門合計'], datasets: [
+            { label: 'G (利益)', data: [0,0,0], backgroundColor: '#f0fdf4', borderColor: '#22c55e', borderWidth: 1 },
+            { label: 'F (固定費)', data: [0,0,0], backgroundColor: '#fffbeb', borderColor: '#f59e0b', borderWidth: 1 },
+            { label: 'VQ (変動費)', data: [0,0,0], backgroundColor: '#fef2f2', borderColor: '#ef4444', borderWidth: 1 }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
+    });
+
+    // Firestoreのリアルタイム監視
+    onSnapshot(doc(db, "mq_app", "all_data"), (docSnap) => {
+        if (docSnap.exists()) {
+            localData = docSnap.data();
+            refreshUI();
+        }
+    });
+
+    window.refreshUI = function() {
+        const m = window.currentMonth;
+        const d = window.currentDept;
+        if (!localData[m]) localData[m] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
+        
+        const data = localData[m][d];
+        document.getElementById('inPQ').value = data.pq;
+        document.getElementById('inVQ').value = data.vq;
+        document.getElementById('inF').value = data.f;
+
+        const mq = data.pq - data.vq;
+        const g = mq - data.f;
+        
+        document.getElementById('dPQ').innerText = data.pq.toLocaleString();
+        document.getElementById('dVQ').innerText = data.vq.toLocaleString();
+        document.getElementById('dMQ').innerText = mq.toLocaleString();
+        document.getElementById('dF').innerText = data.f.toLocaleString();
+        document.getElementById('dG').innerText = g.toLocaleString();
+        document.getElementById('totalG').innerText = '¥' + g.toLocaleString();
+        document.getElementById('outMQRate').innerText = data.pq > 0 ? Math.round((mq/data.pq)*100) : 0;
+        document.getElementById('displayMonth').innerText = m + " Analysis";
+
+        ['koubai', 'shikaku', 'total'].forEach((key, i) => {
+            const row = localData[m][key];
+            const rm = row.pq - row.vq;
+            chart.data.datasets[0].data[i] = rm - row.f;
+            chart.data.datasets[1].data[i] = row.f;
+            chart.data.datasets[2].data[i] = row.vq;
+        });
+        chart.update();
+    }
+
+    window.changeDept = function(dept) {
+        window.currentDept = dept;
+        document.querySelectorAll('#deptTabs button').forEach(b => b.classList.remove('active-tab'));
+        document.getElementById('tab-' + dept).classList.add('active-tab');
+        document.getElementById('displayDeptName').innerText = (dept==='koubai'?'121 購買課管理':dept==='shikaku'?'122 資格教育':'12 部門合計');
+        refreshUI();
+    }
+
+    window.saveCurrentData = async function() {
+        const m = window.currentMonth;
+        const d = window.currentDept;
+        const pq = parseInt(document.getElementById('inPQ').value) || 0;
+        const vq = parseInt(document.getElementById('inVQ').value) || 0;
+        const f = parseInt(document.getElementById('inF').value) || 0;
+
+        document.getElementById('statusMsg').innerText = "保存中...";
+        if (!localData[m]) localData[m] = {};
+        localData[m][d] = { pq, vq, f };
+
+        try {
+            await setDoc(doc(db, "mq_app", "all_data"), localData);
+            document.getElementById('statusMsg').innerText = "クラウド保存完了！";
+        } catch (e) {
+            document.getElementById('statusMsg').innerText = "エラー: 保存できませんでした";
+            console.error(e);
+        }
+        setTimeout(() => document.getElementById('statusMsg').innerText = "", 2000);
+    }
+
+    document.getElementById('selectMonth').onchange = (e) => {
+        window.currentMonth = e.target.value;
+        refreshUI();
+    };
+
+    ['inPQ', 'inVQ', 'inF'].forEach(id => {
+        document.getElementById(id).oninput = () => {
+            if (!localData[window.currentMonth]) localData[window.currentMonth] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
+            localData[window.currentMonth][window.currentDept] = {
+                pq: parseInt(document.getElementById('inPQ').value) || 0,
+                vq: parseInt(document.getElementById('inVQ').value) || 0,
+                f: parseInt(document.getElementById('inF').value) || 0
+            };
+            refreshUI();
+        };
+    });
+</script>
+</body>
+</html>
