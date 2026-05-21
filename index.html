@@ -23,7 +23,6 @@
 <body class="bg-slate-100 min-h-screen">
 
 <div class="flex flex-col lg:flex-row h-screen overflow-hidden">
-    <!-- サイドバー -->
     <aside class="w-full lg:w-80 bg-white border-r p-5 overflow-y-auto shadow-xl z-10">
         <div class="flex items-center gap-2 mb-8">
             <div class="bg-blue-600 p-2 rounded-lg text-white font-black text-xl">MQ</div>
@@ -98,18 +97,18 @@
     </main>
 </div>
 
-<!-- Firebase SDK 連携部分 (Firestore対応版) -->
+<!-- Firebase SDK 連携部分 (最新のConfigに書き換え済み) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-app.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-firestore.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyAEAWd3ZfdEJlnTEM7nyZl2zSMFSYadMWA",
-        authDomain: "mq-accounting-16544.firebaseapp.com",
-        projectId: "mq-accounting-16544",
-        storageBucket: "mq-accounting-16544.firebasestorage.app",
-        messagingSenderId: "520087428350",
-        appId: "1:520087428350:web:750249fa763a9655fed9af"
+        apiKey: "AIzaSyAvK-_h5NzDJcyPDJgb-iddYdscYaUivto",
+        authDomain: "mq-accounting-221b3.firebaseapp.com",
+        projectId: "mq-accounting-221b3",
+        storageBucket: "mq-accounting-221b3.firebasestorage.app",
+        messagingSenderId: "684182333946",
+        appId: "1:684182333946:web:b9406d2ee2ceb838211c43"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -130,7 +129,6 @@
         options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true } } }
     });
 
-    // Firestoreのリアルタイム監視
     onSnapshot(doc(db, "mq_app", "all_data"), (docSnap) => {
         if (docSnap.exists()) {
             localData = docSnap.data();
@@ -161,7 +159,7 @@
         document.getElementById('displayMonth').innerText = m + " Analysis";
 
         ['koubai', 'shikaku', 'total'].forEach((key, i) => {
-            const row = localData[m][key];
+            const row = localData[m][key] || {pq:0, vq:0, f:0};
             const rm = row.pq - row.vq;
             chart.data.datasets[0].data[i] = rm - row.f;
             chart.data.datasets[1].data[i] = row.f;
