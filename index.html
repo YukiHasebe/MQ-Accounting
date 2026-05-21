@@ -20,7 +20,7 @@
         .active-tab { background-color: #1e40af !important; color: white !important; }
     </style>
 </head>
-<body class="bg-slate-100 min-h-screen">
+<body class="bg-slate-100 min-h-screen font-sans">
 
 <div class="flex flex-col lg:flex-row h-screen overflow-hidden">
     <aside class="w-full lg:w-80 bg-white border-r p-5 overflow-y-auto shadow-xl z-10">
@@ -40,9 +40,9 @@
             <div>
                 <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block">Department</label>
                 <div class="grid grid-cols-1 gap-1" id="deptTabs">
-                    <button onclick="changeDept('koubai')" id="tab-koubai" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 active-tab transition-all">購買課管理</button>
-                    <button onclick="changeDept('shikaku')" id="tab-shikaku" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all">資格教育</button>
-                    <button onclick="changeDept('total')" id="tab-total" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all italic">部門合計</button>
+                    <button id="tab-koubai" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 active-tab transition-all">購買課管理</button>
+                    <button id="tab-shikaku" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all">資格教育</button>
+                    <button id="tab-total" class="text-left px-4 py-2 text-xs font-bold border rounded-lg hover:bg-slate-50 transition-all italic">部門合計</button>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             <label class="text-[10px] font-bold text-slate-500 uppercase block">F 累計固定費</label>
             <input type="number" id="inF" class="w-full border-b-2 border-slate-200 p-1 text-base font-black outline-none focus:border-blue-500">
             
-            <button onclick="saveCurrentData()" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold text-sm shadow-lg hover:scale-[1.02] transition-all mt-4">クラウドに保存</button>
+            <button id="saveBtn" class="w-full bg-slate-900 text-white py-3 rounded-xl font-bold text-sm shadow-lg hover:scale-[1.02] transition-all mt-4">クラウドに保存</button>
             <p id="statusMsg" class="text-center text-[10px] font-bold text-blue-600 mt-2"></p>
         </div>
     </aside>
@@ -87,17 +87,14 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-8">
-                <div class="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100">
-                    <h3 class="font-bold text-slate-700 mb-6 flex items-center gap-2">売上構成累計推移</h3>
-                    <div class="h-[300px]"><canvas id="stackedChart"></canvas></div>
-                </div>
+            <div class="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100">
+                <h3 class="font-bold text-slate-700 mb-6 flex items-center gap-2">売上構成累計推移</h3>
+                <div class="h-[300px]"><canvas id="stackedChart"></canvas></div>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Firebase SDK 連携部分 (最新のConfigに書き換え済み) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-app.js";
     import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.9.1/firebase-firestore.js";
@@ -114,8 +111,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.currentMonth = "2026-05";
-    window.currentDept = "koubai";
+    let currentMonth = "2026-05";
+    let currentDept = "koubai";
     let localData = { "2026-05": { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} } };
 
     const ctx = document.getElementById('stackedChart').getContext('2d');
@@ -136,12 +133,10 @@
         }
     });
 
-    window.refreshUI = function() {
-        const m = window.currentMonth;
-        const d = window.currentDept;
-        if (!localData[m]) localData[m] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
+    function refreshUI() {
+        if (!localData[currentMonth]) localData[currentMonth] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
+        const data = localData[currentMonth][currentDept] || {pq:0, vq:0, f:0};
         
-        const data = localData[m][d];
         document.getElementById('inPQ').value = data.pq;
         document.getElementById('inVQ').value = data.vq;
         document.getElementById('inF').value = data.f;
@@ -156,10 +151,10 @@
         document.getElementById('dG').innerText = g.toLocaleString();
         document.getElementById('totalG').innerText = '¥' + g.toLocaleString();
         document.getElementById('outMQRate').innerText = data.pq > 0 ? Math.round((mq/data.pq)*100) : 0;
-        document.getElementById('displayMonth').innerText = m + " Analysis";
+        document.getElementById('displayMonth').innerText = currentMonth + " Analysis";
 
         ['koubai', 'shikaku', 'total'].forEach((key, i) => {
-            const row = localData[m][key] || {pq:0, vq:0, f:0};
+            const row = localData[currentMonth][key] || {pq:0, vq:0, f:0};
             const rm = row.pq - row.vq;
             chart.data.datasets[0].data[i] = rm - row.f;
             chart.data.datasets[1].data[i] = row.f;
@@ -168,44 +163,45 @@
         chart.update();
     }
 
-    window.changeDept = function(dept) {
-        window.currentDept = dept;
+    document.getElementById('tab-koubai').onclick = () => changeDept('koubai');
+    document.getElementById('tab-shikaku').onclick = () => changeDept('shikaku');
+    document.getElementById('tab-total').onclick = () => changeDept('total');
+
+    function changeDept(dept) {
+        currentDept = dept;
         document.querySelectorAll('#deptTabs button').forEach(b => b.classList.remove('active-tab'));
         document.getElementById('tab-' + dept).classList.add('active-tab');
-        document.getElementById('displayDeptName').innerText = (dept==='koubai'?'121 購買課管理':dept==='shikaku'?'122 資格教育':'12 部門合計');
+        document.getElementById('displayDeptName').innerText = (dept==='koubai'?'購買課管理':dept==='shikaku'?'資格教育':'部門合計');
         refreshUI();
     }
 
-    window.saveCurrentData = async function() {
-        const m = window.currentMonth;
-        const d = window.currentDept;
+    document.getElementById('saveBtn').onclick = async function() {
+        document.getElementById('statusMsg').innerText = "保存中...";
         const pq = parseInt(document.getElementById('inPQ').value) || 0;
         const vq = parseInt(document.getElementById('inVQ').value) || 0;
         const f = parseInt(document.getElementById('inF').value) || 0;
 
-        document.getElementById('statusMsg').innerText = "保存中...";
-        if (!localData[m]) localData[m] = {};
-        localData[m][d] = { pq, vq, f };
+        if (!localData[currentMonth]) localData[currentMonth] = {};
+        localData[currentMonth][currentDept] = { pq, vq, f };
 
         try {
             await setDoc(doc(db, "mq_app", "all_data"), localData);
             document.getElementById('statusMsg').innerText = "クラウド保存完了！";
         } catch (e) {
-            document.getElementById('statusMsg').innerText = "エラー: 保存できませんでした";
-            console.error(e);
+            document.getElementById('statusMsg').innerText = "エラー: " + e.message;
         }
         setTimeout(() => document.getElementById('statusMsg').innerText = "", 2000);
-    }
+    };
 
     document.getElementById('selectMonth').onchange = (e) => {
-        window.currentMonth = e.target.value;
+        currentMonth = e.target.value;
         refreshUI();
     };
 
     ['inPQ', 'inVQ', 'inF'].forEach(id => {
         document.getElementById(id).oninput = () => {
-            if (!localData[window.currentMonth]) localData[window.currentMonth] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
-            localData[window.currentMonth][window.currentDept] = {
+            if (!localData[currentMonth]) localData[currentMonth] = { koubai: {pq:0, vq:0, f:0}, shikaku: {pq:0, vq:0, f:0}, total: {pq:0, vq:0, f:0} };
+            localData[currentMonth][currentDept] = {
                 pq: parseInt(document.getElementById('inPQ').value) || 0,
                 vq: parseInt(document.getElementById('inVQ').value) || 0,
                 f: parseInt(document.getElementById('inF').value) || 0
