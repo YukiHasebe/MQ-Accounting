@@ -2,218 +2,369 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>STC MQ-Accounting | EXECUTIVE BOARD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQ Accounting Dashboard - Copros</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Noto+Sans+JP:wght@900&display=swap');
-        body { background-color: #0f172a; color: #1e293b; font-family: 'Inter', 'Noto Sans JP', sans-serif; overflow: hidden; }
-        
-        /* 巨大MQ図：視認性MAX */
-        .mq-grid { display: grid; grid-template-columns: 200px 140px 300px; grid-template-rows: 70px 140px 70px; gap: 12px; }
-        .mq-box { border: 4px solid #000; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; box-shadow: 8px 8px 0px #000; }
-        .box-pq { grid-row: 1/4; background: #eff6ff; }
-        .box-vq { grid-column: 2/4; background: #fff1f2; }
-        .box-mq { grid-row: 2/4; background: #ffffff; }
-        .box-f  { background: #fefce8; }
-        .box-g  { background: #f0fdf4; }
+        :root {
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-dim: #64748b;
+            --accent: #2563eb;
+            --border: #e2e8f0;
+            --mq-pq: #eff6ff;
+            --mq-vq: #fff1f2;
+            --mq-mq: #ffffff;
+            --mq-f: #f8fafc;
+            --mq-g: #f0fdf4;
+            --sign: #94a3b8;
+        }
 
-        /* PVMQ正式レイアウト：画像再現 */
-        .pvmq-formal { display: flex; align-items: center; gap: 0; }
-        .pvm-unit { display: grid; grid-template-columns: 160px 160px; grid-template-rows: 80px 80px; border: 4px solid #000; background: #000; gap: 4px; }
-        .pv-cell { background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
-        .cell-p { grid-row: 1/3; }
-        .cell-v { background: #f8fafc; }
-        .symbol-x { font-size: 3rem; font-weight: 900; padding: 0 30px; color: #fff; }
-        .q-frame { width: 130px; height: 164px; border: 4px solid #000; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        
-        .label-tag { position: absolute; top: 6px; left: 10px; font-size: 1rem; font-weight: 900; color: #94a3b8; }
-        .num-xl { font-size: 2.2rem; font-weight: 900; color: #000; }
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
 
-        .sidebar-input { width: 100%; text-align: right; border-bottom: 2px solid #334155; font-weight: 700; color: #fff; background: transparent; outline: none; }
-        .active-btn { background: #3b82f6 !important; color: white !important; }
-        .stc-input { background: #1e293b; border: 1px solid #334155; border-radius: 6px; padding: 4px; width: 60px; text-align: center; }
+        /* サイドバー */
+        aside {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.02);
+        }
+
+        .logo { font-size: 1.2rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; margin-bottom: 30px; }
+
+        /* メイン */
+        main {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* タブ切り替え */
+        .dept-tabs {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .dept-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        .dept-btn.active {
+            background: white;
+            color: var(--accent);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* MQ要素図解（右側） */
+        .mq-visual-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1.5fr;
+            grid-template-rows: repeat(3, 120px);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mq-box {
+            border: 2px solid #334155;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: 800;
+            position: relative;
+        }
+        .mq-box span { font-size: 0.75rem; margin-bottom: 5px; color: var(--text-dim); }
+        .mq-box strong { font-size: 1.5rem; }
+
+        .box-pq { grid-row: span 3; background: var(--mq-pq); }
+        .box-vq { grid-column: span 2; background: var(--mq-vq); }
+        .box-mq { grid-row: span 2; background: var(--mq-mq); }
+        .box-f  { background: var(--mq-f); }
+        .box-g  { background: var(--mq-g); }
+
+        /* PVMQ配置シミュレーター */
+        .pvm-formula {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .formula-item { text-align: center; flex: 1; }
+        .formula-item strong { display: block; font-size: 1.2rem; margin-top: 5px; }
+        .formula-sign { font-size: 1.5rem; color: var(--sign); font-weight: bold; padding: 0 10px; }
+
+        /* テーブル */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 0.7rem; color: var(--text-dim); padding: 10px; border-bottom: 2px solid var(--border); }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        input[type="number"] {
+            width: 100%;
+            border: 1px solid var(--border);
+            padding: 6px;
+            border-radius: 4px;
+            text-align: right;
+            font-family: inherit;
+        }
+
+        .btn-sync {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .q-input-card {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
-<body class="flex h-screen">
+<body>
 
-    <!-- サイドバー -->
-    <aside class="w-[450px] bg-[#0f172a] text-white p-8 flex flex-col shadow-2xl z-20 overflow-y-auto">
-        <h1 class="text-3xl font-black italic tracking-tighter mb-10 border-b-4 border-blue-600 pb-2">MANAGEMENT</h1>
+<aside>
+    <div class="logo">MQ ACCOUNTING</div>
+    
+    <div style="margin-bottom:24px">
+        <label style="font-size: 0.75rem; font-weight: 700;">CSV IMPORT</label>
+        <input type="file" id="csvFile" style="margin-top:8px; width: 100%; font-size: 0.8rem;">
+    </div>
 
-        <!-- 1. CSV取込 -->
-        <div class="mb-8 p-6 bg-slate-800 rounded-3xl border border-slate-700">
-            <p class="text-[11px] font-black text-blue-400 mb-3 uppercase tracking-widest">CSV Data Import</p>
-            <input type="file" id="csvFile" class="text-xs w-full file:bg-blue-600 file:text-white file:border-0 file:rounded-full file:px-4 file:py-2 cursor-pointer">
+    <div id="q-section" class="q-input-card" style="display:none;">
+        <label style="font-size: 0.75rem; font-weight: 700; color: var(--accent);">講習数 (QUANTITY)</label>
+        <input type="number" id="input-q" value="106" style="font-size: 1.2rem; font-weight: bold; color: var(--accent);" oninput="calculate()">
+    </div>
+
+    <button class="btn-sync" onclick="syncFirebase()">クラウド同期保存</button>
+    <div style="font-size: 0.65rem; color: var(--text-dim); text-align: center; margin-top: 10px;">
+        Project ID: mq-accounting-221b3
+    </div>
+</aside>
+
+<main>
+    <!-- 左側: データ入力 -->
+    <section>
+        <div class="dept-tabs">
+            <button class="dept-btn active" onclick="setDept('dept1', this)">購買課管理</button>
+            <button class="dept-btn" onclick="setDept('dept2', this)">資格教育</button>
+            <button class="dept-btn" onclick="setDept('deptTotal', this)">部門合計</button>
         </div>
 
-        <!-- 2. 部門切替 -->
-        <div class="grid grid-cols-3 gap-2 mb-10">
-            <button onclick="switchDept('koubai')" id="b-koubai" class="py-3 text-[11px] font-black rounded-xl border border-slate-700 active-btn transition-all">購買課</button>
-            <button onclick="switchDept('shikaku')" id="b-shikaku" class="py-3 text-[11px] font-black rounded-xl border border-slate-700 transition-all">資格教育</button>
-            <button onclick="switchDept('total')" id="b-total" class="py-3 text-[11px] font-black rounded-xl border border-slate-700 italic transition-all">合計</button>
-        </div>
-
-        <!-- 3. STC入力 (資格教育時のみ) -->
-        <div id="stcTool" class="mb-10 p-6 bg-blue-900 rounded-[30px] hidden shadow-2xl">
-            <h3 class="text-sm font-black mb-4 flex justify-between">STC 受講者数 <span class="text-blue-300">Q入力</span></h3>
-            <div class="grid grid-cols-1 gap-3 text-xs">
-                <div class="flex justify-between">玉掛: <input type="number" id="q_1" class="stc-input" value="71"></div>
-                <div class="flex justify-between">クレーン: <input type="number" id="q_2" class="stc-input" value="35"></div>
-                <div class="flex justify-between">フォーク: <input type="number" id="q_3" class="stc-input" value="0"></div>
-                <div class="flex justify-between border-t border-blue-700 pt-3 font-black text-lg">
-                    <span>合計Q:</span><span id="q_total" class="text-blue-300">106</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. PL科目入力 -->
-        <div class="space-y-6">
-            <p class="text-[11px] font-black text-slate-500 border-b border-slate-800 pb-2 uppercase tracking-widest">Financial Data</p>
-            <div class="space-y-4">
-                <div class="flex justify-between items-center text-sm font-bold"><span>売上高</span><input type="number" id="v_rev" class="sidebar-input w-36"></div>
-                <div class="flex justify-between items-center text-sm font-bold"><span>変動費</span><input type="number" id="v_mat" class="sidebar-input w-36 text-red-400"></div>
-                <div class="flex justify-between items-center text-sm font-bold"><span>固定費</span><input type="number" id="v_fix" class="sidebar-input w-36 text-amber-400"></div>
-            </div>
-        </div>
-
-        <button onclick="save()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-3xl font-black text-xl shadow-2xl mt-10 transition-all">
-            クラウド同期保存
-        </button>
-    </aside>
-
-    <!-- メイン -->
-    <main class="flex-1 p-8 lg:p-12 overflow-hidden flex flex-col">
-        <div class="max-w-[1200px] mx-auto w-full h-full flex flex-col">
+        <div class="card">
+            <h2 id="dept-title" style="margin:0 0 5px 0; font-size:1.2rem;">121 購買課管理</h2>
+            <p style="color:var(--text-dim); font-size:0.8rem; margin-bottom:20px;">FY2025 累計実績データ</p>
             
-            <header class="flex justify-between items-end mb-10 text-white">
-                <div>
-                    <h2 class="text-7xl font-black tracking-tighter" id="headDept">121 購買課管理</h2>
-                    <div class="flex gap-4 mt-4">
-                        <select id="selY" class="bg-transparent font-black text-slate-400 outline-none cursor-pointer"><option value="2025">2024年度(2506期)</option></select>
-                        <select id="selM" class="bg-transparent font-black text-slate-400 outline-none cursor-pointer"><option value="total">期累計(決算)</option></select>
-                    </div>
-                </div>
-                <div class="text-right flex items-center gap-10">
-                    <div><p class="text-xs font-black text-slate-400 mb-1">MQ RATIO</p><p class="text-5xl font-black text-blue-400"><span id="mqRate">0</span>%</p></div>
-                    <div class="bg-blue-600 p-8 rounded-[40px] shadow-2xl"><p class="text-xs font-black opacity-70 mb-1">PROFIT (G)</p><p class="text-6xl font-black" id="totalG">¥0</p></div>
-                </div>
-            </header>
+            <table>
+                <thead>
+                    <tr><th>勘定科目</th><th style="text-align:right">金額 (¥)</th></tr>
+                </thead>
+                <tbody id="pl-rows">
+                    <!-- JSによる動的生成 -->
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-            <!-- メインボード -->
-            <div class="bg-white rounded-[60px] p-16 shadow-2xl flex-1 flex flex-col items-center justify-center relative overflow-hidden">
-                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#000 2px, transparent 2px); background-size: 30px 30px;"></div>
-                
-                <!-- MQ図：巨大化 -->
-                <div class="mq-grid scale-125 mb-24">
-                    <div class="mq-box box-pq"><span class="text-xl font-black mb-2">PQ</span><span class="text-4xl font-black" id="dPQ">0</span></div>
-                    <div class="mq-box box-vq"><span class="text-xl font-black mb-2 text-red-500">VQ</span><span class="text-4xl font-black text-red-500" id="dVQ">0</span></div>
-                    <div class="mq-box box-mq"><span class="text-xl font-black mb-2 text-blue-600">MQ</span><span class="text-4xl font-black text-blue-600" id="dMQ">0</span></div>
-                    <div class="mq-box box-f"><span class="text-xl font-black mb-2 text-slate-500">F</span><span class="text-4xl font-black text-slate-500" id="dF">0</span></div>
-                    <div class="mq-box box-g"><span class="text-xl font-black mb-2 text-green-600">G</span><span class="text-4xl font-black text-green-600" id="dG">0</span></div>
-                </div>
-
-                <!-- PVMQ図：巨大化 -->
-                <div class="pvmq-formal scale-150 mt-10">
-                    <div class="pvm-unit shadow-2xl">
-                        <div class="pv-cell cell-p"><span class="label-tag">P</span><span id="vP" class="num-xl">0</span></div>
-                        <div class="pv-cell cell-v"><span class="label-tag text-red-400">V</span><span id="vV" class="text-2xl font-black text-red-500">0</span></div>
-                        <div class="pv-cell cell-m"><span class="label-tag text-blue-400">M</span><span id="vM" class="text-2xl font-black text-blue-600">0</span></div>
-                    </div>
-                    <div class="symbol-x">×</div>
-                    <div class="q-frame shadow-2xl">
-                        <span class="text-xs font-black text-slate-400 mb-2 uppercase">Quantity</span>
-                        <span id="vQ" class="text-6xl font-black">106</span>
-                    </div>
-                </div>
+    <!-- 右側: ビジュアル -->
+    <section>
+        <div class="card" style="margin-bottom:24px;">
+            <div class="mq-visual-grid">
+                <div class="mq-box box-pq"><span>売上 PQ</span><strong id="disp-pq">0</strong></div>
+                <div class="mq-box box-vq"><span>変動費 VQ</span><strong id="disp-vq" style="color:#e11d48">0</strong></div>
+                <div class="mq-box box-mq"><span>付加価値 MQ</span><strong id="disp-mq">0</strong></div>
+                <div class="mq-box box-f"><span>固定費 F</span><strong id="disp-f">0</strong></div>
+                <div class="mq-box box-g" id="box-g-color"><span>利益 G</span><strong id="disp-g">0</strong></div>
             </div>
 
-            <!-- 下段グラフ：コンパクトに配置 -->
-            <div class="grid grid-cols-2 gap-8 mt-8 h-48">
-                <div class="bg-white/10 rounded-[40px] p-6 border border-white/10 flex flex-col">
-                    <canvas id="mainChart"></canvas>
+            <!-- PVMQ 配置エリア -->
+            <div class="pvm-formula">
+                <div class="formula-item">
+                    <span style="font-size:0.7rem; color:var(--text-dim);">単価 (P)</span>
+                    <strong id="disp-p">¥0</strong>
                 </div>
-                <div class="bg-white/10 rounded-[40px] p-8 text-white/50 text-sm italic">
-                    Meeting Insights: 決定事項や分析をメモ...
+                <div class="formula-sign">-</div>
+                <div class="formula-item">
+                    <span style="font-size:0.7rem; color:var(--text-dim);">変動単価 (V)</span>
+                    <strong id="disp-v" style="color:#e11d48">¥0</strong>
+                </div>
+                <div class="formula-sign">=</div>
+                <div class="formula-item">
+                    <span style="font-size:0.7rem; color:var(--text-dim);">単位利益 (M)</span>
+                    <strong id="disp-m">¥0</strong>
+                </div>
+                <div class="formula-sign">×</div>
+                <div class="formula-item" style="background: var(--mq-pq); padding: 5px; border-radius: 4px; border: 1px solid var(--accent);">
+                    <span style="font-size:0.7rem; color:var(--accent); font-weight:bold;">数量 (Q)</span>
+                    <strong id="disp-q" style="color:var(--accent);">0</strong>
+                </div>
+                <div class="formula-sign">=</div>
+                <div class="formula-item">
+                    <span style="font-size:0.7rem; color:var(--text-dim);">付加価値 (MQ)</span>
+                    <strong id="disp-mq-small">0</strong>
                 </div>
             </div>
         </div>
-    </main>
-</div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js";
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="card" style="text-align:center;">
+                <span style="color:var(--text-dim); font-size:0.8rem;">MQ比率</span><br>
+                <strong style="font-size:1.5rem;" id="disp-ratio">0%</strong>
+            </div>
+            <div class="card" style="text-align:center;">
+                <span style="color:var(--text-dim); font-size:0.8rem;">損益分岐点売上</span><br>
+                <strong style="font-size:1.5rem;" id="disp-be">¥0</strong>
+            </div>
+        </div>
+    </section>
+</main>
 
+<script>
+    // Firebase 設定
     const firebaseConfig = {
-        apiKey: "AIzaSyAvK-_h5NzDJcyPDJgb-iddYdscYaUivto",
+        apiKey: "AIzaSyAvK-_h5NzDjCYPdJgb-iddYdscYaUivto",
         authDomain: "mq-accounting-221b3.firebaseapp.com",
         projectId: "mq-accounting-221b3",
-        storageBucket: "mq-accounting-221b3.firebasestorage.app",
+        storageBucket: "mq-accounting-221b3.appspot.com",
         messagingSenderId: "684182333946",
-        appId: "1:684182333946:web:b9406d2ee2ceb838211c43"
+        appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    let currentDeptId = 'dept1';
+    const deptData = {
+        dept1: { title: "121 購買課管理", q: 1, p: 14592006, v: 550269, f: 24504444 },
+        dept2: { title: "122 資格教育", q: 106, p: 25461, v: 9526, f: 540000 },
+        deptTotal: { title: "部門合計", q: 1, p: 17287415, v: 550269, f: 25044444 }
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let curD = "koubai"; let allD = {};
-    const chart = new Chart(document.getElementById('mainChart'), {
-        type: 'bar',
-        data: { labels: ['購買', '資格', '合計'], datasets: [{label:'G', data:[0,0,0], backgroundColor:'#4ade80', borderRadius:20}]},
-        options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{display:false},x:{grid:{display:false},ticks:{color:'#fff'}}}}
-    });
-
-    onSnapshot(doc(db, "mq_final_pro", "master"), (snap) => {
-        if(snap.exists()) { allD = snap.data(); refresh(); }
-    });
-
-    window.refresh = function() {
-        const data = allD[curD] || {};
-        document.getElementById('stcTool').style.display = (curD==='shikaku'?'block':'none');
-        document.getElementById('v_rev').value = data.pq || 0;
-        document.getElementById('v_mat').value = data.vq || 0;
-        document.getElementById('v_fix').value = data.f || 0;
+    function setDept(id, btn) {
+        currentDeptId = id;
+        document.querySelectorAll('.dept-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('dept-title').innerText = deptData[id].title;
         
-        const pq = parseInt(document.getElementById('v_rev').value)||0;
-        const vq = parseInt(document.getElementById('v_mat').value)||0;
-        const f = parseInt(document.getElementById('v_fix').value)||0;
-        const q = (parseInt(document.getElementById('q_1').value)||0) + (parseInt(document.getElementById('q_2').value)||0) + (parseInt(document.getElementById('q_3').value)||0) || 1;
+        // 資格教育の場合のみQ入力欄を強調
+        document.getElementById('q-section').style.display = (id === 'dept2') ? 'block' : 'none';
+        document.getElementById('input-q').value = deptData[id].q;
         
-        const mq = pq-vq; const g = mq-f;
-        document.getElementById('dPQ').innerText = pq.toLocaleString();
-        document.getElementById('dVQ').innerText = vq.toLocaleString();
-        document.getElementById('dMQ').innerText = mq.toLocaleString();
-        document.getElementById('dF').innerText = f.toLocaleString();
-        document.getElementById('dG').innerText = g.toLocaleString();
-        document.getElementById('totalG').innerText = '¥'+g.toLocaleString();
-        document.getElementById('mqRate').innerText = pq>0?Math.round((mq/pq)*100):0;
-        document.getElementById('vQ').innerText = q.toLocaleString();
-        document.getElementById('q_total').innerText = q;
-        document.getElementById('vP').innerText = Math.round(pq/q).toLocaleString();
-        document.getElementById('vV').innerText = Math.round(vq/q).toLocaleString();
-        document.getElementById('vM').innerText = Math.round(mq/q).toLocaleString();
-
-        chart.data.datasets[0].data = [ (allD.koubai?.pq-allD.koubai?.vq)-allD.koubai?.f || 0, (allD.shikaku?.pq-allD.shikaku?.vq)-allD.shikaku?.f || 0, (allD.total?.pq-allD.total?.vq)-allD.total?.f || 0 ];
-        chart.update();
+        renderTable();
+        calculate();
     }
 
-    window.switchDept = (d) => {
-        curD = d;
-        document.querySelectorAll('#deptTabs button').forEach(b=>b.classList.remove('active-btn'));
-        document.getElementById('b-'+d).classList.add('active-btn');
-        document.getElementById('headDept').innerText = (d==='koubai'?'121 購買課管理':d==='shikaku'?'122 資格教育':'12 部門合計');
-        refresh();
+    function renderTable() {
+        const d = deptData[currentDeptId];
+        const q = (currentDeptId === 'dept2') ? parseFloat(document.getElementById('input-q').value) : d.q;
+        const rows = [
+            { name: "完成工事高 (PQ)", val: Math.round(d.p * q), type: 'pq' },
+            { name: "変動費 (VQ)", val: Math.round(d.v * q), type: 'vq' },
+            { name: "固定費 (F)", val: d.f, type: 'f' }
+        ];
+        
+        let html = '';
+        rows.forEach(r => {
+            html += `<tr>
+                <td>${r.name}</td>
+                <td><input type="number" value="${r.val}" onchange="updateVal('${r.type}', this.value)"></td>
+            </tr>`;
+        });
+        document.getElementById('pl-rows').innerHTML = html;
     }
 
-    window.save = async () => {
-        allD[curD] = { pq:parseInt(document.getElementById('v_rev').value), vq:parseInt(document.getElementById('v_mat').value), f:parseInt(document.getElementById('v_fix').value), q:parseInt(document.getElementById('q_total').innerText)};
-        await setDoc(doc(db, "mq_final_pro", "master"), allD);
-        alert("クラウド保存完了");
+    function updateVal(type, val) {
+        const q = parseFloat(document.getElementById('input-q').value) || 1;
+        const numVal = parseFloat(val);
+        if(type === 'pq') deptData[currentDeptId].p = numVal / q;
+        if(type === 'vq') deptData[currentDeptId].v = numVal / q;
+        if(type === 'f') deptData[currentDeptId].f = numVal;
+        calculate();
     }
 
-    document.querySelectorAll('input').forEach(i=>i.oninput=refresh);
-    switchDept('koubai');
+    function calculate() {
+        const d = deptData[currentDeptId];
+        const q = parseFloat(document.getElementById('input-q').value) || 1;
+        
+        const pq = Math.round(d.p * q);
+        const vq = Math.round(d.v * q);
+        const mq = pq - vq;
+        const f = d.f;
+        const g = mq - f;
+        
+        const m = d.p - d.v;
+        const ratio = pq > 0 ? (mq / pq) * 100 : 0;
+        const be = ratio > 0 ? Math.round(f / (ratio / 100)) : 0;
+
+        // 図解反映
+        document.getElementById('disp-pq').innerText = pq.toLocaleString();
+        document.getElementById('disp-vq').innerText = vq.toLocaleString();
+        document.getElementById('disp-mq').innerText = mq.toLocaleString();
+        document.getElementById('disp-f').innerText = f.toLocaleString();
+        document.getElementById('disp-g').innerText = g.toLocaleString();
+        
+        // 数式反映
+        document.getElementById('disp-p').innerText = "¥" + Math.round(d.p).toLocaleString();
+        document.getElementById('disp-v').innerText = "¥" + Math.round(d.v).toLocaleString();
+        document.getElementById('disp-m').innerText = "¥" + Math.round(m).toLocaleString();
+        document.getElementById('disp-q').innerText = q.toLocaleString();
+        document.getElementById('disp-mq-small').innerText = mq.toLocaleString();
+        
+        document.getElementById('disp-ratio').innerText = ratio.toFixed(1) + "%";
+        document.getElementById('disp-be').innerText = "¥" + be.toLocaleString();
+
+        // 利益の色付け（赤字は警告）
+        document.getElementById('box-g-color').style.background = g >= 0 ? 'var(--mq-g)' : '#fff1f2';
+    }
+
+    function syncFirebase() {
+        alert("Firebaseへデータを送信します...");
+    }
+
+    // 初期表示
+    setDept('dept1', document.querySelector('.dept-btn'));
 </script>
+
 </body>
 </html>
