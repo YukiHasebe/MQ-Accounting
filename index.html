@@ -32,21 +32,22 @@
         .dashboard-grid { display: grid; grid-template-columns: 450px 1fr 450px; gap: 25px; }
         .card { background: var(--card); border-radius: 15px; padding: 20px; border: 1px solid #e5e7eb; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 
-        /* 左側：PLテーブル */
+        /* 左側：PLエリア */
         .tabs { display: flex; gap: 5px; margin-bottom: 12px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 13px; }
         .tab-btn.active { background: var(--primary); color: white; }
         
         .pl-scroll { 
-            height: 650px; 
+            height: 600px; 
             overflow-y: scroll; 
-            overflow-x: hidden; /* 横スライダーを廃止 */
+            overflow-x: hidden;
             border: 1px solid #e5e7eb; 
             background: #fff;
+            margin-bottom: 15px;
         }
         table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
         th { position: sticky; top: 0; background: #f8fafb; z-index: 10; padding: 10px; border-bottom: 2px solid #e5e7eb; }
-        td { padding: 8px 5px; border-bottom: 1px solid #f3f4f6; word-break: break-all; }
+        td { padding: 8px 5px; border-bottom: 1px solid #f3f4f6; }
         
         input[type="number"] { width: 90%; border: 1px solid #d1d5db; padding: 4px; border-radius: 4px; text-align: right; font-weight: bold; }
         
@@ -67,18 +68,12 @@
 
         .metrics-v { display: flex; flex-direction: column; gap: 15px; }
         .m-card { background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 12px; text-align: center; width: 180px; border-left: 6px solid var(--primary); }
-        .m-card span { font-size: 11px; font-weight: bold; color: #64748b; }
         .m-card strong { display: block; font-size: 1.6rem; color: var(--primary); margin-top: 5px; }
 
-        .pvmq-panel { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 1px solid #e5e7eb; margin-top: 10px; }
-        .pvm-grid { display: grid; grid-template-columns: 110px 110px; grid-template-rows: 60px 60px; border: 3px solid var(--border-dark); }
-        .pvm-c { border: 1px solid var(--border-dark); display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; }
-        .q-c { border: 3px solid var(--border-dark); width: 80px; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #eff6ff; }
-        .sym { font-size: 30px; font-weight: bold; color: #cbd5e1; }
-
+        .pvmq-panel { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 15px; border: 1px solid #e5e7eb; }
         .q-entry { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #eff6ff; padding: 10px; border-radius: 8px; margin-bottom: 10px; }
-        .q-entry label { font-size: 9px; font-weight: 900; color: var(--primary); text-align: center; display: block; }
-        .q-entry input { width: 85%; text-align: center; font-weight: bold; border: 1px solid #bfdbfe; }
+
+        .btn-sync { background: var(--success); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: 900; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -96,6 +91,7 @@
     </header>
 
     <div class="dashboard-grid">
+        <!-- 左側：PLテーブル + 同期ボタン -->
         <section>
             <div class="tabs">
                 <button class="tab-btn active" onclick="setDept('121', this)">121 購買課管理</button>
@@ -105,24 +101,24 @@
             <div class="card">
                 <div id="q-area" style="display:none;">
                     <div class="q-entry">
-                        <div><label>玉掛</label><input type="number" class="qin" value="32" oninput="calculate()"></div>
-                        <div><label>クレーン</label><input type="number" class="qin" value="15" oninput="calculate()"></div>
-                        <div><label>フォーク</label><input type="number" class="qin" value="60" oninput="calculate()"></div>
-                        <div><label>テール</label><input type="number" class="qin" value="5" oninput="calculate()"></div>
-                        <div><label>ハネス</label><input type="number" class="qin" value="4" oninput="calculate()"></div>
+                        <div><label style="font-size:9px;">玉掛</label><input type="number" class="qin" value="32" oninput="calculate()"></div>
+                        <div><label style="font-size:9px;">クレーン</label><input type="number" class="qin" value="15" oninput="calculate()"></div>
+                        <div><label style="font-size:9px;">フォーク</label><input type="number" class="qin" value="60" oninput="calculate()"></div>
+                        <div><label style="font-size:9px;">テール</label><input type="number" class="qin" value="5" oninput="calculate()"></div>
+                        <div><label style="font-size:9px;">ハネス</label><input type="number" class="qin" value="4" oninput="calculate()"></div>
                     </div>
                 </div>
                 <div class="pl-scroll">
-                    <table id="pl-table">
-                        <thead>
-                            <tr><th style="width:130px;">科目</th><th style="text-align:right;">金額 (¥)</th></tr>
-                        </thead>
+                    <table>
+                        <thead><tr><th style="width:130px;">科目</th><th style="text-align:right;">金額 (¥)</th></tr></thead>
                         <tbody id="pl-body"></tbody>
                     </table>
                 </div>
+                <button class="btn-sync" onclick="alert('クラウド同期完了')">クラウド同期保存</button>
             </div>
         </section>
 
+        <!-- 中央：メインビジュアル -->
         <section class="main-visual">
             <div style="display: flex; gap: 20px; align-items: center;">
                 <div class="mq-table">
@@ -139,9 +135,9 @@
             </div>
 
             <div class="pvmq-panel">
-                <div class="pvm-grid">
-                    <div class="pvm-c" style="grid-row: span 2;"><span>P (単価)</span><strong id="v-p">0</strong></div>
-                    <div class="pvm-c" style="background:#fef2f2;"><span>V (変動単価)</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
+                <div style="display:grid; grid-template-columns:110px 110px; grid-template-rows:60px 60px; border:3px solid var(--border-dark);">
+                    <div class="pvm-c" style="grid-row:span 2;"><span>P (単価)</span><strong id="v-p">0</strong></div>
+                    <div class="pvm-c" style="background:#fef2f2;"><span>V (変動)</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
                     <div class="pvm-c"><span>M (利益)</span><strong id="v-m">0</strong></div>
                 </div>
                 <div class="sym">×</div>
@@ -149,9 +145,9 @@
                 <div class="sym">=</div>
                 <div style="padding-left:15px;"><span>MQ (付加価値合計)</span><br><strong style="font-size:2rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
-            <button style="background:var(--success); color:white; border:none; padding:12px; width:80%; border-radius:10px; font-weight:900; cursor:pointer;" onclick="alert('クラウド同期完了')">クラウド同期保存</button>
         </section>
 
+        <!-- 右：グラフ -->
         <section>
             <div class="card" style="margin-bottom: 25px;"><canvas id="structureChart" height="280"></canvas></div>
             <div class="card"><canvas id="profitLineChart" height="280"></canvas></div>
@@ -160,17 +156,12 @@
 </div>
 
 <script>
-    // CSV内の全科目を網羅したマスタ
     const masterAccounts = [
         { name: "完成工事高", type: "売上" }, { name: "兼業事業売上高", type: "売上" }, { name: "内部振替収入", type: "売上" },
         { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "外注費", type: "変動" },
-        { name: "運搬費", type: "固定" }, { name: "安全費", type: "固定" }, { name: "技術管理費", type: "固定" },
-        { name: "機械等経費", type: "固定" }, { name: "従業員給料手当", type: "固定" }, { name: "従業員賞与", type: "固定" },
-        { name: "法定福利費", type: "固定" }, { name: "福利厚生費", type: "固定" }, { name: "事務用品費", type: "固定" },
-        { name: "消耗品費", type: "固定" }, { name: "諸会費", type: "固定" }, { name: "教育費", type: "固定" },
-        { name: "通信交通費", type: "固定" }, { name: "燃料費", type: "固定" }, { name: "動力用水光熱費", type: "固定" },
-        { name: "広告宣伝費", type: "固定" }, { name: "減価償却費", type: "固定" }, { name: "租税公課", type: "固定" },
-        { name: "保険料", type: "固定" }, { name: "支払手数料", type: "固定" }, { name: "雑費", type: "固定" }
+        { name: "安全費", type: "固定" }, { name: "技術管理費", type: "固定" }, { name: "機械等経費", type: "固定" },
+        { name: "従業員給料手当", type: "固定" }, { name: "法定福利費", type: "固定" }, { name: "燃料費", type: "固定" },
+        { name: "減価償却費", type: "固定" }, { name: "租税公課", type: "固定" }, { name: "保険料", type: "固定" }
     ];
 
     let currentDept = '121', dbData = {}, charts = {};
@@ -179,18 +170,21 @@
         const reader = new FileReader();
         reader.onload = (ev) => { 
             const rows = ev.target.result.split('\n').map(r => r.split(',').map(c => c.trim().replace(/"/g, '')));
-            const year = "2025", month = "3";
             let count = 0;
             rows.forEach(row => {
-                const name = row[1];
-                if(masterAccounts.some(a => a.name === name)) {
-                    dbData[`${year}-${month}-121-${name}`] = parseInt((row[11]||"0").replace(/,/g,'')) || 0;
-                    dbData[`${year}-${month}-122-${name}`] = parseInt((row[13]||"0").replace(/,/g,'')) || 0;
-                    dbData[`${year}-${month}-Total-${name}`] = parseInt((row[15]||"0").replace(/,/g,'')) || 0;
+                // 科目名が入っている可能性のある列をスキャン (1列目または2列目)
+                const name = row[1] || row[0]; 
+                if(!name) return;
+                const match = masterAccounts.find(a => name.includes(a.name));
+                if(match) {
+                    const year = "2025", month = "3";
+                    dbData[`${year}-${month}-121-${match.name}`] = parseInt((row[11]||"0").replace(/,/g,'')) || 0;
+                    dbData[`${year}-${month}-122-${match.name}`] = parseInt((row[13]||"0").replace(/,/g,'')) || 0;
+                    dbData[`${year}-${month}-Total-${match.name}`] = parseInt((row[15]||"0").replace(/,/g,'')) || 0;
                     count++;
                 }
             });
-            alert(`${count}件の科目データを反映しました。`);
+            alert(`${count}件の科目を反映しました。`);
             calculate();
         };
         reader.readAsText(e.target.files[0]);
@@ -213,13 +207,9 @@
         masterAccounts.forEach(acc => {
             let val = dbData[`${year}-${month}-${currentDept}-${acc.name}`] || 0;
             if(acc.type === "売上") pq += val; else if(acc.type === "変動") vq += val; else f += val;
-            
-            const tagClass = acc.type === "売上" ? "tag-p" : (acc.type === "変動" ? "tag-v" : "tag-f");
+            const tag = acc.type === "売上" ? "tag-p" : (acc.type === "変動" ? "tag-v" : "tag-f");
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><span class="tag ${tagClass}">${acc.type}</span>${acc.name}</td>
-                <td style="text-align:right;"><input type="number" value="${val}" onchange="dbData['${year}-${month}-${currentDept}-${acc.name}']=parseInt(this.value);calculate();"></td>
-            `;
+            tr.innerHTML = `<td><span class="tag ${tag}">${acc.type}</span>${acc.name}</td><td style="text-align:right;"><input type="number" value="${val}" onchange="dbData['${year}-${month}-${currentDept}-${acc.name}']=parseInt(this.value);calculate();"></td>`;
             plBody.appendChild(tr);
         });
 
@@ -252,23 +242,13 @@
         if(charts.st) charts.st.destroy();
         charts.st = new Chart(document.getElementById('structureChart'), {
             type: 'bar',
-            data: {
-                labels: ['2022', '2023', '2024', '2025'],
-                datasets: [
-                    { label: '利益(G)', data: [1187054, 631692, 1310425, g], backgroundColor: '#60a5fa' },
-                    { label: '固定費(F)', data: [540000, 600000, 540000, f], backgroundColor: '#f472b6' },
-                    { label: '変動費(VQ)', data: [1102479, 1117585, 1355990, vq], backgroundColor: '#3b82f6' }
-                ]
-            },
+            data: { labels: ['2022','2023','2024','2025'], datasets: [{label:'利益(G)',data:[1187054,631692,1310425,g],backgroundColor:'#60a5fa'},{label:'固定費(F)',data:[540000,600000,540000,f],backgroundColor:'#f472b6'},{label:'変動費(VQ)',data:[1102479,1117585,1355990,vq],backgroundColor:'#3b82f6'}]},
             options: { responsive: true, scales: { x: { stacked: true }, y: { stacked: true } }, plugins: { title: { display: true, text: '利益構造推移' } } }
         });
         if(charts.pr) charts.pr.destroy();
         charts.pr = new Chart(document.getElementById('profitLineChart'), {
             type: 'line',
-            data: {
-                labels: ['2022', '2023', '2024', '2025'],
-                datasets: [{ label: '利益トレンド', data: [1187054, 631692, 1310425, g], borderColor: '#059669', tension: 0.1 }]
-            },
+            data: { labels: ['2022','2023','2024','2025'], datasets: [{label:'利益トレンド',data:[1187054,631692,1310425,g],borderColor:'#059669',tension:0.1}]},
             options: { responsive: true, plugins: { title: { display: true, text: '純利益推移' } } }
         });
     }
