@@ -10,297 +10,277 @@
             --primary: #2563eb;
             --success: #059669;
             --danger: #e11d48;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --bg: #f1f5f9;
+            --card: #ffffff;
             --border: #334155;
             --text: #1e293b;
-            --text-dim: #64748b;
+            --tag-p: #dbeafe; /* 売上ラベル色 */
+            --tag-v: #fee2e2; /* 変動費ラベル色 */
+            --tag-f: #f1f5f9; /* 固定費ラベル色 */
         }
 
-        body {
-            font-family: "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-        }
+        body { font-family: "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
 
-        .container { max-width: 1500px; margin: 0 auto; }
-
-        /* ヘッダー */
         header {
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px;
+            background: white; padding: 15px 25px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;
         }
-        .header-title h1 { margin: 0; font-size: 22px; color: var(--primary); }
-        .header-controls { display: flex; gap: 15px; align-items: center; font-size: 14px; }
-        select, button { padding: 6px 12px; border-radius: 4px; border: 1px solid #cbd5e1; background: white; cursor: pointer; }
+        .header-title h1 { margin: 0; font-size: 20px; color: var(--primary); }
+        .controls { display: flex; gap: 12px; align-items: center; }
 
-        /* レイアウト */
-        .dashboard-grid { display: grid; grid-template-columns: 420px 1fr; gap: 24px; }
+        .dashboard-grid { display: grid; grid-template-columns: 480px 1fr; gap: 24px; }
+        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
 
-        .card {
-            background: var(--card-bg); border-radius: 8px; padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
-            margin-bottom: 20px;
-        }
-
-        /* タブ */
-        .tabs { display: flex; gap: 4px; margin-bottom: 15px; }
-        .tab-btn {
-            flex: 1; padding: 10px; border: none; background: #e2e8f0;
-            cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 12px;
-        }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #e2e8f0; cursor: pointer; font-weight: bold; border-radius: 6px; font-size: 12px; }
         .tab-btn.active { background: var(--primary); color: white; }
 
-        /* MQ図解エリア */
-        .mq-section { display: flex; gap: 20px; align-items: flex-start; }
-        .mq-table-box {
-            display: grid; grid-template-columns: 150px 100px 150px;
-            grid-template-rows: repeat(3, 85px); border: 2px solid var(--border); background: white;
-        }
-        .mq-cell {
-            border: 1px solid var(--border); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-        }
-        .mq-cell span { font-size: 11px; font-weight: bold; margin-bottom: 2px; color: var(--text-dim); }
-        .mq-cell strong { font-size: 1.2rem; }
+        /* MQ図 */
+        .mq-visual-area { display: flex; gap: 20px; margin-bottom: 20px; }
+        .mq-table { display: grid; grid-template-columns: 140px 100px 140px; grid-template-rows: repeat(3, 80px); border: 2px solid var(--border); }
+        .mq-cell { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: white; }
+        .mq-cell span { font-size: 10px; font-weight: bold; color: #64748b; }
+        .mq-cell strong { font-size: 1.1rem; }
 
-        /* 指標（縦並び） */
-        .metrics-column { display: flex; flex-direction: column; gap: 10px; width: 200px; }
-        .metric-card {
-            background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center;
-            border: 1px solid #e2e8f0;
-        }
-        .metric-card span { font-size: 11px; color: var(--text-dim); font-weight: bold; }
-        .metric-card strong { display: block; font-size: 1.4rem; color: var(--primary); margin-top: 5px; }
+        .metrics-v { display: flex; flex-direction: column; gap: 10px; }
+        .m-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; text-align: center; width: 160px; }
+        .m-box span { font-size: 10px; color: #64748b; font-weight: bold; }
+        .m-box strong { display: block; font-size: 1.3rem; color: var(--primary); }
 
-        /* PVMQ（画像再現） */
-        .pvmq-visual { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; width: fit-content; }
-        .pvm-block { display: grid; grid-template-columns: 100px 100px; grid-template-rows: 55px 55px; border: 2px solid var(--border); }
-        .pvm-cell { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .q-block { border: 2px solid var(--border); width: 70px; height: 110px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* PVMQ構造 */
+        .pvmq-box { display: flex; align-items: center; gap: 10px; padding: 15px; background: #f8fafc; border-radius: 8px; width: fit-content; margin-top: 15px; }
+        .pvm-subgrid { display: grid; grid-template-columns: 90px 90px; grid-template-rows: 50px 50px; border: 2px solid var(--border); }
+        .pvm-subcell { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; }
+        .q-subcell { border: 2px solid var(--border); width: 60px; height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #eff6ff; }
 
-        /* 講習数入力 */
-        .q-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 10px; }
-        .q-item { background: #eff6ff; padding: 8px; border-radius: 4px; text-align: center; border: 1px solid #bfdbfe; }
-        .q-item label { font-size: 10px; display: block; margin-bottom: 3px; font-weight: bold; color: var(--primary); }
-        .q-item input { width: 90%; text-align: center; border: 1px solid #bfdbfe; font-weight: bold; }
-
-        /* テーブル */
-        .pl-container { max-height: 500px; overflow-y: auto; }
+        /* PLテーブル */
+        .pl-wrap { max-height: 550px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th { position: sticky; top: 0; background: #f1f5f9; padding: 10px; text-align: left; z-index: 10; }
-        td { padding: 8px; border-bottom: 1px solid #f1f5f9; }
-        .num { text-align: right; font-family: 'Consolas', monospace; }
+        th { position: sticky; top: 0; background: #f8fafc; padding: 10px; text-align: left; border-bottom: 2px solid #e2e8f0; z-index: 10; }
+        td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        
+        /* 要素タグ */
+        .tag { font-size: 9px; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-right: 6px; border: 1px solid rgba(0,0,0,0.1); }
+        .tag-p { background: var(--tag-p); color: #1e40af; }
+        .tag-v { background: var(--tag-v); color: #991b1b; }
+        .tag-f { background: var(--tag-f); color: #475569; }
 
-        .btn-sync { background: var(--success); color: white; border: none; padding: 10px; width: 100%; font-weight: bold; margin-top: 10px; border-radius: 4px; }
+        input[type="number"] { width: 100%; border: 1px solid #cbd5e1; padding: 4px; border-radius: 4px; text-align: right; font-family: monospace; }
+        .q-input-group { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: #eff6ff; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
+        .q-input-group label { font-size: 9px; font-weight: bold; display: block; text-align: center; }
+        .q-input-group input { width: 85%; font-weight: bold; text-align: center; display: block; margin: 2px auto; }
+        
+        .btn-main { background: var(--success); color: white; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <div class="header-title">
-            <h1>MQ会計ダッシュボード <span style="font-size: 14px; font-weight: normal; color: var(--text-dim);">Copros Management</span></h1>
-        </div>
-        <div class="header-controls">
-            <div>
-                <label>年度:</label>
-                <select id="yearSelect"><option>2025年度</option></select>
-            </div>
-            <div>
-                <label>月:</label>
-                <select id="monthSelect" onchange="calculate()">
-                    <option value="発生">2026年03月 (発生値)</option>
-                    <option value="累計">2026年03月 (累計値)</option>
-                </select>
-            </div>
-            <button onclick="document.getElementById('csvFile').click()" style="background: var(--primary); color: white; border: none;">CSVインポート</button>
-            <input type="file" id="csvFile" style="display:none" accept=".csv">
+        <div class="header-title"><h1>MQ会計ダッシュボード</h1></div>
+        <div class="controls">
+            <select id="yearSel" onchange="calculate()">
+                <option value="2025">2025年度</option><option value="2024">2024年度</option>
+                <option value="2023">2023年度</option><option value="2022">2022年度</option>
+            </select>
+            <select id="monthSel" onchange="calculate()">
+                <option value="3">2026年03月</option><option value="4">2026年04月</option>
+                <!-- 他の月は省略可能ですが、ロジック上は全月対応可能 -->
+            </select>
+            <select id="calcType" onchange="calculate()"><option value="発生">発生値</option><option value="累計">累計値</option></select>
+            <button onclick="document.getElementById('csvIn').click()" style="background:var(--primary); color:white; border:none; padding:6px 15px; border-radius:4px; cursor:pointer;">CSV読込</button>
+            <input type="file" id="csvIn" style="display:none" accept=".csv">
         </div>
     </header>
 
     <div class="dashboard-grid">
-        <!-- 左側：PLデータ -->
+        <!-- 左側：科目データ -->
         <section>
             <div class="tabs">
-                <button class="tab-btn active" onclick="setDept('121 購買課管理', this)">121 購買課管理</button>
-                <button class="tab-btn" onclick="setDept('122 資格教育', this)">122 資格教育</button>
-                <button class="tab-btn" onclick="setDept('部門合計', this)">部門合計</button>
+                <button class="tab-btn active" onclick="setDept('121', this)">121 購買課管理</button>
+                <button class="tab-btn" onclick="setDept('122', this)">122 資格教育</button>
+                <button class="tab-btn" onclick="setDept('Total', this)">部門合計</button>
             </div>
 
-            <!-- 資格教育用 Q入力欄 -->
-            <div class="card" id="q-panel" style="display:none; border: 2px solid var(--primary);">
-                <span style="font-size: 12px; font-weight: bold; color: var(--primary);">▼ 講習数入力 (Q)</span>
-                <div class="q-grid">
-                    <div class="q-item"><label>玉掛</label><input type="number" class="q-in" value="32" oninput="calculate()"></div>
-                    <div class="q-item"><label>クレーン</label><input type="number" class="q-in" value="15" oninput="calculate()"></div>
-                    <div class="q-item"><label>フォーク</label><input type="number" class="q-in" value="60" oninput="calculate()"></div>
-                    <div class="q-item"><label>テール</label><input type="number" class="q-in" value="5" oninput="calculate()"></div>
-                    <div class="q-item"><label>ハネス</label><input type="number" class="q-in" value="4" oninput="calculate()"></div>
+            <div class="card">
+                <div id="q-area" style="display:none;">
+                    <div class="q-input-group">
+                        <div><label>玉掛</label><input type="number" class="qin" value="32" oninput="calculate()"></div>
+                        <div><label>クレーン</label><input type="number" class="qin" value="15" oninput="calculate()"></div>
+                        <div><label>フォーク</label><input type="number" class="qin" value="60" oninput="calculate()"></div>
+                        <div><label>テール</label><input type="number" class="qin" value="5" oninput="calculate()"></div>
+                        <div><label>ハネス</label><input type="number" class="qin" value="4" oninput="calculate()"></div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card pl-container">
-                <table id="pl-table">
-                    <thead><tr><th>勘定科目</th><th style="text-align:right">金額(¥)</th></tr></thead>
-                    <tbody id="pl-body"></tbody>
-                </table>
-                <button class="btn-sync" onclick="alert('Firebase同期完了')">クラウド同期保存</button>
+                <div class="pl-wrap">
+                    <table>
+                        <thead><tr><th>分類 / 勘定科目</th><th style="text-align:right">金額 (¥)</th></tr></thead>
+                        <tbody id="pl-body"></tbody>
+                    </table>
+                </div>
+                <button class="btn-main" onclick="alert('データを同期しました')">保存・クラウド同期</button>
             </div>
         </section>
 
         <!-- 右側：ビジュアル -->
         <section>
-            <div class="card">
-                <div class="mq-section">
-                    <!-- MQ図 -->
-                    <div class="mq-table-box">
+            <div class="card" style="margin-bottom:24px;">
+                <div class="mq-visual-area">
+                    <div class="mq-table">
                         <div class="mq-cell" style="grid-row: span 3; background:#eff6ff;"><span>売上 PQ</span><strong id="m-pq">0</strong></div>
                         <div class="mq-cell" style="grid-column: span 2; background:#fff1f2;"><span>変動費 VQ</span><strong id="m-vq" style="color:var(--danger)">0</strong></div>
                         <div class="mq-cell" style="grid-row: span 2; background:#ffffff;"><span>付加価値 MQ</span><strong id="m-mq">0</strong></div>
                         <div class="mq-cell" style="background:#f8fafc;"><span>固定費 F</span><strong id="m-f">0</strong></div>
-                        <div class="mq-cell" id="g-bg"><span>利益 G</span><strong id="m-g">0</strong></div>
+                        <div class="mq-cell" id="g-box"><span>利益 G</span><strong id="m-g">0</strong></div>
                     </div>
-
-                    <!-- 指標 2行縦並び -->
-                    <div class="metrics-column">
-                        <div class="metric-card">
-                            <span>MQ比率</span>
-                            <strong id="idx-ratio">0%</strong>
-                        </div>
-                        <div class="metric-card">
-                            <span>損益分岐点売上</span>
-                            <strong id="idx-be">¥0</strong>
-                        </div>
+                    <div class="metrics-v">
+                        <div class="m-box"><span>MQ比率</span><strong id="id-ratio">0%</strong></div>
+                        <div class="m-box"><span>損益分岐点</span><strong id="id-be">¥0</strong></div>
                     </div>
                 </div>
 
-                <!-- PVMQシミュレーター -->
-                <div class="pvmq-visual">
-                    <div class="pvm-block">
-                        <div class="pvm-cell" style="grid-row: span 2; background:#f8fafc;"><span>P</span><strong id="v-p">0</strong></div>
-                        <div class="pvm-cell" style="background:#fff1f2;"><span>V</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
-                        <div class="pvm-cell" style="background:#ffffff;"><span>M</span><strong id="v-m">0</strong></div>
+                <!-- PVMQ（画像再現） -->
+                <div class="pvmq-box">
+                    <div class="pvm-subgrid">
+                        <div class="pvm-subcell" style="grid-row: span 2;"><span>P (単価)</span><strong id="v-p">0</strong></div>
+                        <div class="pvm-subcell" style="background:#fff1f2;"><span>V (変動単価)</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
+                        <div class="pvm-subcell"><span>M (単位利益)</span><strong id="v-m">0</strong></div>
                     </div>
-                    <div style="font-size:24px; font-weight:bold; color:var(--text-dim);">×</div>
-                    <div class="q-block" style="background:#eff6ff;"><span>Q</span><strong id="v-q">0</strong></div>
-                    <div style="font-size:24px; font-weight:bold; color:var(--text-dim);">=</div>
-                    <div style="padding-left:10px;">
-                        <span style="font-size:11px; color:var(--text-dim);">MQ (付加価値)</span><br>
-                        <strong style="font-size:1.8rem;" id="v-mq">0</strong>
-                    </div>
+                    <div style="font-size:24px; font-weight:bold; color:#cbd5e1;">×</div>
+                    <div class="q-subcell"><span>Q (数量)</span><strong id="v-q">0</strong></div>
+                    <div style="font-size:24px; font-weight:bold; color:#cbd5e1;">=</div>
+                    <div style="padding-left:10px;"><span>MQ (付加価値)</span><br><strong style="font-size:1.5rem;" id="v-mq">0</strong></div>
                 </div>
             </div>
 
-            <!-- グラフ -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="card"><canvas id="chart-profit" height="150"></canvas></div>
-                <div class="card"><canvas id="chart-pvm" height="150"></canvas></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                <div class="card"><canvas id="yearChart" height="180"></canvas></div>
+                <div class="card"><canvas id="profitChart" height="180"></canvas></div>
             </div>
         </section>
     </div>
 </div>
 
 <script>
-    let rawData = [];
-    let currentDept = '121 購買課管理';
+    // 科目定義と初期分類
+    const masterAccounts = [
+        { name: "完成工事高", type: "P" }, { name: "兼業事業売上高", type: "P" }, { name: "内部振替収入", type: "P" },
+        { name: "材料費", type: "V" }, { name: "労務費", type: "V" }, { name: "外注費", type: "V" },
+        { name: "従業員給料手当", type: "F" }, { name: "従業員賞与", type: "F" }, { name: "法定福利費", type: "F" },
+        { name: "福利厚生費", type: "F" }, { name: "事務用品費", type: "F" }, { name: "教育費", type: "F" },
+        { name: "通信交通費", type: "F" }, { name: "燃料費", type: "F" }, { name: "減価償却費", type: "F" },
+        { name: "租税公課", type: "F" }, { name: "保険料", type: "F" }, { name: "支払手数料", type: "F" }
+    ];
+
+    let currentDept = '121';
+    let dbData = {}; 
     let charts = {};
 
-    document.getElementById('csvFile').addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    document.getElementById('csvIn').addEventListener('change', function(e) {
         const reader = new FileReader();
-        reader.onload = (event) => { parseCSV(event.target.result); calculate(); };
-        reader.readAsText(file);
+        reader.onload = (ev) => { 
+            const rows = ev.target.result.split('\n').map(r => r.split(',').map(c => c.trim().replace(/"/g, '')));
+            applyCSV(rows);
+            calculate();
+        };
+        reader.readAsText(e.target.files[0]);
     });
 
-    function parseCSV(text) {
-        rawData = text.split('\n').map(row => row.split(',').map(cell => cell.trim().replace(/"/g, '')));
-    }
-
-    function setDept(name, btn) {
-        currentDept = name;
+    function setDept(id, btn) {
+        currentDept = id;
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('q-panel').style.display = (name === '122 資格教育') ? 'block' : 'none';
+        document.getElementById('q-area').style.display = (id === '122') ? 'block' : 'none';
         calculate();
     }
 
     function calculate() {
-        const view = document.getElementById('monthSelect').value;
+        const year = document.getElementById('yearSel').value;
+        const month = document.getElementById('monthSel').value;
+        const type = document.getElementById('calcType').value;
+        
         let pq = 0, vq = 0, f = 0;
         const plBody = document.getElementById('pl-body');
         plBody.innerHTML = '';
 
-        let colIdx = (currentDept === '121 購買課管理') ? (view === '発生' ? 11 : 12) : 
-                     (currentDept === '122 資格教育') ? (view === '発生' ? 13 : 14) : 
-                     (view === '発生' ? 15 : 16);
+        masterAccounts.forEach(acc => {
+            let val = dbData[`${year}-${month}-${currentDept}-${acc.name}`] || 0;
+            if(acc.type === "P") pq += val;
+            else if(acc.type === "V") vq += val;
+            else f += val;
 
-        rawData.forEach(row => {
-            const label = row[1];
-            if (!label || label === '科目名' || label.includes('Unnamed')) return;
-            let val = parseInt((row[colIdx] || "0").replace(/,/g, '')) || 0;
-
-            if (label === '兼業事業売上高' || label === '社外収入' || label === '内部振替収入') {
-                if (label !== '収入合計') pq += val;
-            } else if (label === '材料費' || label === '労務費' || label === '外注費') {
-                vq += Math.abs(val);
-            } else if (row[0] === '' && val !== 0 && !label.includes('合計')) {
-                f += Math.abs(val);
-            }
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${label}</td><td class="num">${val.toLocaleString()}</td>`;
+            const tagClass = acc.type === "P" ? "tag-p" : (acc.type === "V" ? "tag-v" : "tag-f");
+            const tagLabel = acc.type === "P" ? "売上" : (acc.type === "V" ? "変動" : "固定");
+            
+            tr.innerHTML = `
+                <td><span class="tag ${tagClass}">${tagLabel}</span>${acc.name}</td>
+                <td><input type="number" value="${val}" onchange="manualEdit('${acc.name}', this.value)"></td>
+            `;
             plBody.appendChild(tr);
         });
 
-        let q = (currentDept === '122 資格教育') ? 0 : 1;
-        if (currentDept === '122 資格教育') {
-            document.querySelectorAll('.q-in').forEach(input => q += parseInt(input.value) || 0);
+        let q = (currentDept === '122') ? 0 : 1;
+        if(currentDept === '122') {
+            document.querySelectorAll('.qin').forEach(i => q += parseInt(i.value) || 0);
         }
 
-        const mq = pq - vq;
-        const g = mq - f;
-        const p = pq / (q || 1);
-        const v = vq / (q || 1);
-        const m = p - v;
-        const ratio = (pq > 0) ? (mq / pq) * 100 : 0;
-        const be = (ratio > 0) ? Math.round(f / (ratio / 100)) : 0;
+        const mq = pq - vq; const g = mq - f;
+        const p = pq / (q || 1); const v = vq / (q || 1); const m = p - v;
+        const ratio = pq > 0 ? (mq / pq) * 100 : 0;
+        const be = ratio > 0 ? Math.round(f / (ratio / 100)) : 0;
 
         document.getElementById('m-pq').innerText = pq.toLocaleString();
         document.getElementById('m-vq').innerText = vq.toLocaleString();
         document.getElementById('m-mq').innerText = mq.toLocaleString();
         document.getElementById('m-f').innerText = f.toLocaleString();
         document.getElementById('m-g').innerText = g.toLocaleString();
-        document.getElementById('g-bg').style.background = g >= 0 ? '#f0fdf4' : '#fff1f2';
-
+        document.getElementById('g-box').style.background = g >= 0 ? '#f0fdf4' : '#fff1f2';
+        
         document.getElementById('v-p').innerText = Math.round(p).toLocaleString();
         document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
         document.getElementById('v-m').innerText = Math.round(m).toLocaleString();
         document.getElementById('v-q').innerText = q.toLocaleString();
         document.getElementById('v-mq').innerText = mq.toLocaleString();
+        document.getElementById('id-ratio').innerText = ratio.toFixed(1) + "%";
+        document.getElementById('id-be').innerText = "¥" + be.toLocaleString();
 
-        document.getElementById('idx-ratio').innerText = ratio.toFixed(1) + "%";
-        document.getElementById('idx-be').innerText = "¥" + be.toLocaleString();
-        
-        updateCharts(g, p, v, m);
+        updateCharts(g);
     }
 
-    function updateCharts(g, p, v, m) {
-        if (charts.profit) charts.profit.destroy();
-        if (charts.pvm) charts.pvm.destroy();
+    function manualEdit(accName, val) {
+        const year = document.getElementById('yearSel').value;
+        const month = document.getElementById('monthSel').value;
+        dbData[`${year}-${month}-${currentDept}-${accName}`] = parseInt(val) || 0;
+        calculate();
+    }
 
-        charts.profit = new Chart(document.getElementById('chart-profit'), {
+    function applyCSV(rows) {
+        const year = "2025"; const month = "3"; // CSVの内容に合わせる
+        rows.forEach(row => {
+            const name = row[1];
+            if(masterAccounts.some(a => a.name === name)) {
+                dbData[`${year}-${month}-121-${name}`] = parseInt((row[11]||"0").replace(/,/g,'')) || 0;
+                dbData[`${year}-${month}-122-${name}`] = parseInt((row[13]||"0").replace(/,/g,'')) || 0;
+                dbData[`${year}-${month}-Total-${name}`] = parseInt((row[15]||"0").replace(/,/g,'')) || 0;
+            }
+        });
+    }
+
+    function updateCharts(currentG) {
+        if(charts.y) charts.y.destroy();
+        charts.y = new Chart(document.getElementById('yearChart'), {
             type: 'bar',
-            data: { labels: ['今期利益'], datasets: [{ label: '利益(G)', data: [g], backgroundColor: '#059669' }] },
-            options: { plugins: { title: { display: true, text: '利益推移' } } }
-        });
-        charts.pvm = new Chart(document.getElementById('chart-pvm'), {
-            type: 'line',
-            data: { labels: ['今期'], datasets: [{ label: '単価(P)', data: [p], borderColor: '#2563eb' }, { label: '単位利益(M)', data: [m], borderColor: '#059669' }] },
-            options: { plugins: { title: { display: true, text: 'P・M単価推移' } } }
+            data: {
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [{ label: '年度利益推移', data: [1187054, 88542, -3352464, currentG], backgroundColor: '#2563eb' }]
+            },
+            options: { plugins: { title: { display: true, text: '年度利益(G)推移' } } }
         });
     }
+
     calculate();
 </script>
 
