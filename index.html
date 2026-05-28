@@ -3,161 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STC MQ-Accounting Dashboard</title>
+    <title>MQ STRATEGY BOARD - PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #f1f5f9; color: #1e293b; }
-        :root { --pq: #eff6ff; --vq: #fff1f2; --mq: #ffffff; --f: #fefce8; --g: #f0fdf4; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@500;900&display=swap');
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; background-color: #f8fafc; color: #0f172a; letter-spacing: -0.02em; }
         
-        /* MQメイン図：コンパクト化 */
-        .mq-grid { display: grid; grid-template-columns: 140px 100px 200px; grid-template-rows: 50px 90px 50px; gap: 8px; margin: auto; }
-        .mq-box { border: 2px solid #000; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; box-shadow: 4px 4px 0px #000; }
-        .box-pq { grid-row: 1 / 4; grid-column: 1; background: var(--pq); }
-        .box-vq { grid-row: 1; grid-column: 2 / 4; background: var(--vq); }
-        .box-mq { grid-row: 2 / 4; grid-column: 2; background: var(--mq); }
-        .box-f  { grid-row: 2; grid-column: 3; background: var(--f); }
-        .box-g  { grid-row: 3; grid-column: 3; background: var(--g); }
+        /* MQ図の精緻なスタイリング */
+        .mq-board { display: grid; grid-template-columns: 160px 110px 240px; grid-template-rows: 60px 100px 60px; gap: 12px; }
+        .mq-card { border: 3px solid #000; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; background: white; box-shadow: 4px 4px 0px #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .box-pq { grid-row: 1 / 4; grid-column: 1; background-color: #f1f5f9; }
+        .box-vq { grid-row: 1; grid-column: 2 / 4; background-color: #fff1f2; }
+        .box-mq { grid-row: 2 / 4; grid-column: 2; background-color: #ffffff; }
+        .box-f  { grid-row: 2; grid-column: 3; background-color: #fefce8; }
+        .box-g  { grid-row: 3; grid-column: 3; background-color: #f0fdf4; }
 
-        /* PVMQ正式レイアウト：×の上が開いたスタイル */
-        .pvmq-table { display: flex; align-items: center; gap: 0; }
-        .pv-main { display: grid; grid-template-columns: 100px 100px; grid-template-rows: 50px 50px; border: 2px solid #000; background: #000; gap: 2px; }
-        .pv-cell { background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        /* PVMQ表：×の上に罫線なし・数字中央 */
+        .pvmq-layout { display: flex; align-items: center; gap: 0; margin-top: 30px; }
+        .pvm-grid { display: grid; grid-template-columns: 140px 140px; grid-template-rows: 70px 70px; border: 3px solid #000; background: #000; gap: 3px; border-radius: 8px 0 0 8px; overflow: hidden; }
+        .pvm-cell { background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
         .cell-p { grid-row: 1/3; }
         .cell-v { background: #f8fafc; }
-        .symbol-x { font-size: 2rem; font-weight: bold; padding: 0 15px; }
-        .q-box { width: 80px; height: 102px; border: 2px solid #000; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .symbol-x { font-size: 2.5rem; font-weight: 900; padding: 0 25px; color: #000; }
+        .q-frame { width: 110px; height: 143px; border: 3px solid #000; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 0 8px 8px 0; border-left: none; }
         
-        .active-tab { background: #1e40af !important; color: white !important; border-color: #1e40af !important; }
-        .sidebar-input { width: 100%; text-align: right; border-bottom: 1px solid #e2e8f0; font-weight: 700; background: transparent; outline: none; transition: border-color 0.2s; }
-        .sidebar-input:focus { border-color: #3b82f6; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .label-abs { position: absolute; top: 6px; left: 10px; font-size: 0.75rem; font-weight: 900; color: #94a3b8; }
+        .value-xl { font-size: 1.8rem; font-weight: 900; color: #000; }
+
+        .sidebar-input { width: 100%; text-align: right; border-bottom: 2px solid #e2e8f0; font-weight: 700; background: transparent; transition: all 0.2s; font-family: monospace; }
+        .sidebar-input:focus { border-color: #3b82f6; background: #f1f5f9; }
+        .active-dept { background: #1e40af !important; color: white !important; box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3); }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="h-screen overflow-hidden flex">
 
-<div class="flex h-screen">
-    <!-- サイドバー：入力系 -->
-    <aside class="w-[400px] bg-white border-r border-slate-200 shadow-2xl z-20 flex flex-col">
-        <div class="p-6 bg-slate-900 text-white flex items-center justify-between">
-            <h1 class="text-xl font-black tracking-tighter">MANAGEMENT BOARD</h1>
-            <div class="bg-blue-600 px-2 py-1 rounded text-[10px] font-bold">PRO</div>
+    <!-- サイドバー：入力コントロール -->
+    <aside class="w-[420px] bg-[#0f172a] text-white flex flex-col shadow-2xl z-30">
+        <div class="p-8">
+            <h1 class="text-2xl font-black tracking-tighter flex items-center gap-2">
+                <span class="text-blue-500">■</span> MQ ANALYZER <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded ml-2">PRO</span>
+            </h1>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-5 space-y-6">
-            <!-- 1. CSV取込 -->
-            <div class="p-4 bg-green-50 border border-green-100 rounded-2xl">
-                <p class="text-[10px] font-bold text-green-600 mb-2 uppercase tracking-widest">CSV Data Import</p>
-                <input type="file" id="csvFile" accept=".csv" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-600 file:text-white hover:file:bg-green-700 cursor-pointer">
-            </div>
-
-            <!-- 2. 部門切替 -->
-            <div class="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-xl">
-                <button onclick="switchDept('koubai')" id="t-koubai" class="py-2 text-[10px] font-black rounded-lg active-tab">購買課</button>
-                <button onclick="switchDept('shikaku')" id="t-shikaku" class="py-2 text-[10px] font-black rounded-lg bg-white">資格教育</button>
-                <button onclick="switchDept('total')" id="t-total" class="py-2 text-[10px] font-black rounded-lg bg-white italic">合計</button>
-            </div>
-
-            <!-- 3. STC人数（資格教育時のみ表示） -->
-            <div id="stcTool" class="p-4 bg-slate-900 rounded-2xl text-white hidden animate-in fade-in duration-300">
-                <h3 class="text-xs font-black text-blue-400 mb-3 uppercase tracking-tighter">STC 講習人数入力 (Q)</h3>
-                <div class="grid grid-cols-2 gap-3 text-[11px]">
-                    <div>玉掛: <input type="number" id="q_t" class="bg-slate-800 border border-slate-700 rounded w-14 p-1 text-center font-bold q-in" value="71"></div>
-                    <div>クレーン: <input type="number" id="q_c" class="bg-slate-800 border border-slate-700 rounded w-14 p-1 text-center font-bold q-in" value="35"></div>
-                    <div class="col-span-2 pt-2 border-t border-slate-700 flex justify-between font-black">
-                        <span>合計累計数量 (Q)</span>
-                        <span id="q_sum" class="text-blue-400 text-sm">106</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. PL科目詳細 -->
+        <div class="flex-1 overflow-y-auto px-8 space-y-8">
+            <!-- CSV & Dept -->
             <div class="space-y-4">
-                <div class="category text-[10px] font-black text-slate-400 border-b pb-1 uppercase tracking-widest">PL科目詳細反映</div>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center text-xs"><span>社外収入 (PQ)</span><input type="number" id="v_rev" class="sidebar-input w-28 pl-val"></div>
-                    <div class="flex justify-between items-center text-xs"><span>材料・外注費 (VQ)</span><input type="number" id="v_mat" class="sidebar-input w-28 pl-val"></div>
-                    <div class="flex justify-between items-center text-xs"><span>給料手当 (F)</span><input type="number" id="v_sal" class="sidebar-input w-28 pl-val"></div>
-                    <div class="flex justify-between items-center text-xs"><span>経費その他 (F)</span><input type="number" id="v_other" class="sidebar-input w-28 pl-val"></div>
+                <div class="p-5 bg-slate-800/50 rounded-2xl border border-slate-700">
+                    <p class="text-[10px] font-black text-blue-400 uppercase mb-3">CSV Data Source</p>
+                    <input type="file" id="csvFile" accept=".csv" class="text-xs w-full cursor-pointer file:bg-blue-600 file:text-white file:border-0 file:rounded-full file:px-4 file:py-1 file:mr-3">
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="switchDept('koubai')" id="t-koubai" class="py-2 text-[10px] font-black border border-slate-700 rounded-xl active-dept transition-all">購買課</button>
+                    <button onclick="switchDept('shikaku')" id="t-shikaku" class="py-2 text-[10px] font-black border border-slate-700 rounded-xl transition-all">資格教育</button>
+                    <button onclick="switchDept('total')" id="t-total" class="py-2 text-[10px] font-black border border-slate-700 rounded-xl italic transition-all">部門合計</button>
+                </div>
+            </div>
+
+            <!-- STC Input (資格教育時のみ) -->
+            <div id="stcBox" class="p-6 bg-blue-600 rounded-3xl hidden shadow-xl ring-4 ring-blue-500/30">
+                <h3 class="text-xs font-black mb-4 uppercase tracking-widest">STC 講習人数 (Q)</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-sm font-bold"><span>今月の受講者</span><input type="number" id="q_m" class="w-20 bg-blue-700 border-none rounded-lg p-1 text-center" value="0"></div>
+                    <div class="flex justify-between items-center text-sm font-bold"><span>累計の受講者</span><input type="number" id="q_c" class="w-20 bg-blue-800 border-none rounded-lg p-2 text-center text-lg" value="106"></div>
+                </div>
+            </div>
+
+            <!-- PL Inputs -->
+            <div class="space-y-6">
+                <p class="text-[10px] font-black text-slate-500 border-b border-slate-800 pb-2 uppercase tracking-[0.2em]">Financial Details</p>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-sm font-medium"><span>社外収入</span><input type="number" id="v_rev" class="sidebar-input w-32 text-blue-400"></div>
+                    <div class="flex justify-between items-center text-sm font-medium"><span>材料・外注費</span><input type="number" id="v_mat" class="sidebar-input w-32 text-red-400"></div>
+                    <div class="flex justify-between items-center text-sm font-medium"><span>人件費・給与</span><input type="number" id="v_sal" class="sidebar-input w-32 text-amber-400"></div>
+                    <div class="flex justify-between items-center text-sm font-medium text-slate-400"><span>その他経費</span><input type="number" id="v_other" class="sidebar-input w-32 text-slate-400"></div>
                 </div>
             </div>
         </div>
 
-        <div class="p-4 bg-slate-50 border-t border-slate-100">
-            <button onclick="save()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black text-sm shadow-xl hover:bg-black transition-all">
-                データをクラウドに保存
-            </button>
-            <p id="saveMsg" class="text-center text-[10px] mt-2 font-bold text-blue-600 h-4"></p>
+        <div class="p-8 bg-slate-900/50 border-t border-slate-800">
+            <button onclick="save()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-lg shadow-2xl shadow-blue-500/20 transition-all active:scale-95">クラウド同期</button>
+            <p id="saveMsg" class="text-center text-[10px] mt-3 font-bold text-blue-400 h-4"></p>
         </div>
     </aside>
 
-    <!-- メイン：ビジュアル系 -->
-    <main class="flex-1 overflow-hidden flex flex-col p-6 lg:p-8">
-        <!-- ヘッダー：セレクターと利益 -->
-        <header class="flex justify-between items-start mb-6">
-            <div class="flex items-center gap-6">
-                <h2 class="text-5xl font-black tracking-tighter" id="titleDept">121 購買課管理</h2>
-                <div class="flex gap-2">
-                    <select id="selY" class="bg-white border-2 border-slate-300 rounded-lg p-1.5 font-bold text-sm outline-none">
+    <!-- メインコンテンツ -->
+    <main class="flex-1 flex flex-col p-8 lg:p-12 overflow-hidden">
+        <!-- Header -->
+        <header class="flex justify-between items-start mb-8">
+            <div>
+                <div class="flex items-center gap-4 mb-2">
+                    <h2 class="text-6xl font-black tracking-tighter" id="headDept">121 購買課管理</h2>
+                    <span class="text-xs bg-slate-200 px-3 py-1 rounded-full font-black text-slate-500 uppercase">Analysis Mode</span>
+                </div>
+                <div class="flex gap-3">
+                    <select id="selY" class="bg-transparent font-black text-slate-500 outline-none cursor-pointer hover:text-blue-600 transition-colors">
                         <option value="2025">2024年度(2506期)</option>
                         <option value="2024">2023年度(2406期)</option>
                     </select>
-                    <select id="selM" class="bg-white border-2 border-slate-300 rounded-lg p-1.5 font-bold text-sm outline-none">
-                        <option value="total">期累計(決算)</option>
-                        <option value="05">5月度</option>
+                    <span class="text-slate-300">|</span>
+                    <select id="selM" class="bg-transparent font-black text-slate-500 outline-none cursor-pointer hover:text-blue-600 transition-colors">
+                        <option value="total">期累計合計</option>
+                        <option value="05">5月度単月</option>
                     </select>
                 </div>
             </div>
-            <div class="bg-blue-600 px-8 py-5 rounded-[30px] text-white shadow-2xl text-right min-w-[240px]">
-                <p class="text-[10px] font-black opacity-70 uppercase tracking-widest">Cumulative Profit (G)</p>
-                <p class="text-4xl font-black" id="totalG">¥0</p>
+            
+            <div class="bg-white p-8 rounded-[40px] shadow-xl border border-slate-100 flex items-center gap-8 ring-1 ring-slate-200">
+                <div class="text-right border-r pr-8 border-slate-100">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">MQ Ratio</p>
+                    <p class="text-4xl font-black text-blue-600"><span id="mqRate">0</span>%</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Profit (G)</p>
+                    <p class="text-6xl font-black tracking-tighter" id="totalG">¥0</p>
+                </div>
             </div>
         </header>
 
-        <!-- コンテンツエリア：グリッド配置でスクロールを防ぐ -->
-        <div class="flex-1 grid grid-cols-12 gap-6 overflow-hidden">
-            <!-- 左側：MQ図とPVMQ -->
-            <div class="col-span-7 bg-white rounded-[40px] p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-around relative">
-                <div class="absolute top-8 right-10 text-right">
-                    <p class="text-[10px] font-black text-slate-400">MQ RATIO</p>
-                    <p class="text-4xl font-black text-blue-600"><span id="mqRate">0</span>%</p>
+        <!-- Main Grid -->
+        <div class="flex-1 grid grid-cols-12 gap-8 min-h-0">
+            <!-- Left: Visual Board -->
+            <div class="col-span-8 bg-white rounded-[50px] shadow-sm border border-slate-200 flex flex-col items-center justify-center p-12">
+                <div class="mq-board scale-110 mb-12">
+                    <div class="mq-card box-pq"><span class="label-abs">PQ</span><span class="value-xl" id="dPQ">0</span></div>
+                    <div class="mq-card box-vq"><span class="label-abs text-red-400">VQ</span><span class="value-xl text-red-500" id="dVQ">0</span></div>
+                    <div class="mq-card box-mq"><span class="label-abs text-blue-500">MQ</span><span class="value-xl text-blue-600" id="dMQ">0</span></div>
+                    <div class="mq-card box-f"><span class="label-abs text-amber-500">F</span><span class="value-xl text-slate-500" id="dF">0</span></div>
+                    <div class="mq-card box-g"><span class="label-abs text-green-500">G</span><span class="value-xl text-green-600 font-black" id="dG">0</span></div>
                 </div>
 
-                <!-- MQメイン図 -->
-                <div class="mq-grid scale-110">
-                    <div class="mq-box box-pq"><span class="text-[10px] font-black mb-1">PQ</span><span class="text-xl font-black" id="dPQ">0</span></div>
-                    <div class="mq-box box-vq"><span class="text-[10px] font-black mb-1 text-red-500">VQ</span><span class="text-xl font-black text-red-500" id="dVQ">0</span></div>
-                    <div class="mq-box box-mq"><span class="text-[10px] font-black mb-1 text-blue-600">MQ</span><span class="text-xl font-black text-blue-600" id="dMQ">0</span></div>
-                    <div class="mq-box box-f"><span class="text-[10px] font-black mb-1 text-slate-500">F</span><span class="text-xl font-black text-slate-500" id="dF">0</span></div>
-                    <div class="mq-box box-g"><span class="text-[10px] font-black mb-1 text-green-600">G</span><span class="text-xl font-black text-green-600" id="dG">0</span></div>
-                </div>
-
-                <!-- PVMQ正式図 -->
-                <div class="pvmq-table scale-110">
-                    <div class="pv-main">
-                        <div class="pv-cell cell-p"><span class="absolute top-1 left-2 text-[9px] font-black opacity-40">P</span><span id="vP" class="text-xl font-black">0</span></div>
-                        <div class="pv-cell cell-v"><span class="absolute top-1 left-2 text-[9px] font-black opacity-40">V</span><span id="vV" class="text-sm font-bold text-red-500">0</span></div>
-                        <div class="pv-cell cell-m"><span class="absolute top-1 left-2 text-[9px] font-black opacity-40">M</span><span id="vM" class="text-sm font-bold text-blue-600">0</span></div>
+                <div class="pvmq-layout scale-110">
+                    <div class="pvm-grid">
+                        <div class="pvm-cell cell-p"><span class="label-abs">P</span><span id="vP" class="value-xl">0</span></div>
+                        <div class="pvm-cell cell-v"><span class="label-abs text-red-400">V</span><span id="vV" class="text-xl font-black text-red-500">0</span></div>
+                        <div class="pvm-cell cell-m"><span class="label-abs text-blue-500">M</span><span id="vM" class="text-xl font-black text-blue-600">0</span></div>
                     </div>
                     <div class="symbol-x">×</div>
-                    <div class="q-box">
-                        <span class="text-[9px] font-black opacity-40 mb-1">Q</span>
-                        <span id="vQ" class="text-2xl font-black">0</span>
+                    <div class="q-frame">
+                        <span class="text-xs font-black text-slate-400 mb-1">Quantity (Q)</span>
+                        <span id="vQ" class="text-5xl font-black">106</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 右側：グラフとメモ -->
-            <div class="col-span-5 flex flex-col gap-6">
-                <div class="flex-1 bg-white rounded-[40px] p-6 shadow-sm border border-slate-100 flex flex-col">
-                    <h3 class="text-xs font-black text-slate-400 mb-4 uppercase">Sales Structure Analysis</h3>
+            <!-- Right: Chart & Notes -->
+            <div class="col-span-4 flex flex-col gap-8">
+                <div class="flex-1 bg-white rounded-[50px] p-10 border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="text-xs font-black text-slate-400 uppercase mb-6 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-blue-500 rounded-full"></span> Comparison Chart
+                    </h3>
                     <div class="flex-1"><canvas id="mainChart"></canvas></div>
                 </div>
-                <div class="h-40 bg-slate-900 rounded-[40px] p-6 text-white shadow-2xl">
-                    <h3 class="text-[10px] font-black opacity-40 mb-2 uppercase">Meeting Notes</h3>
-                    <textarea class="w-full h-20 bg-transparent border-none outline-none text-xs text-slate-300 italic resize-none" placeholder="決定事項を記入..."></textarea>
+                <div class="h-48 bg-[#0f172a] rounded-[50px] p-8 text-white shadow-2xl relative">
+                    <p class="text-[10px] font-black text-blue-400 mb-3 uppercase tracking-widest">Meeting Insights</p>
+                    <textarea class="w-full h-24 bg-transparent border-none outline-none text-sm text-slate-300 italic resize-none leading-relaxed" placeholder="会議の要点を記入..."></textarea>
                 </div>
             </div>
         </div>
@@ -184,11 +185,11 @@
     const ctx = document.getElementById('mainChart').getContext('2d');
     const chart = new Chart(ctx, {
         type: 'bar',
-        data: { labels: ['購買', '資格', '合計'], datasets: [{label:'G', data:[0,0,0], backgroundColor:'#4ade80'}]},
-        options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } } } }
+        data: { labels: ['購買', '資格', '合計'], datasets: [{label:'Profit (G)', data:[0,0,0], backgroundColor:'#22c55e', borderRadius:10}]},
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
     });
 
-    onSnapshot(doc(db, "mq_app_pro", "master"), (snap) => {
+    onSnapshot(doc(db, "mq_app_ultimate", "master"), (snap) => {
         if(snap.exists()) { allD = snap.data(); refresh(); }
     });
 
@@ -197,15 +198,18 @@
         if(!allD[key]) allD[key] = { koubai:{}, shikaku:{}, total:{} };
         const data = allD[key][curD] || {};
 
-        document.getElementById('stcTool').style.display = (curD === 'shikaku' ? 'block' : 'none');
-        document.querySelectorAll('.pl-val').forEach(el => el.value = data[el.id] || 0);
-        document.getElementById('q_t').value = data['q_t'] || 0;
-        document.getElementById('q_c').value = data['q_c'] || 0;
+        document.getElementById('stcBox').style.display = (curD === 'shikaku' ? 'block' : 'none');
+        document.getElementById('v_rev').value = data['v_rev'] || 0;
+        document.getElementById('v_mat').value = data['v_mat'] || 0;
+        document.getElementById('v_sal').value = data['v_sal'] || 0;
+        document.getElementById('v_other').value = data['v_other'] || 0;
+        document.getElementById('q_m').value = data['q_m'] || 0;
+        document.getElementById('q_c').value = data['q_c'] || 106;
 
-        const pq = (parseInt(document.getElementById('v_rev').value)||0);
-        const vq = (parseInt(document.getElementById('v_mat').value)||0);
+        const pq = parseInt(document.getElementById('v_rev').value) || 0;
+        const vq = parseInt(document.getElementById('v_mat').value) || 0;
         const f = (parseInt(document.getElementById('v_sal').value)||0) + (parseInt(document.getElementById('v_other').value)||0);
-        const q = (parseInt(document.getElementById('q_t').value)||0) + (parseInt(document.getElementById('q_c').value)||0) || 1;
+        const q = parseInt(document.getElementById('q_c').value) || 1;
         
         const mq = pq - vq; const g = mq - f;
         document.getElementById('dPQ').innerText = pq.toLocaleString();
@@ -219,36 +223,34 @@
         document.getElementById('vP').innerText = Math.round(pq/q).toLocaleString();
         document.getElementById('vV').innerText = Math.round(vq/q).toLocaleString();
         document.getElementById('vM').innerText = Math.round(mq/q).toLocaleString();
-        document.getElementById('q_sum').innerText = q;
 
         ['koubai', 'shikaku', 'total'].forEach((d, i) => {
             const row = allD[key][d] || {};
-            chart.data.datasets[0].data[i] = ((row.v_rev||0) - (row.v_mat||0)) - ((row.v_sal||0)+(row.v_other||0));
+            chart.data.datasets[0].data[i] = ((row.v_rev||0)-(row.v_mat||0)) - ((row.v_sal||0)+(row.v_other||0));
         });
         chart.update();
     }
 
     window.switchDept = (d) => {
         curD = d;
-        document.querySelectorAll('#deptTabs button').forEach(b => b.classList.remove('active-tab'));
-        document.getElementById('t-'+d).classList.add('active-tab');
-        document.getElementById('titleDept').innerText = (d==='koubai'?'121 購買課管理':d==='shikaku'?'122 資格教育':'12 部門合計');
+        document.querySelectorAll('#deptTabs button').forEach(b => b.classList.remove('active-dept'));
+        document.getElementById('t-'+d).classList.add('active-dept');
+        document.getElementById('headDept').innerText = (d==='koubai'?'121 購買課管理':d==='shikaku'?'122 資格教育':'12 部門合計');
         refresh();
     }
 
     window.save = async () => {
         const key = document.getElementById('selY').value + "_" + document.getElementById('selM').value;
         const inputs = document.querySelectorAll('input');
+        if(!allD[key]) allD[key] = {};
         allD[key][curD] = {};
         inputs.forEach(i => { if(i.id) allD[key][curD][i.id] = parseInt(i.value) || 0 });
-        await setDoc(doc(db, "mq_app_pro", "master"), allD);
-        document.getElementById('saveMsg').innerText = "クラウド同期完了！";
+        await setDoc(doc(db, "mq_app_ultimate", "master"), allD);
+        document.getElementById('saveMsg').innerText = "CLOUDS SYNC COMPLETE";
         setTimeout(() => document.getElementById('saveMsg').innerText = "", 2000);
     }
 
-    // CSV 解析ロジック
     document.getElementById('csvFile').addEventListener('change', (e) => {
-        const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (event) => {
             const lines = event.target.result.split('\n');
@@ -256,13 +258,12 @@
                 const [name, val] = line.split(',');
                 const num = parseInt(val?.replace(/[^-0-9]/g, '')) || 0;
                 if(name?.includes('収入')) document.getElementById('v_rev').value = num;
-                if(name?.includes('材料')) document.getElementById('v_mat').value = num;
-                if(name?.includes('給与')) document.getElementById('v_sal').value = num;
+                if(name?.includes('材料費')) document.getElementById('v_mat').value = num;
+                if(name?.includes('給料')) document.getElementById('v_sal').value = num;
             });
             refresh();
-            alert('CSVの科目を自動反映しました！');
         };
-        reader.readAsText(file);
+        reader.readAsText(e.target.files[0]);
     });
 
     document.querySelectorAll('input, select').forEach(el => el.oninput = refresh);
