@@ -22,66 +22,76 @@
             border-bottom: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .header-title h1 { margin: 0; font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .controls select { padding: 10px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 16px; font-weight: 900; color: var(--primary); cursor: pointer; background: #fff; }
+        .controls select { padding: 8px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 15px; font-weight: 900; color: var(--primary); cursor: pointer; }
 
         .dashboard-grid { display: grid; grid-template-columns: 420px 1fr 450px; gap: 20px; align-items: start; }
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        .tab-btn { flex: 1; padding: 12px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 12px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 12px; }
         .tab-btn.active { background: var(--primary); color: white; }
         
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        td { padding: 5px 8px; border-bottom: 1px solid #f1f5f9; }
+        td { padding: 6px; border-bottom: 1px solid #f1f5f9; }
         .tag { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 900; margin-right: 4px; display: inline-block; width: 30px; text-align: center; }
         .tag-p { background: #dbeafe; color: #1e40af; } .tag-v { background: #fee2e2; color: #b91c1c; } .tag-f { background: #f3f4f6; color: #475569; }
 
+        /* KPI：2段表示 */
         .kpi-row { display: flex; gap: 20px; margin-bottom: 15px; width: 100%; justify-content: center; }
-        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; max-width: 250px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 0 var(--primary); }
-        .kpi-box span { font-size: 11px; font-weight: bold; color: var(--gray); }
-        .kpi-box strong { font-size: 2rem; color: var(--primary); line-height: 1.1; }
+        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; max-width: 280px; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 4px 0 var(--primary); }
+        .kpi-box span { font-size: 11px; font-weight: bold; color: var(--gray); margin-bottom: 2px; }
+        .kpi-box strong { font-size: 2.2rem; color: var(--primary); line-height: 1; }
 
-        .mq-table { display: grid; grid-template-columns: 240px 140px 240px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; }
+        /* MQ図 */
+        .mq-table { display: grid; grid-template-columns: 220px 140px 220px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); }
         .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 5px; }
-        .mq-c strong { font-size: 1.6rem; font-weight: 900; white-space: nowrap; overflow: hidden; }
+        .mq-c strong { font-size: 1.6rem; font-weight: 900; white-space: nowrap; }
 
+        /* にょにょにょん */
         .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 15px 0 0 15px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         .drawer.open { right: 0 !important; }
-        .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 11px; font-weight: 900; }
-        #paste-drawer { top: 80px; width: 400px; right: -420px; } 
-        #stats-drawer { top: 210px; width: 650px; background: #f0f9ff; right: -670px; }
+        .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 12px; font-weight: 900; }
+        #paste-drawer { top: 80px; width: 400px; right: -420px; }
+        #stats-drawer { top: 220px; width: 650px; background: #f0f9ff; right: -670px; }
+        .stats-table { width: 100%; border-collapse: collapse; background: white; font-size: 12px; }
+        .stats-table th, .stats-table td { border: 1px solid #cbd5e1; padding: 10px 5px; text-align: center; }
 
+        /* フッター：2段表示（数字トップ） */
         .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 15px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; }
+        .footer-item:last-child { border-right: none; }
         .footer-item strong { font-size: 1.6rem; color: var(--success); display: block; }
+        .footer-item span { font-size: 10px; color: var(--gray); font-weight: bold; }
+        .footer-item .desc { font-size: 9px; color: #cbd5e1; display: block; }
+
         .btn-sync { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
 
-        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .sens-card { background: #1e293b; color: white; padding: 12px; border-radius: 10px; border-left: 4px solid #10b981; }
+        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .sens-card { background: #1e293b; color: white; padding: 15px; border-radius: 12px; border-left: 4px solid #10b981; }
         .sens-label { font-size: 10px; color: var(--gray); display: block; }
         .sens-result { font-size: 1.1rem; font-weight: 900; color: #10b981; }
     </style>
 </head>
 <body>
 
-<!-- にょん1 -->
+<!-- にょん1: 貼り付け -->
 <div class="drawer" id="paste-drawer">
     <div class="drawer-handle" onclick="toggleDrawer('paste-drawer')">EXCEL貼り付け</div>
-    <h3 style="margin:0; color:var(--primary);">Excelデータ一括反映</h3>
-    <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; margin-top:10px; font-size:11px;" placeholder="Excelの範囲をペースト"></textarea>
+    <h3 style="margin:0; color:var(--primary); font-size:16px;">Excelデータ一括反映</h3>
+    <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; margin-top:10px; font-size:11px;"></textarea>
     <button onclick="importFromPaste()" style="width:100%; background:var(--primary); color:white; border:none; padding:15px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">反映を実行</button>
 </div>
 
-<!-- にょん2 -->
+<!-- にょん2: 統計 -->
 <div class="drawer" id="stats-drawer">
     <div class="drawer-handle" id="stats-handle" onclick="toggleDrawer('stats-drawer')">予定・実績管理</div>
-    <h3 style="margin:0; color:var(--primary);">資格教育：開催予定と実績</h3>
+    <h3 style="margin:0; color:var(--primary); font-size:16px;">資格教育：開催予定と実績</h3>
     <div style="max-height: 550px; overflow: hidden; margin-top:10px;">
-        <table class="stats-table" style="width:100%; border-collapse:collapse; background:white; font-size:12px; text-align:center;">
+        <table class="stats-table">
             <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定</th><th>実績</th><th>人数予定</th><th>実績人数</th></tr></thead>
             <tbody id="stats-body"></tbody>
         </table>
     </div>
-    <button onclick="alert('統計を保存しました')" style="width:100%; background:var(--primary); color:white; border:none; padding:15px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">クラウド保存</button>
+    <button onclick="alert('統計を保存しました')" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">統計を保存</button>
 </div>
 
 <div class="container">
@@ -89,6 +99,7 @@
         <div class="header-title"><h1>MQ会計　ストラック表</h1></div>
         <div class="controls">
             <select id="yearSel" onchange="calculate()"><option value="2025">2025年度</option><option value="2024">2024年度</option></select>
+            <!-- 月の並びを期首7月からに完全固定 -->
             <select id="monthSel" onchange="calculate()" style="margin-left:10px;">
                 <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
                 <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
@@ -107,7 +118,7 @@
                 <button class="tab-btn" id="btn-Total" onclick="setDept('Total', this)">部門合計</button>
             </div>
             <div class="card">
-                <div class="pl-all-display"><table><tbody id="pl-body"></tbody></table></div>
+                <div class="pl-list"><table><tbody id="pl-body"></tbody></table></div>
                 
                 <div id="q-panel" style="display:none; background:#eff6ff; padding:12px; border-radius:12px; border:2px solid #bfdbfe; margin-top:10px;">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
@@ -144,33 +155,34 @@
                     <div class="mq-c" style="background:var(--mq-vq); border:1px solid var(--border);"><span>V (変動)</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
                     <div class="mq-c" style="border:1px solid var(--border);"><span>M (利益)</span><strong id="v-m">0</strong></div>
                 </div>
-                <div style="font-size:40px; font-weight:900; color:#cbd5e1;">×</div>
-                <div style="border:3px solid var(--border); width:100px; height:130px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#eff6ff;">
+                <div style="font-size:35px; font-weight:900; color:#cbd5e1;">×</div>
+                <div style="border:3px solid var(--border); width:90px; height:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#eff6ff;">
                     <span style="font-size:11px; font-weight:bold;">Q (数量)</span><strong id="v-q">0</strong>
                 </div>
-                <div style="font-size:40px; font-weight:900; color:#cbd5e1;">=</div>
-                <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.4rem; color:var(--primary);" id="v-mq">0</strong></div>
+                <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
+                <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.2rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
 
             <div class="sens-grid">
-                <div class="sens-card"><span class="sens-label">単価(P) 5%UPなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
-                <div class="sens-card"><span class="sens-label">数量(Q) 5%UPなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
-                <div class="sens-card"><span class="sens-label">変動費(V) 5%DOWNなら</span><strong class="sens-result" id="sens-v">¥0 UP</strong></div>
-                <div class="sens-card" style="border-left:4px solid var(--success);"><span class="sens-label">固定費(F) 5%DOWNなら</span><strong class="sens-result" id="sens-f">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">単価(P) 5%アップなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">数量(Q) 5%アップなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">変動費(V) 5%ダウンなら</span><strong class="sens-result" id="sens-v">¥0 UP</strong></div>
+                <div class="sens-card" style="border-left:4px solid var(--success);"><span class="sens-label">固定費(F) 5%ダウンなら</span><strong class="sens-result" id="sens-f">¥0 UP</strong></div>
             </div>
         </section>
 
+        <!-- 右：グラフ -->
         <section id="chart-area">
             <div class="card" style="height:350px; margin-bottom:20px;"><canvas id="chart1"></canvas></div>
             <div class="card" style="height:350px;"><canvas id="chart2"></canvas></div>
         </section>
     </div>
 
-    <!-- フッター -->
+    <!-- フッター：完全復元 -->
     <div class="footer-bar">
         <div class="footer-item"><strong id="idx-safety">0.0%</strong><span>安全余裕率</span><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
         <div class="footer-item"><strong id="idx-bep">0.0%</strong><span>BEP比率</span><span class="desc">損益トントンラインの割合</span></div>
-        <div class="footer-item"><strong id="idx-vmq">0 : 0</strong><span>V vs MQ 比率</span><span class="desc">利益と費用の構成バランス</span></div>
+        <div class="footer-item"><strong id="idx-vmq">0 : 0</strong><span>V vs MQ 比率</span><span class="desc">費用構成バランス</span></div>
     </div>
 </div>
 
@@ -178,11 +190,10 @@
     const firebaseConfig = { apiKey: "AIzaSyAvK-_h5NzDjCYPdJgb-iddYdscYaUivto", authDomain: "mq-accounting-221b3.firebaseapp.com", projectId: "mq-accounting-221b3", storageBucket: "mq-accounting-221b3.appspot.com", messagingSenderId: "684182333946", appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" };
     firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-    // 全35科目をマスタとして固定（消さないように明示）
     const masterAccounts = [
-        { name: "完成工事高", type: "売上" }, { name: "兼業事業売上高", type: "売上" }, { name: "内部振替収入", type: "売上" },
+        { name: "兼業事業売上高", type: "売上" }, { name: "内部振替収入", type: "売上" },
         { name: "従業員給料手当", type: "固定" }, { name: "従業員賞与", type: "固定" }, { name: "法定福利費", type: "固定" }, { name: "福利厚生費", type: "固定" }, { name: "広告宣伝費", type: "固定" }, { name: "減価償却費", type: "固定" },
-        { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "運搬費", type: "変動" }, { name: "準備費", type: "変動" }, { name: "仮設費", type: "変動" }, { name: "安全費", type: "変動" }, { name: "技術管理費", type: "変動" }, { name: "機械等経費", type: "変動" }, { name: "事務用品費", type: "変動" }, { name: "消耗品費", type: "変動" }, { name: "諸会費", type: "変動" }, { name: "教育費", type: "変動" }, { name: "採用費", type: "変動" }, { name: "通信交通費", type: "変動" }, { name: "燃料費", type: "変動" }, { name: "動力用水光熱費", type: "変動" }, { name: "租税公課", type: "変動" }, { name: "保険料", type: "変動" }, { name: "支払手数料", type: "変動" }, { name: "雑費", type: "変動" }, { name: "修繕維持費", type: "変動" }, { name: "会議費", type: "変動" }, { name: "地代家賃", type: "変動" }, { name: "車両費", type: "変動" }, { name: "役員報酬", type: "変動" }, { name: "退職金", type: "変動" }
+        { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "租税公課", type: "変動" }, { name: "燃料費", type: "変動" }, { name: "動力用水光熱費", type: "変動" }, { name: "事務用品費", type: "変動" }, { name: "教育費", type: "変動" }, { name: "通信交通費", type: "変動" }, { name: "雑費", type: "変動" }, { name: "修繕維持費", type: "変動" }, { name: "機械等経費", type: "変動" }, { name: "安全費", type: "変動" }, { name: "技術管理費", type: "変動" }, { name: "諸会費", type: "変動" }, { name: "会議費", type: "変動" }
     ];
 
     let currentDept = '121', dbData = {}, charts = {};
@@ -199,14 +210,13 @@
 
     function importFromPaste() {
         const text = document.getElementById('pasteArea').value;
-        const currentYear = document.getElementById('yearSel').value;
-        const currentMonth = document.getElementById('monthSel').value;
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
         text.split('\n').forEach(line => {
             const match = masterAccounts.find(a => line.includes(a.name));
             if (match) {
                 const nums = line.replace(/,/g, '').match(/-?\d+/g) || [];
                 if (nums.length >= 6) {
-                    const b = `${currentYear}-${currentMonth}-`;
+                    const b = `${y}-${m}-`;
                     if(!dbData[b+'121']) dbData[b+'121'] = {}; if(!dbData[b+'122']) dbData[b+'122'] = {}; if(!dbData[b+'Total']) dbData[b+'Total'] = {};
                     dbData[b+'121'][match.name] = parseInt(nums[nums.length-6]);
                     dbData[b+'122'][match.name] = parseInt(nums[nums.length-4]);
@@ -220,7 +230,7 @@
     async function syncToFirebase() {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
         await db.collection("accounting").doc(`${y}-${m}-${currentDept}`).set({ values: dbData[`${y}-${m}-${currentDept}`], updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        alert("クラウド同期が完了しました。");
+        alert("同期完了！");
     }
 
     function setDept(id, btn) {
@@ -235,27 +245,32 @@
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
         let pq = 0, vq = 0, f = 0; const plBody = document.querySelector('#pl-body'); plBody.innerHTML = '';
         const data = dbData[`${y}-${m}-${currentDept}`] || {};
+        
+        // 項目表示：金額が0以外のものだけ表示（要望）
         masterAccounts.forEach(acc => {
             let val = data[acc.name] || 0;
             if(acc.type === "売上") pq += val; else if(acc.type === "変動") vq += val; else f += val;
-            plBody.innerHTML += `<tr><td><span class="tag tag-${acc.type==='売上'?'p':(acc.type==='変動'?'v':'f')}">${acc.type}</span>${acc.name}</td><td style="text-align:right; font-weight:bold;">${val.toLocaleString()}</td></tr>`;
+            if(val !== 0) {
+                const tag = acc.type === "売上" ? "tag-p" : (acc.type === "変動" ? "tag-v" : "tag-f");
+                plBody.innerHTML += `<tr><td><span class="tag ${tag}">${acc.type}</span>${acc.name}</td><td style="text-align:right; font-weight:bold;">${val.toLocaleString()}</td></tr>`;
+            }
         });
 
-        let monthQ = 1;
+        let q = 1; 
         if(currentDept === '122') {
-            monthQ = 0; document.querySelectorAll('.qin').forEach(i => monthQ += parseInt(i.value) || 0);
-            const nj = document.querySelector(`#stat-row-${m} .nj-cell`); if(nj) nj.innerText = monthQ;
+            q = 0; document.querySelectorAll('.qin').forEach(i => q += parseInt(i.value) || 0);
+            const nj = document.querySelector(`#stat-row-${m} .nj-cell`); if(nj) nj.innerText = q;
         } else {
-            monthQ = parseInt(document.getElementById('q-val-manual').value) || 1;
+            q = parseInt(document.getElementById('q-val-manual').value) || 1;
         }
 
-        const mq = pq-vq, g = mq-f, p = pq/monthQ, v = vq/monthQ, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
+        const mq = pq-vq, g = mq-f, p = pq/q, v = vq/q, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
         
         document.getElementById('m-pq').innerText = pq.toLocaleString(); document.getElementById('m-vq').innerText = vq.toLocaleString();
         document.getElementById('m-mq').innerText = mq.toLocaleString(); document.getElementById('m-f').innerText = f.toLocaleString();
         document.getElementById('m-g').innerText = g.toLocaleString(); document.getElementById('g-box').style.background = g>=0?'var(--mq-g)':'var(--mq-vq)';
         document.getElementById('v-p').innerText = Math.round(p).toLocaleString(); document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
-        document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); document.getElementById('v-q').innerText = monthQ.toLocaleString();
+        document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); document.getElementById('v-q').innerText = q.toLocaleString();
         document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio').innerText = ratio.toFixed(1) + "%";
         document.getElementById('id-be').innerText = "¥" + be.toLocaleString();
         
@@ -267,7 +282,7 @@
         document.getElementById('sens-q').innerText = "¥" + Math.round(mq * 0.05).toLocaleString() + " UP";
         document.getElementById('sens-v').innerText = "¥" + Math.round(vq * 0.05).toLocaleString() + " UP";
         document.getElementById('sens-f').innerText = "¥" + Math.round(f * 0.05).toLocaleString() + " UP";
-        updateCharts(pq, vq, f, g, monthQ, m_);
+        updateCharts(pq, vq, f, g, q, m_);
     }
 
     function updateCharts(pq, vq, f, g, q, m) {
