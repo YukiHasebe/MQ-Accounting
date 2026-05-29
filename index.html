@@ -21,76 +21,84 @@
             background: white; padding: 15px 30px; border-radius: 12px; 
             border-bottom: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .header-title h1 { margin: 0; font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .controls select { padding: 8px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 15px; font-weight: 900; color: var(--primary); cursor: pointer; }
+        .header-title h1 { margin: 0; font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+        .controls select { padding: 10px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 16px; font-weight: 900; color: var(--primary); cursor: pointer; }
 
         .dashboard-grid { display: grid; grid-template-columns: 420px 1fr 450px; gap: 20px; align-items: start; }
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
         /* 左カラム */
-        .tab-btn { flex: 1; padding: 12px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 12px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; }
         .tab-btn.active { background: var(--primary); color: white; }
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        td { padding: 5px 8px; border-bottom: 1px solid #f1f5f9; }
+        td { padding: 6px; border-bottom: 1px solid #f1f5f9; }
         .tag { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 900; margin-right: 4px; display: inline-block; width: 30px; text-align: center; }
         .tag-p { background: #dbeafe; color: #1e40af; } .tag-v { background: #fee2e2; color: #b91c1c; } .tag-f { background: #f3f4f6; color: #475569; }
 
         /* KPI：2段表示 */
         .kpi-row { display: flex; gap: 20px; margin-bottom: 15px; width: 100%; justify-content: center; }
-        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; max-width: 250px; display: flex; flex-direction: column; justify-content: center; }
-        .kpi-box span { font-size: 11px; font-weight: bold; color: var(--gray); margin-bottom: 2px; }
-        .kpi-box strong { font-size: 2rem; color: var(--primary); line-height: 1; }
+        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; max-width: 280px; display: flex; flex-direction: column; justify-content: center; }
+        .kpi-box span { font-size: 11px; font-weight: bold; color: var(--gray); margin-bottom: 3px; }
+        .kpi-box strong { font-size: 2.2rem; color: var(--primary); line-height: 1; }
 
         /* MQ図 */
-        .mq-table { display: grid; grid-template-columns: 220px 140px 220px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; }
-        .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .mq-table { display: grid; grid-template-columns: 220px 140px 220px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; box-shadow: 10px 10px 0 rgba(0,0,0,0.1); }
+        .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .mq-c strong { font-size: 1.6rem; font-weight: 900; }
 
-        /* シミュレーションパネル */
-        .sensitivity-area { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .sens-card { background: #1e293b; color: white; padding: 12px; border-radius: 10px; }
-        .sens-label { font-size: 10px; color: #94a3b8; display: block; margin-bottom: 3px; }
-        .sens-result { font-size: 1.1rem; font-weight: 900; color: #10b981; }
+        /* 戦略シミュレーション */
+        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .sens-card { background: #1e293b; color: white; padding: 15px; border-radius: 12px; }
+        .sens-label { font-size: 10px; color: var(--gray); display: block; }
+        .sens-result { font-size: 1.2rem; font-weight: 900; color: #10b981; }
 
-        /* にょにょにょん（ハンドル位置を完全に分離） */
-        .drawer { position: fixed; right: -420px; background: white; border: 3px solid var(--primary); padding: 20px; border-radius: 15px 0 0 15px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
+        /* にょにょにょん（2段ハンドル） */
+        .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 15px 0 0 15px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         .drawer.open { right: 0 !important; }
         .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 11px; font-weight: 900; }
         
-        #paste-drawer { width: 400px; top: 80px; } /* 上段 */
-        #stats-drawer { width: 600px; top: 220px; background: #f0f9ff; right: -620px; } /* 下段 */
+        #paste-drawer { top: 80px; width: 400px; } 
+        #stats-drawer { top: 210px; width: 600px; background: #f0f9ff; right: -620px; }
+
+        .stats-table { width: 100%; border-collapse: collapse; background: white; font-size: 12px; text-align: center; }
+        .stats-table th, .stats-table td { border: 1px solid #cbd5e1; padding: 10px 5px; }
+        .stats-table input { width: 100%; border: 1px solid #eee; padding: 5px; text-align: center; font-weight: bold; }
 
         /* フッター：2段表示 */
-        .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 12px 0; z-index: 500; border-top: 4px solid var(--success); }
+        .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 15px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; }
         .footer-item strong { font-size: 1.6rem; color: var(--success); display: block; }
         .footer-item span { font-size: 10px; color: var(--gray); font-weight: bold; }
-        .footer-item .desc { font-size: 9px; color: #cbd5e1; display: block; margin-top: 2px; }
+        .footer-item .desc { font-size: 9px; color: #cbd5e1; display: block; }
 
         .btn-sync { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
     </style>
 </head>
 <body>
 
-<!-- にょん1: 貼り付け -->
+<!-- にょん1: 貼り付け（上段） -->
 <div class="drawer" id="paste-drawer">
     <div class="drawer-handle" onclick="toggleDrawer('paste-drawer')">EXCEL貼り付け</div>
-    <h3 style="margin:0 0 10px 0; color:var(--primary); font-size:15px;">Excelからデータをコピーして貼り付け</h3>
-    <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; font-size:11px; padding:5px;"></textarea>
-    <button onclick="importFromPaste()" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">データを反映</button>
+    <h3 style="margin:0 0 10px 0; color:var(--primary);">Excelデータ一括反映</h3>
+    <textarea id="pasteArea" style="width:100%; height:250px; border:1px solid #cbd5e1; font-size:11px; padding:10px;"></textarea>
+    <button onclick="importFromPaste()" style="width:100%; background:var(--primary); color:white; border:none; padding:15px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">反映を実行</button>
 </div>
 
-<!-- にょん2: 統計 -->
+<!-- にょん2: 統計（下段） -->
 <div class="drawer" id="stats-drawer">
     <div class="drawer-handle" id="stats-handle" onclick="toggleDrawer('stats-drawer')">予定・実績管理</div>
-    <h3 style="margin:0 0 10px 0; color:var(--primary); font-size:15px;">資格教育：開催予定と実績</h3>
-    <div style="max-height: 500px; overflow: hidden;">
-        <table style="width:100%; border-collapse:collapse; background:white; font-size:12px; text-align:center;">
-            <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定</th><th>実績</th><th>人数予定</th><th>実績</th></tr></thead>
+    <h3 style="margin:0 0 10px 0; color:var(--primary);">資格教育：開催予定と実績</h3>
+    <div style="max-height: 550px; overflow: hidden;">
+        <table class="stats-table">
+            <thead>
+                <tr style="background:#f1f5f9;">
+                    <th style="width:50px;">月</th><th>開催予定</th><th>実績</th><th>人数予定</th><th>実績人数</th>
+                </tr>
+            </thead>
             <tbody id="stats-body"></tbody>
         </table>
     </div>
-    <button onclick="alert('統計を保存しました')" style="width:100%; background:var(--primary); color:white; border:none; padding:12px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">統計を保存</button>
+    <button onclick="alert('統計を保存しました')" style="width:100%; background:var(--primary); color:white; border:none; padding:15px; margin-top:10px; border-radius:8px; font-weight:bold; cursor:pointer;">クラウド保存</button>
 </div>
 
 <div class="container">
@@ -104,7 +112,7 @@
     </header>
 
     <div class="dashboard-grid">
-        <!-- 左側 -->
+        <!-- 左：全科目表示 -->
         <section>
             <div style="display:flex; gap:4px; margin-bottom:12px;">
                 <button class="tab-btn active" onclick="setDept('121', this)">121 購買課</button>
@@ -114,7 +122,7 @@
             <div class="card">
                 <div class="pl-all"><table><tbody id="pl-body"></tbody></table></div>
                 
-                <div id="q-panel" style="display:none; background:#eff6ff; padding:15px; border-radius:12px; border:2px solid #bfdbfe; margin-top:10px;">
+                <div id="q-panel" style="display:none; background:#eff6ff; padding:12px; border-radius:12px; border:2px solid #bfdbfe; margin-top:10px;">
                     <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:8px;">
                         <div style="display:flex; justify-content:space-between;"><label style="font-size:10px; font-weight:bold;">玉掛</label><input type="number" class="qin" value="32" oninput="calculate()" style="width:60px; text-align:right;"></div>
                         <div style="display:flex; justify-content:space-between;"><label style="font-size:10px; font-weight:bold;">小型</label><input type="number" class="qin" value="15" oninput="calculate()" style="width:60px; text-align:right;"></div>
@@ -151,33 +159,33 @@
                     <div class="mq-c"><span>M</span><strong id="v-m">0</strong></div>
                 </div>
                 <div style="font-size:30px; font-weight:900; color:#cbd5e1;">×</div>
-                <div style="border:3px solid var(--border); width:80px; height:120px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#eff6ff;">
+                <div style="border:3px solid var(--border); width:80px; height:110px; display:flex; flex-direction:column; justify-content:center; align-items:center; background:#eff6ff;">
                     <span style="font-size:10px; font-weight:bold;">Q累計</span><strong id="v-q">0</strong>
                 </div>
                 <div style="font-size:30px; font-weight:900; color:#cbd5e1;">=</div>
-                <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2rem; color:var(--primary);" id="v-mq">0</strong></div>
+                <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.5rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
 
-            <div class="sensitivity-area">
-                <div class="sens-card"><span class="sens-label">単価(P) 5%アップなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
-                <div class="sens-card"><span class="sens-label">数量(Q) 5%アップなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
-                <div class="sens-card"><span class="sens-label">変動費(V) 5%ダウンなら</span><strong class="sens-result" id="sens-v">¥0 UP</strong></div>
-                <div class="sens-card" style="border-left:4px solid var(--success);"><span class="sens-label">固定費(F) 5%ダウンなら</span><strong class="sens-result" id="sens-f">¥0 UP</strong></div>
+            <div class="sens-grid">
+                <div class="sens-card"><span class="sens-label">単価(P) 5%UPなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">数量(Q) 5%UPなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">変動費(V) 5%DOWNなら</span><strong class="sens-result" id="sens-v">¥0 UP</strong></div>
+                <div class="sens-card" style="border-left:4px solid var(--success);"><span class="sens-label">固定費(F) 5%DOWNなら</span><strong class="sens-result" id="sens-f">¥0 UP</strong></div>
             </div>
         </section>
 
-        <!-- 右 -->
+        <!-- 右：動的グラフ -->
         <section id="chart-area">
-            <div class="card" style="height:320px; margin-bottom:20px;"><canvas id="chart1"></canvas></div>
-            <div class="card" style="height:320px;"><canvas id="chart2"></canvas></div>
+            <div class="card" style="height:350px; margin-bottom:20px;"><canvas id="chart1"></canvas></div>
+            <div class="card" style="height:350px;"><canvas id="chart2"></canvas></div>
         </section>
     </div>
 
     <!-- フッター指標 -->
     <div class="footer-bar">
-        <div class="footer-item"><strong>95.6%</strong><span>安全余裕率</span><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
-        <div class="footer-item"><strong>4.4%</strong><span>BEP比率</span><span class="desc">損益トントンラインの割合</span></div>
-        <div class="footer-item"><strong>3 : 97</strong><span>V vs MQ 比率</span><span class="desc">利益と費用の構成バランス</span></div>
+        <div class="footer-item"><strong id="idx-safety">0.0%</strong><span>安全余裕率</span><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
+        <div class="footer-item"><strong id="idx-bep">0.0%</strong><span>BEP比率</span><span class="desc">損益トントンラインの割合</span></div>
+        <div class="footer-item"><strong id="idx-vmq">0 : 0</strong><span>V vs MQ 比率</span><span class="desc">利益と費用の構成バランス</span></div>
     </div>
 </div>
 
@@ -274,7 +282,7 @@
             charts.c1 = new Chart(ctx1, { type:'bar', data: { labels:['22','23','24','今'], datasets:[{label:'Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},{label:'M',data:[16293,11958,12674,m],borderColor: '#ef4444',type:'line',yAxisID:'y1'}]}, options:{maintainAspectRatio:false,scales:{y1:{position:'right',beginAtZero:true}}} });
             charts.c2 = new Chart(ctx2, { type:'line', data: { labels:['22','23','24','今'], datasets:[{label:'玉掛',data:[71,46,35,32],borderColor:'#1e40af'},{label:'小型',data:[35,18,22,15],borderColor:'#f97316'},{label:'フォーク',data:[0,20,53,60],borderColor:'#10b981'}]}, options:{maintainAspectRatio:false} });
         } else {
-            charts.c1 = new Chart(ctx1, { type:'bar', data: { labels:['22','23','24','今'], datasets:[{label:'G',data:[1187054,631692,1310425,g],backgroundColor:'#10b981'},{label:'F',data:[540000,600000,540000,f],backgroundColor:'#94a3b8'},{label:'VQ',data:[1102479,1117585,1355990,vq],backgroundColor:'#3b82f6'}]}, options:{maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true}}} });
+            charts.c1 = new Chart(ctx1, { type:'bar', data: { labels:['22','23','24','今'], datasets:[{label:'利益(G)',data:[1187054,631692,1310425,g],backgroundColor:'#10b981'},{label:'固定費(F)',data:[540000,600000,540000,f],backgroundColor:'#94a3b8'},{label:'変動費(VQ)',data:[1102479,1117585,1355990,vq],backgroundColor:'#3b82f6'}]}, options:{maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true}}} });
             charts.c2 = new Chart(ctx2, { type:'line', data: { labels:['22','23','24','今'], datasets:[{label:'純利益',data:[1187054,631692,1310425,g],borderColor:'#10b981',tension:0.1}]}, options:{maintainAspectRatio:false} });
         }
     }
