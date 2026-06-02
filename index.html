@@ -45,7 +45,6 @@
         .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; }
         .mq-c strong { font-size: 1.6rem; font-weight: 900; white-space: nowrap; overflow: hidden; }
 
-        /* PVMQシミュレーター：レイアウト修正 */
         .pvmq-sim-area { display: flex; align-items: center; gap: 15px; padding: 15px 25px; background: white; border-radius: 15px; border: 1px solid #cbd5e1; margin-top: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .pvm-grid-box { display: grid; grid-template-columns: 160px 160px; grid-template-rows: 75px 75px; border: 3px solid var(--border); }
         .pvm-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; padding: 5px; }
@@ -57,51 +56,23 @@
         .q-box-large { border: 3px solid var(--border); width: 100px; height: 150px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #eff6ff; }
         .q-box-large strong { font-size: 1.6rem; font-weight: 900; }
 
-                /* 戦略シミュレーション：濃紺のカードデザイン */
-        .sens-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .sens-card {
-            background: #1e293b;
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 5px solid #10b981;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .sens-label {
-            font-size: 10px;
-            color: #94a3b8;
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .sens-result {
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: #10b981;
-        }
+        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .sens-card { background: #1e293b; color: white; padding: 15px; border-radius: 12px; border-left: 5px solid #10b981; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .sens-label { font-size: 10px; color: #94a3b8; display: block; margin-bottom: 5px; font-weight: bold; }
+        .sens-result { font-size: 1.2rem; font-weight: 900; color: #10b981; }
 
-        /* にょにょにょん */
         .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 15px 0 0 15px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2); }
         .drawer.open { right: 0 !important; }
         .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 12px; font-weight: 900; }
         #paste-drawer { top: 80px; width: 400px; right: -420px; }
         #stats-drawer { top: 220px; width: 720px; background: #f0f9ff; right: -740px; }
 
-        /* 統計テーブル：均一設計 */
         .stats-table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
         .stats-table th, .stats-table td { border: 1px solid #cbd5e1; height: 42px; text-align: center; }
         .stats-table th { background: #f1f5f9; font-weight: 800; font-size: 11px; }
         .stats-table input { width: 95%; border: none; text-align: center; font-weight: bold; background: transparent; font-size: 14px; }
         .border-heavy { border-right: 4px solid var(--border) !important; }
 
-        /* フッター：完全復元 */
         .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 15px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; }
         .footer-item:last-child { border-right: none; }
@@ -111,9 +82,11 @@
 
         .btn-sync { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
         .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 15px; }
-        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .sens-card { background: #1e293b; color: white; padding: 12px; border-radius: 10px; border-left: 4px solid #10b981; }
-        .sens-result { font-size: 1.1rem; font-weight: 900; color: #10b981; }
+
+        /* 入力用スタイルの調整 */
+        input.cell-edit { width: 100%; border: 1px solid transparent; text-align: right; font-weight: bold; font-size: 11px; padding: 2px; outline: none; }
+        input.cell-edit:focus { border-bottom: 1px solid var(--primary); background: #fffbeb; }
+        .row-total { background: #f8fafc; font-weight: 900; border-top: 2px solid var(--border); }
     </style>
 </head>
 <body>
@@ -163,9 +136,11 @@
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <span style="font-size:12px; font-weight:bold;">勘定科目内訳</span>
-                    <button onclick="toggleEditMode()" style="font-size:10px; cursor:pointer;">全表示/編集モード</button>
+                    <button onclick="toggleEditMode()" style="font-size:10px; cursor:pointer; background:none; border:1px solid #ddd; border-radius:4px;">全表示/編集モード</button>
                 </div>
-                <div class="pl-all-display"><table><tbody id="pl-body"></tbody></table></div>
+                <div class="pl-all-display" style="max-height: 500px; overflow-y: auto;">
+                    <table><tbody id="pl-body"></tbody></table>
+                </div>
                 <div id="q-panel" class="q-entry-box" style="display:none;">
                     <div style="display:grid; grid-template-columns:1fr; gap:8px;">
                         <div style="display:flex; justify-content:space-between;"><label style="font-size:10px; font-weight:bold;">玉掛</label><input type="number" class="qin" value="0" oninput="calculateOnly()"></div>
@@ -199,7 +174,6 @@
                 <div class="mq-c" style="background:var(--mq-f);"><span>固定費 F</span><strong id="m-f">0</strong></div>
                 <div class="mq-c" id="g-box"><span>利益 G</span><strong id="m-g">0</strong></div>
             </div>
-            <!-- 【修正】PVMQ図の配置と数字表示 -->
             <div class="pvmq-sim-area">
                 <div class="pvm-grid-box">
                     <div class="pvm-c pvm-p"><span>P (単価)</span><strong id="v-p">0</strong></div>
@@ -213,7 +187,6 @@
                 <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
                 <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.4rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
-                        <!-- 戦略シミュレーションカード -->
             <div class="sens-grid">
                 <div class="sens-card"><span class="sens-label">単価(P) 5%アップなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
                 <div class="sens-card"><span class="sens-label">数量(Q) 5%アップなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
@@ -228,7 +201,6 @@
         </section>
     </div>
 
-    <!-- フッター：完全復元 -->
     <div class="footer-bar">
         <div class="footer-item"><strong id="idx-safety">0.0%</strong><span>安全余裕率</span><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
         <div class="footer-item"><strong id="idx-bep">0.0%</strong><span>BEP比率</span><span class="desc">損益トントンラインの割合</span></div>
@@ -237,10 +209,18 @@
 </div>
 
 <script>
-    const firebaseConfig = { apiKey: "AIzaSyAvK-_h5NzDjCYPdJgb-iddYdscYaUivto", authDomain: "mq-accounting-221b3.firebaseapp.com", projectId: "mq-accounting-221b3", storageBucket: "mq-accounting-221b3.appspot.com", messagingSenderId: "684182333946", appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" };
+    // 添付画像に基づきAPIキーを更新
+    const firebaseConfig = { 
+        apiKey: "AIzaSyAvK-_h5NZdJcyPDJgb-iddYdscYaUivto", 
+        authDomain: "mq-accounting-221b3.firebaseapp.com", 
+        projectId: "mq-accounting-221b3", 
+        storageBucket: "mq-accounting-221b3.appspot.com", 
+        messagingSenderId: "684182333946", 
+        appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" 
+    };
     firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-       const masterAccounts = [
+    const masterAccounts = [
         { name: "社外収入", type: "売上" }, { name: "内部振替収入", type: "売上" },
         { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "運搬費", type: "変動" },
         { name: "安全費", type: "変動" }, { name: "技術管理費", type: "変動" }, { name: "機械等経費", type: "変動" },
@@ -258,7 +238,10 @@
     Chart.register(ChartDataLabels);
 
     window.onload = () => {
-        db.collection("accounting").get().then(snap => { snap.forEach(doc => dbData[doc.id] = doc.data().values); calculate(); });
+        db.collection("accounting").get().then(snap => { 
+            snap.forEach(doc => dbData[doc.id] = doc.data().values); 
+            calculate(); 
+        });
         const sb = document.getElementById('stats-body');
         const months = [7,8,9,10,11,12,1,2,3,4,5,6];
         months.forEach(m => sb.innerHTML += `<tr id="stat-row-${m}"><td style="font-weight:bold;">${m}月</td><td><input type="number"></td><td class="border-heavy"><input type="number"></td><td><input type="number"></td><td class="nj-cell" style="font-weight:900; color:var(--primary);">0</td></tr>`);
@@ -277,7 +260,7 @@
                 const nums = line.replace(/,/g, '').match(/-?\d+/g) || [];
                 if (nums.length >= 6) {
                     const b = `${y}-${m}-`;
-                    if(!dbData[b+'121']) dbData[b+'121'] = {}; if(!dbData[b+'122']) dbData[b+'122'] = {}; if(!dbData[b+'Total']) dbData[b+'Total'] = {};
+                    ["121","122","Total"].forEach(d => { if(!dbData[b+d]) dbData[b+d]={}; });
                     dbData[b+'121'][match.name+"-発生"] = parseInt(nums[nums.length-6]);
                     dbData[b+'121'][match.name+"-累計"] = parseInt(nums[nums.length-5]);
                     dbData[b+'122'][match.name+"-発生"] = parseInt(nums[nums.length-4]);
@@ -292,8 +275,19 @@
 
     async function syncToFirebase() {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
-        await db.collection("accounting").doc(`${y}-${m}-${currentDept}`).set({ values: dbData[`${y}-${m}-${currentDept}`], updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        alert("同期完了！");
+        const key = `${y}-${m}-${currentDept}`;
+        if(!dbData[key]) return alert("保存するデータがありません");
+        
+        try {
+            await db.collection("accounting").doc(key).set({ 
+                values: dbData[key], 
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp() 
+            });
+            alert("クラウド同期が完了しました！");
+        } catch (e) {
+            console.error(e);
+            alert("同期エラーが発生しました");
+        }
     }
 
     function setDept(id, btn) {
@@ -305,66 +299,169 @@
 
     function calculateOnly() { calculate(true); }
 
+    // 入力補助：Enterで次へ、カンマ制御
+    function handleInputKey(e, input) {
+        if (e.key === 'Enter') {
+            const rows = Array.from(document.querySelectorAll('.cell-edit'));
+            const idx = rows.indexOf(input);
+            if (idx > -1 && rows[idx+1]) rows[idx+1].focus();
+            input.blur();
+        }
+    }
+
     function calculate(skipTableRender = false) {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value;
+        const key = `${y}-${m}-${currentDept}`;
+        if(!dbData[key]) dbData[key] = {};
+        const data = dbData[key];
+
         let pq = 0, vq = 0, f = 0, totalExp = 0, profitG = 0;
-        const plBody = document.querySelector('#pl-body');
-        if (!skipTableRender) plBody.innerHTML = '';
-        const data = dbData[`${y}-${m}-${currentDept}`] || {};
         
+        // 合計の事前計算
         masterAccounts.forEach(acc => {
+            if(acc.type === "集計") return;
             let val = data[acc.name + "-" + type] || 0;
-            if(acc.name === "社外収入" || acc.name === "内部振替収入") pq += val;
-            if(acc.name === "**支出合計**") totalExp = val;
-            if(acc.name === "**部門損益**") profitG = val;
-            if(acc.type === "固定") f += val;
-            
-            if(!skipTableRender && (editMode || (val !== 0 && acc.type !== "集計"))) {
-                const tag = (acc.name==="社外収入"||acc.name==="内部振替収入") ? "tag-p" : (acc.type === "固定" ? "tag-f" : "tag-v");
-                plBody.innerHTML += `<tr><td><span class="tag ${tag}">${(acc.name==="社外収入"||acc.name==="内部振替収入")?'売上':acc.type}</span>${acc.name}</td><td style="text-align:right;"><input type="text" value="${val.toLocaleString()}" onchange="dbData['${y}-${m}-${currentDept}']['${acc.name}-${type}']=parseInt(this.value.replace(/,/g,'')) || 0;calculate(true);" style="width:100%; border:none; text-align:right; font-weight:bold; font-size:11px;"></td></tr>`;
-            }
+            if(acc.type === "売上") pq += val;
+            else if(acc.type === "固定") f += val;
+            else if(acc.type === "変動") vq += val;
         });
+        totalExp = vq + f;
+        profitG = pq - totalExp;
 
-        if(totalExp === 0) { masterAccounts.forEach(acc => { if(acc.type!=="売上" && acc.type!=="集計") totalExp += (data[acc.name+"-"+type] || 0); }); }
-        if(profitG === 0) profitG = pq - totalExp;
-        vq = totalExp - f;
+        // 計算結果をデータに書き戻す
+        data[`**支出合計**-${type}`] = totalExp;
+        data[`**部門損益**-${type}`] = profitG;
 
-        let q = 1; if(currentDept === '122') { q = 0; document.querySelectorAll('.qin').forEach(i => q += parseInt(i.value) || 0); const nj = document.querySelector(`#stat-row-${m} .nj-cell`); if(nj) nj.innerText = q; }
-        else { q = parseInt(document.getElementById('q-val-manual').value) || 1; }
-        if (q === 0) q = 1;
+        const plBody = document.querySelector('#pl-body');
+        if (!skipTableRender) {
+            plBody.innerHTML = '';
+            masterAccounts.forEach(acc => {
+                let val = data[acc.name + "-" + type] || 0;
+                const isTotal = acc.type === "集計";
+                
+                if(editMode || (val !== 0)) {
+                    const tag = (acc.type === "売上") ? "tag-p" : (acc.type === "固定" ? "tag-f" : (acc.type === "変動" ? "tag-v" : ""));
+                    const rowClass = isTotal ? 'row-total' : '';
+                    const readonly = isTotal ? 'readonly' : '';
+                    
+                    plBody.innerHTML += `
+                        <tr class="${rowClass}">
+                            <td><span class="tag ${tag}">${acc.type}</span>${acc.name}</td>
+                            <td style="text-align:right;">
+                                <input type="text" 
+                                    class="cell-edit" 
+                                    value="${val.toLocaleString()}" 
+                                    ${readonly}
+                                    onfocus="this.value=this.value.replace(/,/g,'')" 
+                                    onblur="updateValue('${acc.name}', '${type}', this.value); this.value=parseInt(this.value).toLocaleString()"
+                                    onkeydown="handleInputKey(event, this)">
+                            </td>
+                        </tr>`;
+                }
+            });
+        }
+
+        // Qの計算
+        let q = 1; 
+        if(currentDept === '122') { 
+            q = 0; 
+            document.querySelectorAll('.qin').forEach(i => q += parseInt(i.value) || 0); 
+            const nj = document.querySelector(`#stat-row-${m} .nj-cell`); 
+            if(nj) nj.innerText = q; 
+        } else { 
+            q = parseInt(document.getElementById('q-val-manual').value) || 1; 
+        }
+        if (q <= 0) q = 1;
 
         const mq = pq-vq, p = pq/q, v = vq/q, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
         
+        // ダッシュボード反映
         document.getElementById('card-pq').innerText = "¥" + pq.toLocaleString();
         document.getElementById('card-exp').innerText = "¥" + totalExp.toLocaleString();
         document.getElementById('card-g').innerText = "¥" + profitG.toLocaleString();
         document.getElementById('card-g').style.color = profitG >= 0 ? 'var(--success)' : 'var(--danger)';
-        document.getElementById('m-pq').innerText = pq.toLocaleString(); document.getElementById('m-vq').innerText = vq.toLocaleString();
-        document.getElementById('m-mq').innerText = mq.toLocaleString(); document.getElementById('m-f').innerText = f.toLocaleString();
-        document.getElementById('m-g').innerText = profitG.toLocaleString(); document.getElementById('g-box').style.background = profitG>=0?'var(--mq-g)':'var(--mq-vq)';
-        document.getElementById('v-p').innerText = Math.round(p).toLocaleString(); document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
-        document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); document.getElementById('v-q').innerText = q.toLocaleString();
-        document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio').innerText = ratio.toFixed(1) + "%";
+        document.getElementById('m-pq').innerText = pq.toLocaleString(); 
+        document.getElementById('m-vq').innerText = vq.toLocaleString();
+        document.getElementById('m-mq').innerText = mq.toLocaleString(); 
+        document.getElementById('m-f').innerText = f.toLocaleString();
+        document.getElementById('m-g').innerText = profitG.toLocaleString(); 
+        document.getElementById('g-box').style.background = profitG>=0?'var(--mq-g)':'var(--mq-vq)';
+        document.getElementById('v-p').innerText = Math.round(p).toLocaleString(); 
+        document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
+        document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); 
+        document.getElementById('v-q').innerText = q.toLocaleString();
+        document.getElementById('v-mq').innerText = mq.toLocaleString(); 
+        document.getElementById('id-ratio').innerText = ratio.toFixed(1) + "%";
         document.getElementById('id-be').innerText = "¥" + be.toLocaleString();
         document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
+        
+        // 戦略シミュ
         document.getElementById('sens-p').innerText = "¥" + Math.round(pq * 0.05).toLocaleString() + " UP";
         document.getElementById('sens-q').innerText = "¥" + Math.round(mq * 0.05).toLocaleString() + " UP";
         document.getElementById('sens-v').innerText = "¥" + Math.round(vq * 0.05).toLocaleString() + " UP";
         document.getElementById('sens-f').innerText = "¥" + Math.round(f * 0.05).toLocaleString() + " UP";
+        
         updateCharts(pq, vq, f, profitG, q, m_);
+    }
+
+    function updateValue(accName, type, val) {
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
+        const key = `${y}-${m}-${currentDept}`;
+        dbData[key][`${accName}-${type}`] = parseInt(val.replace(/,/g,'')) || 0;
+        calculate(false); // 合計再計算のためテーブルも再描画
     }
 
     function updateCharts(pq, vq, f, g, q, m) {
         if(charts.st) charts.st.destroy();
-        charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: ['22','23','24','25'], datasets: [{ label: '利益(G)', data: [1187054, 631692, 1310425, g], backgroundColor: '#10b981' }, { label: '固定費(F)', data: [540000, 600000, 540000, f], backgroundColor: '#94a3b8' }, { label: '変動費(VQ)', data: [1102479, 1117585, 1355990, vq], backgroundColor: '#3b82f6' }]}, options: { plugins: { datalabels: { color: '#000', font: { weight: 'bold', size: 10 }, formatter: (v) => v.toLocaleString() }, title: { display: true, text: '利益構造推移 (P=V+F+G)' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
+        charts.st = new Chart(document.getElementById('stChart'), { 
+            type: 'bar', 
+            data: { 
+                labels: ['22','23','24','25'], 
+                datasets: [
+                    { label: '利益(G)', data: [1187054, 631692, 1310425, g], backgroundColor: '#10b981' }, 
+                    { label: '固定費(F)', data: [540000, 600000, 540000, f], backgroundColor: '#94a3b8' }, 
+                    { label: '変動費(VQ)', data: [1102479, 1117585, 1355990, vq], backgroundColor: '#3b82f6' }
+                ]
+            }, 
+            options: { 
+                plugins: { 
+                    datalabels: { color: '#000', font: { weight: 'bold', size: 10 }, formatter: (v) => v.toLocaleString() }, 
+                    title: { display: true, text: '利益構造推移 (P=V+F+G)' } 
+                }, 
+                scales: { x: { stacked: true }, y: { stacked: true } }, 
+                maintainAspectRatio: false 
+            } 
+        });
+        
         if(charts.pr) charts.pr.destroy();
         const ctx2 = document.getElementById('chart2').getContext('2d');
         if (currentDept === '122') {
-            charts.pr = new Chart(ctx2, { type:'bar', data: { labels:['22','23','24','25'], datasets:[{label:'Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},{label:'M',data:[16293,11958,12674,m],borderColor: '#ef4444',type:'line',yAxisID:'y1'}]}, options:{scales:{y1:{position:'right',beginAtZero:true}}, plugins:{title:{display:true,text:'受講者数Qと単価M'}}, maintainAspectRatio: false} });
+            charts.pr = new Chart(ctx2, { 
+                type:'bar', 
+                data: { 
+                    labels:['22','23','24','25'], 
+                    datasets:[
+                        {label:'Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},
+                        {label:'M',data:[16293,11958,12674,m],borderColor: '#ef4444',type:'line',yAxisID:'y1'}
+                    ]
+                }, 
+                options:{
+                    scales:{y1:{position:'right',beginAtZero:true}}, 
+                    plugins:{title:{display:true,text:'受講者数Qと単価M'}}, 
+                    maintainAspectRatio: false
+                } 
+            });
         } else {
-            charts.pr = new Chart(ctx2, { type:'line', data: { labels:['22','23','24','25'], datasets:[{label:'利益',data:[1187054, 631692, 1310425, g],borderColor:'#10b981',tension:0.1}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'純利益トレンド'}}} });
+            charts.pr = new Chart(ctx2, { 
+                type:'line', 
+                data: { 
+                    labels:['22','23','24','25'], 
+                    datasets:[{label:'利益',data:[1187054, 631692, 1310425, g],borderColor:'#10b981',tension:0.1}]
+                }, 
+                options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'純利益トレンド'}}} 
+            });
         }
     }
 </script>
