@@ -183,6 +183,7 @@
                 <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
                 <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.4rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
+                        <!-- 戦略シミュレーションカード -->
             <div class="sens-grid">
                 <div class="sens-card"><span class="sens-label">単価(P) 5%アップなら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
                 <div class="sens-card"><span class="sens-label">数量(Q) 5%アップなら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
@@ -209,10 +210,17 @@
     const firebaseConfig = { apiKey: "AIzaSyAvK-_h5NzDjCYPdJgb-iddYdscYaUivto", authDomain: "mq-accounting-221b3.firebaseapp.com", projectId: "mq-accounting-221b3", storageBucket: "mq-accounting-221b3.appspot.com", messagingSenderId: "684182333946", appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" };
     firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
-    const masterAccounts = [
+       const masterAccounts = [
         { name: "社外収入", type: "売上" }, { name: "内部振替収入", type: "売上" },
-        { name: "従業員給料手当", type: "固定" }, { name: "従業員賞与", type: "固定" }, { name: "法定福利費", type: "固定" }, { name: "福利厚生費", type: "固定" }, { name: "広告宣伝費", type: "固定" }, { name: "減価償却費", type: "固定" },
-        { name: "完成工事原価", type: "変動" }, { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "運搬費", type: "変動" }, { name: "準備費", type: "変動" }, { name: "仮設費", type: "変動" }, { name: "事業損失防止施設費", type: "変動" }, { name: "安全費", type: "変動" }, { name: "技術管理費", type: "変動" }, { name: "営繕費", type: "変動" }, { name: "機械等経費", type: "変動" }, { name: "租税公課", type: "変動" }, { name: "燃料費", type: "変動" }, { name: "動力用水光熱費", type: "変動" }, { name: "租税公課", type: "変動" }, { name: "保険料", type: "変動" }, { name: "支払い手数料", type: "変動" }, { name: "雑費", type: "変動" }, { name: "修繕維持費", type: "変動" }, { name: "内部調達原価", type: "変動" },
+        { name: "材料費", type: "変動" }, { name: "労務費", type: "変動" }, { name: "運搬費", type: "変動" },
+        { name: "安全費", type: "変動" }, { name: "技術管理費", type: "変動" }, { name: "機械等経費", type: "変動" },
+        { name: "従業員給料手当", type: "固定" }, { name: "従業員賞与", type: "固定" }, { name: "法定福利費", type: "固定" },
+        { name: "福利厚生費", type: "固定" }, { name: "修繕維持費", type: "変動" }, { name: "事務用品費", type: "変動" },
+        { name: "消耗品費", type: "変動" }, { name: "諸会費", type: "変動" }, { name: "教育費", type: "変動" },
+        { name: "広告宣伝費", type: "固定" }, { name: "通信交通費", type: "変動" }, { name: "燃料費", type: "変動" },
+        { name: "動力用水光熱費", type: "変動" }, { name: "減価償却費", type: "固定" }, { name: "租税公課", type: "変動" },
+        { name: "保険料", type: "変動" }, { name: "車両費", type: "変動" }, { name: "支払い手数料", type: "変動" },
+        { name: "補償費", type: "変動" }, { name: "雑費", type: "変動" }, { name: "内部調達原価", type: "変動" },
         { name: "**支出合計**", type: "集計" }, { name: "**部門損益**", type: "集計" }
     ];
 
