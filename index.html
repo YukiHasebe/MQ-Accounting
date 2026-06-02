@@ -71,7 +71,7 @@
             padding: 15px;
             border-radius: 12px;
             border-left: 5px solid #10b981;
-            text-align: left;
+            text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .sens-label {
@@ -358,13 +358,13 @@
 
     function updateCharts(pq, vq, f, g, q, m) {
         if(charts.st) charts.st.destroy();
-        charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: ['22','23','24','今'], datasets: [{ label: '利益(G)', data: [1187054, 631692, 1310425, g], backgroundColor: '#10b981' }, { label: '固定費(F)', data: [540000, 600000, 540000, f], backgroundColor: '#94a3b8' }, { label: '変動費(VQ)', data: [1102479, 1117585, 1355990, vq], backgroundColor: '#3b82f6' }]}, options: { plugins: { datalabels: { color: '#000', font: { weight: 'bold', size: 10 }, formatter: (v) => v.toLocaleString() }, title: { display: true, text: '利益構造推移 (P=V+F+G)' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
+        charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: ['22','23','24','25'], datasets: [{ label: '利益(G)', data: [1187054, 631692, 1310425, g], backgroundColor: '#10b981' }, { label: '固定費(F)', data: [540000, 600000, 540000, f], backgroundColor: '#94a3b8' }, { label: '変動費(VQ)', data: [1102479, 1117585, 1355990, vq], backgroundColor: '#3b82f6' }]}, options: { plugins: { datalabels: { color: '#000', font: { weight: 'bold', size: 10 }, formatter: (v) => v.toLocaleString() }, title: { display: true, text: '利益構造推移 (P=V+F+G)' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
         if(charts.pr) charts.pr.destroy();
         const ctx2 = document.getElementById('chart2').getContext('2d');
         if (currentDept === '122') {
-            charts.pr = new Chart(ctx2, { type:'bar', data: { labels:['22','23','24','今'], datasets:[{label:'Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},{label:'M',data:[16293,11958,12674,m],borderColor: '#ef4444',type:'line',yAxisID:'y1'}]}, options:{scales:{y1:{position:'right',beginAtZero:true}}, plugins:{title:{display:true,text:'受講者数Qと単価M'}}, maintainAspectRatio: false} });
+            charts.pr = new Chart(ctx2, { type:'bar', data: { labels:['22','23','24','25'], datasets:[{label:'Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},{label:'M',data:[16293,11958,12674,m],borderColor: '#ef4444',type:'line',yAxisID:'y1'}]}, options:{scales:{y1:{position:'right',beginAtZero:true}}, plugins:{title:{display:true,text:'受講者数Qと単価M'}}, maintainAspectRatio: false} });
         } else {
-            charts.pr = new Chart(ctx2, { type:'line', data: { labels:['22','23','24','今'], datasets:[{label:'利益',data:[1187054, 631692, 1310425, g],borderColor:'#10b981',tension:0.1}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'純利益トレンド'}}} });
+            charts.pr = new Chart(ctx2, { type:'line', data: { labels:['22','23','24','25'], datasets:[{label:'利益',data:[1187054, 631692, 1310425, g],borderColor:'#10b981',tension:0.1}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'純利益トレンド'}}} });
         }
     }
 </script>
