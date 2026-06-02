@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQ会計 ストラック表 - 株式会社コプロス 確定版</title>
+    <title>MQ会計 ストラック表 - 株式会社コプロス 究極確定版</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -23,7 +23,7 @@
         .controls select { padding: 10px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 16px; font-weight: 900; color: var(--primary); cursor: pointer; background: #fff; }
 
         .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
-        .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card.edit-active { background: var(--edit-bg); border: 2px solid #f59e0b; }
 
         .tab-btn { flex: 1; padding: 12px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 12px; }
@@ -71,9 +71,13 @@
         .stats-table input { width: 95%; border: none; text-align: center; font-weight: bold; background: transparent; font-size: 14px; }
         .border-heavy { border-right: 4px solid var(--border) !important; }
 
-        .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 15px 0; z-index: 500; border-top: 4px solid var(--success); }
-        .footer-item { text-align: center; flex: 1; }
-        .footer-item strong { font-size: 1.6rem; color: #60a5fa; display: block; }
+        /* フッター：解説付き新レイアウト */
+        .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; justify-content: space-around; padding: 10px 0; z-index: 500; border-top: 4px solid var(--success); }
+        .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; display: flex; flex-direction: column; justify-content: center; }
+        .footer-item:last-child { border-right: none; }
+        .footer-item span.label { font-size: 10px; color: #94a3b8; font-weight: bold; margin-bottom: 2px; }
+        .footer-item strong { font-size: 1.6rem; color: #60a5fa; line-height: 1; margin-bottom: 4px; }
+        .footer-item span.desc { font-size: 9px; color: #cbd5e1; opacity: 0.8; }
 
         .btn-sync { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
         .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 15px; }
@@ -135,27 +139,23 @@
                 <div style="max-height: 480px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
                     <table><tbody id="pl-body"></tbody></table>
                 </div>
-                
                 <div id="q-panel" class="q-entry-box" style="display:none;">
                     <div style="display:grid; grid-template-columns:1fr; gap:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">玉掛</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">小型移動式クレーン</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フォークリフト</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">テールゲート</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フルハーネス</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center;"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">玉掛</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center; width:80px;"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">小型移動式クレーン</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center; width:80px;"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フォークリフト</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center; width:80px;"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">テールゲート</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center; width:80px;"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フルハーネス</label><input type="number" class="qin" value="0" oninput="calculateOnly()" style="text-align:center; width:80px;"></div>
                     </div>
                 </div>
-
                 <div id="q-manual" style="margin-top:10px; padding:12px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0;">
                     <div style="display:flex; justify-content:space-between; align-items:center;"><label id="q-label-text" style="font-size:11px; font-weight:bold;">配置人数(Q)入力</label><input type="number" id="q-val-manual" value="1" oninput="calculateOnly()" style="width:100px; text-align:center; font-weight:bold;"></div>
                 </div>
-
                 <div class="goal-seek-area">
-                    <strong id="seek-title">目標利益への逆算</strong><br>
+                    <strong id="seek-title">目標達成への逆算シミュレーション</strong><br>
                     利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:80px; font-size:11px; text-align:right;"> 円増やすには<br>
                     <span id="seek-result" style="font-size:13px; color:var(--primary); font-weight:900;">計算中...</span>
                 </div>
-
                 <button class="btn-sync" onclick="syncToFirebase()" style="margin-top:15px;">クラウド同期保存</button>
             </div>
         </section>
@@ -167,8 +167,8 @@
                 <div class="summary-box" id="box-g"><span>部門損益 G</span><strong id="card-g">¥0</strong></div>
             </div>
             <div class="kpi-row">
-                <div class="kpi-box"><span>MQ比率</span><strong id="id-ratio">0.0%</strong></div>
-                <div class="kpi-box"><span>損益分岐点売上</span><strong id="id-be">¥0</strong></div>
+                <div class="kpi-box"><span>MQ比率</span><strong id="id-ratio-top">0.0%</strong></div>
+                <div class="kpi-box"><span>損益分岐点売上</span><strong id="id-be-top">¥0</strong></div>
             </div>
             <div class="mq-table">
                 <div class="mq-c" style="grid-row:span 3; background:var(--mq-pq);"><span>売上 PQ</span><strong id="m-pq">0</strong></div>
@@ -202,10 +202,23 @@
         </section>
     </div>
 
+    <!-- フッター：解説テキスト付き -->
     <div class="footer-bar">
-        <div class="footer-item"><strong id="idx-safety">0.0%</strong><span>安全余裕率</span></div>
-        <div class="footer-item"><strong id="idx-bep">0.0%</strong><span>BEP比率</span></div>
-        <div class="footer-item"><strong id="idx-vmq">0 : 0</strong><span>V vs MQ 比率</span></div>
+        <div class="footer-item">
+            <span class="label">安全余裕率</span>
+            <strong id="idx-safety">0.0%</strong>
+            <span class="desc">あと何％売上が下がっても赤字にならないか</span>
+        </div>
+        <div class="footer-item">
+            <span class="label">BEP比率</span>
+            <strong id="idx-bep">0.0%</strong>
+            <span class="desc">売上の何％が損益トントンラインか（低いほど良い）</span>
+        </div>
+        <div class="footer-item">
+            <span class="label">V vs MQ 比率</span>
+            <strong id="idx-vmq">0 : 0</strong>
+            <span class="desc">変動費と付加価値の構成バランス</span>
+        </div>
     </div>
 </div>
 
@@ -280,10 +293,9 @@
     }
 
     async function syncToFirebase() {
-        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
-        const key = `${y}-${m}-${currentDept}`;
+        const key = `${document.getElementById('yearSel').value}-${document.getElementById('monthSel').value}-${currentDept}`;
         await db.collection("accounting").doc(key).set({ values: dbData[key], updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        alert("保存完了！");
+        alert("クラウド同期保存が完了しました！");
     }
 
     function calculate(skipTableRender = false) {
@@ -312,7 +324,6 @@
             });
         }
 
-        // Qの処理
         let q = 1;
         if(currentDept === '122') {
             q = 0; document.querySelectorAll('.qin').forEach(i => q += parseInt(i.value) || 0);
@@ -348,8 +359,9 @@
         document.getElementById('m-g').innerText = profitG.toLocaleString(); document.getElementById('g-box').style.background = profitG>=0?'var(--mq-g)':'var(--mq-vq)';
         document.getElementById('v-p').innerText = Math.round(p).toLocaleString(); document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
         document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); document.getElementById('v-q').innerText = q.toLocaleString();
-        document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio').innerText = ratio.toFixed(1) + "%";
-        document.getElementById('id-be').innerText = "¥" + be.toLocaleString();
+        document.getElementById('v-mq').innerText = mq.toLocaleString(); 
+        document.getElementById('id-ratio-top').innerText = ratio.toFixed(1) + "%";
+        document.getElementById('id-be-top').innerText = "¥" + be.toLocaleString();
         document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
@@ -387,10 +399,25 @@
         });
         if(charts.st) charts.st.destroy();
         charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: years, datasets: [{ label: '利益', data: gData, backgroundColor: '#10b981' }, { label: '固定費', data: fData, backgroundColor: '#94a3b8' }, { label: '変動費', data: vData, backgroundColor: '#3b82f6' }]}, options: { plugins: { title: { display: true, text: '年度別累計構造推移' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
+        
         if(charts.pr) charts.pr.destroy();
         const ctx2 = document.getElementById('chart2').getContext('2d');
         if (currentDept === '122') {
-            charts.pr = new Chart(ctx2, { type:'bar', data: { labels:years, datasets:[{label:'受講者Q',data:[106,103,146,q],backgroundColor:'#bbf7d0',yAxisID:'y'},{label:'単価利益M',data:[16293,11958,12674,m],borderColor:'#ef4444',type:'line',yAxisID:'y1'}]}, options:{scales:{y1:{position:'right',beginAtZero:true}}, plugins:{title:{display:true,text:'資格教育：QとMの推移'}}, maintainAspectRatio:false} });
+            charts.pr = new Chart(ctx2, { 
+                type:'bar', 
+                data: { 
+                    labels:years, 
+                    datasets:[
+                        {label:'単価利益M', data:[16293,11958,12674,m], borderColor:'#ef4444', type:'line', yAxisID:'y1', order: 0}, // order:0 で最前面
+                        {label:'受講者Q', data:[106,103,146,q], backgroundColor:'#bbf7d0', yAxisID:'y', order: 1} // order:1 で背面
+                    ]
+                }, 
+                options:{
+                    scales:{y1:{position:'right', beginAtZero:true}}, 
+                    plugins:{title:{display:true, text:'資格教育：Q(棒)とM(線)の推移'}}, 
+                    maintainAspectRatio:false
+                } 
+            });
         } else {
             charts.pr = new Chart(ctx2, { type:'line', data: { labels:years, datasets:[{label:'累計利益',data:gData,borderColor:'#10b981'}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'部門累計利益トレンド'}}} });
         }
