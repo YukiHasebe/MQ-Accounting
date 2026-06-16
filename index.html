@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQ会計 ストラック表 - 株式会社コプロス 横展開版</title>
+    <title>MQ会計 ストラック表 - 株式会社コプロス 完結版</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -15,20 +15,18 @@
             --mq-pq: #eff6ff; --mq-vq: #fef2f2; --mq-f: #f1f5f9; --mq-g: #ecfdf5;
             --edit-bg: #fffbeb;
         }
-       body { font-family: "Hiragino Sans", "Meiryo", sans-serif; background: var(--bg); color: #1e293b; margin: 0; padding: 10px; box-sizing: border-box; }
-      　.container { width: 100%; max-width: 100%; margin: 0 auto; padding-bottom: 140px; }
+        body { font-family: "Hiragino Sans", "Meiryo", sans-serif; background: var(--bg); color: #1e293b; margin: 0; padding: 10px; box-sizing: border-box; }
+        .container { width: 100%; max-width: 100%; margin: 0 auto; padding-bottom: 140px; }
 
         header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 12px; border-bottom: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 10px; }
         .header-title h1 { margin: 0; font-size: clamp(18px, 4vw, 24px); font-weight: 900; color: var(--primary); letter-spacing: 2px; }
         .controls { display: flex; gap: 8px; flex-wrap: wrap; }
         .controls select, .controls button { padding: 8px 12px; border-radius: 8px; border: 2px solid var(--primary); font-size: 14px; font-weight: 900; color: var(--primary); cursor: pointer; background: #fff; }
 
-       .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
-       /* レスポンシブ対応：中画面（ノートPCなど） */
-       @media (max-width: 1600px) { .dashboard-grid { grid-template-columns: 400px 1fr; } }
-       /* レスポンシブ対応：スマホ・小画面 */
-       @media (max-width: 1000px) { .dashboard-grid { grid-template-columns: 1fr; } }
-        
+        .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
+        @media (max-width: 1600px) { .dashboard-grid { grid-template-columns: 400px 1fr; } }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } header { flex-direction: column; align-items: flex-start; } }
+
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card.edit-active { background: var(--edit-bg); border: 2px solid #f59e0b; }
 
@@ -39,24 +37,30 @@
         .tag { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 900; margin-right: 4px; display: inline-block; width: 30px; text-align: center; }
         .tag-p { background: #dbeafe; color: #1e40af; } .tag-v { background: #fee2e2; color: #b91c1c; } .tag-f { background: #f3f4f6; color: #475569; }
 
-        .summary-row { display: flex; gap: 10px; width: 100%; margin-bottom: 15px; }
-        .summary-box { background: white; border: 1px solid #cbd5e1; padding: 10px; border-radius: 12px; text-align: center; flex: 1; min-width: 80px; }
+        .summary-row { display: flex; gap: 10px; width: 100%; margin-bottom: 15px; flex-wrap: wrap; }
+        .summary-box { background: white; border: 1px solid #cbd5e1; padding: 10px; border-radius: 12px; text-align: center; flex: 1; min-width: 100px; }
+        .summary-box span { font-size: 10px; font-weight: bold; color: var(--gray); display: block; }
         .summary-box strong { font-size: 1.4rem; font-weight: 900; color: #1e293b; }
+        .summary-box.alert { border: 2px solid var(--danger); background: #fff1f2; }
 
-        .kpi-row { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; justify-content: center; }
-        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; box-shadow: 0 4px 0 var(--primary); }
+        .kpi-row { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; justify-content: center; flex-wrap: wrap; }
+        .kpi-box { background: white; border: 3px solid var(--primary); padding: 10px; border-radius: 12px; text-align: center; flex: 1; min-width: 150px; box-shadow: 0 4px 0 var(--primary); }
         .kpi-box strong { font-size: 1.8rem; color: var(--primary); }
 
-        .mq-table { display: grid; grid-template-columns: 1fr 0.6fr 1fr; grid-template-rows: repeat(3, 100px); border: 4px solid var(--border); background: white; width: 100%; max-width: 620px; }
+        .mq-table { display: grid; grid-template-columns: 1fr 0.6fr 1fr; grid-template-rows: repeat(3, 100px); border: 4px solid var(--border); background: white; width: 100%; }
         .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 5px; overflow: hidden; }
         .mq-c strong { font-size: clamp(1rem, 2vw, 1.5rem); font-weight: 900; }
 
-        .pvmq-sim-area { display: flex; align-items: center; gap: 10px; padding: 15px; background: white; border-radius: 15px; border: 1px solid #cbd5e1; margin-top: 20px; width: 100%; max-width: 620px; box-sizing: border-box; }
+        .pvmq-sim-area { display: flex; align-items: center; gap: 10px; padding: 15px; background: white; border-radius: 15px; border: 1px solid #cbd5e1; margin-top: 20px; width: 100%; box-sizing: border-box; }
         .pvm-grid-box { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 70px 70px; border: 3px solid var(--border); flex: 2; }
+        .pvm-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; padding: 5px; }
+        .pvm-p { grid-row: span 2; }
+        .pvm-v { background: var(--mq-vq) !important; }
         .q-box-large { border: 3px solid var(--border); width: 80px; height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #eff6ff; flex: 1; }
 
-        .sens-grid { width: 100%; max-width: 620px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+        .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
         .sens-card { background: #1e293b; color: white; padding: 10px; border-radius: 10px; border-left: 4px solid #10b981; text-align: center; }
+        .sens-label { font-size: 10px; color: #94a3b8; display: block; margin-bottom: 2px; }
         .sens-result { font-size: 1rem; font-weight: 900; color: #10b981; }
 
         .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 15px 0 0 15px; transition: 0.5s; z-index: 2000; box-shadow: -10px 0 30px rgba(0,0,0,0.2); max-width: 90vw; }
@@ -67,14 +71,17 @@
 
         .stats-table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
         .stats-table th, .stats-table td { border: 1px solid #cbd5e1; height: 35px; text-align: center; font-size: 11px; }
+        .stats-table th { background: #f1f5f9; font-weight: 800; }
         .stats-table input { width: 90%; border: none; text-align: center; font-weight: bold; background: transparent; }
 
         .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; padding: 10px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; }
-        .footer-item strong { font-size: clamp(1rem, 3vw, 1.5rem); color: #60a5fa; display: block; }
-        .footer-item .desc { font-size: 9px; color: #cbd5e1; display: block; }
+        .footer-item:last-child { border-right: none; }
+        .footer-item span.label { font-size: 10px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 2px; }
+        .footer-item strong { font-size: clamp(1rem, 3vw, 1.5rem); color: #60a5fa; display: block; line-height: 1; margin-bottom: 4px; }
+        .footer-item .desc { font-size: 8px; color: #cbd5e1; display: block; }
 
-        .btn-sync { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; margin-top: 10px; }
+        .btn-sync { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
         .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 10px; }
         input.cell-edit, input.q-sub-input { width: 100%; border: none; text-align: right; font-weight: bold; font-size: 11px; background: transparent; padding: 2px; }
         input.cell-edit:focus, input.q-sub-input:focus { background: white; outline: 1px solid var(--primary); }
@@ -88,7 +95,7 @@
     <div class="drawer-handle" onclick="toggleDrawer('paste-drawer')">EXCEL貼り付け</div>
     <h3 style="margin:0; color:var(--primary); font-size:16px;">Excelデータ一括反映</h3>
     <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; margin-top:10px; font-size:11px;" placeholder="Excelの範囲をペースト"></textarea>
-    <button onclick="importFromPaste()" class="btn-sync">反映を実行</button>
+    <button onclick="importFromPaste()" class="btn-sync" style="margin-top:10px;">反映を実行</button>
 </div>
 
 <div class="drawer" id="stats-drawer">
@@ -96,11 +103,11 @@
     <h3 style="margin:0; color:var(--primary); font-size:16px;">資格教育：開催予定と実績</h3>
     <div style="max-height: 550px; overflow-y: auto; margin-top:10px;">
         <table class="stats-table">
-            <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定(回)</th><th style="border-right:3px solid #1e293b">実績(回)</th><th>人数予定(人)</th><th>実績(人)</th></tr></thead>
+            <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定(回)</th><th style="border-right:3px solid #1e293b">実績(回)</th><th>人数予定(人)</th><th>人数実績(人)</th></tr></thead>
             <tbody id="stats-body"></tbody>
         </table>
     </div>
-   <button onclick="saveStats()" class="btn-sync">統計をクラウド保存</button>
+    <button onclick="saveStats()" class="btn-sync" style="margin-top:10px;">統計をクラウド保存</button>
 </div>
 
 <div class="container">
@@ -124,7 +131,7 @@
             <div class="card" id="main-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <span style="font-size:12px; font-weight:bold;">勘定科目内訳 (全表示)</span>
-                    <button onclick="toggleEditMode()" style="font-size:10px; cursor:pointer;">編集モード切替</button>
+                    <button onclick="toggleEditMode()" style="font-size:10px; cursor:pointer; border-radius:4px; border:1px solid #ddd; padding:2px 8px;">編集モード切替</button>
                 </div>
                 <div style="max-height: 480px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
                     <table><tbody id="pl-body"></tbody></table>
@@ -148,7 +155,7 @@
                     利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:80px; text-align:right;"> 円増やすには<br>
                     <span id="seek-result" style="font-size:13px; color:var(--primary); font-weight:900;">計算中...</span>
                 </div>
-                <button class="btn-sync" onclick="syncToFirebase()">クラウド同期保存</button>
+                <button class="btn-sync" onclick="syncToFirebase()" style="margin-top:10px;">クラウド同期保存</button>
             </div>
         </section>
 
@@ -173,18 +180,18 @@
                 <div class="pvm-grid-box">
                     <div class="pvm-c pvm-p"><span>P (単価)</span><strong id="v-p">0</strong></div>
                     <div class="pvm-c pvm-v"><span>V (変動)</span><strong id="v-v" style="color:var(--danger)">0</strong></div>
-                    <div class="pvm-c"><span>M (利益)</span><strong id="v-m">0</strong></div>
+                    <div class="pvm-c"><span>M (単価利益)</span><strong id="v-m">0</strong></div>
                 </div>
                 <div style="font-size:35px; font-weight:900; color:#cbd5e1;">×</div>
-                <div class="q-box-large"><span id="q-sub-text">Q (人数)</span><strong id="v-q">0</strong></div>
-                <div style="font-size:35px; font-weight:900; color:#cbd5e1; flex:0.2">=</div>
+                <div class="q-box-large"><span id="q-sub-text">Q (人数)</span><strong id="v-q" style="text-align:center;">0</strong></div>
+                <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
                 <div style="flex:1.5; padding-left:10px;"><span>MQ合計</span><br><strong style="font-size:1.8rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
             <div class="sens-grid">
-                <div class="sens-card"><span class="sens-label">単価(P) 5%↑</span><strong class="sens-result" id="sens-p">¥0</strong></div>
-                <div class="sens-card"><span class="sens-label">数量(Q) 5%↑</span><strong class="sens-result" id="sens-q">¥0</strong></div>
-                <div class="sens-card"><span class="sens-label">変動(V) 5%↓</span><strong class="sens-result" id="sens-v">¥0</strong></div>
-                <div class="sens-card"><span class="sens-label">固定(F) 5%↓</span><strong class="sens-result" id="sens-f">¥0</strong></div>
+                <div class="sens-card"><span class="sens-label">単価(P) 5%↑なら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">数量(Q) 5%↑なら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">変動(V) 5%↓なら</span><strong class="sens-result" id="sens-v">¥0 UP</strong></div>
+                <div class="sens-card"><span class="sens-label">固定(F) 5%↓なら</span><strong class="sens-result" id="sens-f">¥0 UP</strong></div>
             </div>
         </section>
 
@@ -197,12 +204,11 @@
     <div class="footer-bar">
         <div class="footer-item"><span class="label">安全余裕率</span><strong id="idx-safety">0.0%</strong><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
         <div class="footer-item"><span class="label">BEP比率</span><strong id="idx-bep">0.0%</strong><span class="desc">損益トントンラインの割合</span></div>
-        <div class="footer-item"><span class="label">V vs MQ 比率</span><strong id="idx-vmq">0 : 0</strong><span class="desc">変動費と付加価値のバランス</span></div>
+        <div class="footer-item"><span class="label">V vs MQ 比率</span><strong id="idx-vmq">0 : 0</strong><span class="desc">費用構成バランス</span></div>
     </div>
 </div>
 
 <script>
-    // Firebase設定
     const firebaseConfig = { 
         apiKey: "AIzaSyAvK-_h5NZdJcyPDJgb-iddYdscYaUivto", 
         authDomain: "mq-accounting-221b3.firebaseapp.com", 
@@ -230,7 +236,6 @@
     let currentDept = '121', dbData = {}, charts = {}, editMode = false;
     Chart.register(ChartDataLabels);
 
-    // 初期化
     window.onload = async () => {
         setupSelectors();
         loadLastState();
@@ -263,41 +268,36 @@
 
     async function refreshData() {
         const snap = await db.collection("accounting").get();
-        snap.forEach(doc => dbData[doc.id] = doc.data().values || doc.data());
+        snap.forEach(doc => {
+            const d = doc.data();
+            dbData[doc.id] = d.values || d;
+        });
     }
 
-   function setupStatsTable() {
-    const months = [7,8,9,10,11,12,1,2,3,4,5,6];
-    const sb = document.getElementById('stats-body'); sb.innerHTML = '';
-    const y = document.getElementById('yearSel').value;
-    const stats = dbData[`stats-${y}`] || {};
-    months.forEach(m => {
-        const row = stats[m] || { yp:0, yr:0, np:0, nr:0 };
-        sb.innerHTML += `<tr id="stat-row-${m}">
-            <td>${m}月</td>
-            <td><input type="number" class="st-yp" value="${row.yp||0}"></td>
-            <td style="border-right:3px solid #1e293b"><input type="number" class="st-yr" value="${row.yr||0}"></td>
-            <td><input type="number" class="st-np" value="${row.np||0}"></td>
-            <td class="nj-cell" style="font-weight:900;">${row.nr||0}</td>
-        </tr>`;
-    });
-}
+    function setupStatsTable() {
+        const months = [7,8,9,10,11,12,1,2,3,4,5,6];
+        const sb = document.getElementById('stats-body'); sb.innerHTML = '';
+        const y = document.getElementById('yearSel').value;
+        const stats = dbData[`stats-${y}`] || {};
+        months.forEach(m => {
+            const row = stats[m] || { yp:0, yr:0, np:0, nr:0 };
+            sb.innerHTML += `<tr id="stat-row-${m}">
+                <td>${m}月</td>
+                <td><input type="number" class="st-yp" value="${row.yp||0}"></td>
+                <td style="border-right:3px solid #1e293b"><input type="number" class="st-yr" value="${row.yr||0}"></td>
+                <td><input type="number" class="st-np" value="${row.np||0}"></td>
+                <td class="nj-cell" style="font-weight:900; color:var(--primary);">${row.nr||0}</td>
+            </tr>`;
+        });
+    }
+
     function toggleDrawer(id) { document.getElementById(id).classList.toggle('open'); }
     function toggleEditMode() { editMode = !editMode; document.getElementById('main-card').classList.toggle('edit-active', editMode); calculate(); }
     function calculateOnly() { calculate(true); }
 
-    function changePeriod() {
-        saveLastState();
-        setupStatsTable();
-        calculate();
-    }
+    function changePeriod() { saveLastState(); setupStatsTable(); calculate(); }
 
-    function setDept(id, btn) {
-        currentDept = id;
-        saveLastState();
-        updateTabUI();
-        calculate();
-    }
+    function setDept(id, btn) { currentDept = id; saveLastState(); updateTabUI(); calculate(); }
 
     function updateTabUI() {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -306,27 +306,34 @@
         document.getElementById('q-panel').style.display = (currentDept === '122') ? 'block' : 'none';
     }
 
-   async function syncToFirebase() {
-    const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
-    const key = `${y}-${m}-${currentDept}`;
-    if(!dbData[key]) dbData[key] = {};
-    const data = dbData[key];
-    if(currentDept === '122') {
-        data.q_details = {
-            tamakake: parseInt(document.getElementById('q_tamakake').value)||0,
-            crane: parseInt(document.getElementById('q_crane').value)||0,
-            fork: parseInt(document.getElementById('q_fork').value)||0,
-            tailgate: parseInt(document.getElementById('q_tailgate').value)||0,
-            harness: parseInt(document.getElementById('q_harness').value)||0
-        };
-    } else {
-        data.q_allocation = parseInt(document.getElementById('q-val-manual').value)||1;
+    function importFromPaste() {
+        const text = document.getElementById('pasteArea').value;
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
+        text.split('\n').forEach(line => {
+            const match = masterAccounts.find(a => line.includes(a.name));
+            if (match) {
+                const nums = line.replace(/,/g, '').match(/-?\d+/g) || [];
+                if (nums.length >= 6) {
+                    const b = `${y}-${m}-`;
+                    ["121","122","Total"].forEach(d => { if(!dbData[b+d]) dbData[b+d]={}; });
+                    dbData[b+'121'][match.name+"-発生"] = parseInt(nums[nums.length-6]);
+                    dbData[b+'121'][match.name+"-累計"] = parseInt(nums[nums.length-5]);
+                    dbData[b+'122'][match.name+"-発生"] = parseInt(nums[nums.length-4]);
+                    dbData[b+'122'][match.name+"-累計"] = parseInt(nums[nums.length-3]);
+                    dbData[b+'Total'][match.name+"-発生"] = parseInt(nums[nums.length-2]);
+                    dbData[b+'Total'][match.name+"-累計"] = parseInt(nums[nums.length-1]);
+                }
+            }
+        });
+        document.getElementById('paste-drawer').classList.remove('open'); calculate();
     }
-    await db.collection("accounting").doc(key).set({values: data, updatedAt: firebase.firestore.FieldValue.serverTimestamp()});
-    alert("クラウド同期保存が完了しました！");
-}
+
+    async function syncToFirebase() {
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
+        const key = `${y}-${m}-${currentDept}`;
+        if(!dbData[key]) dbData[key] = {};
+        const data = dbData[key];
         
-        // Q詳細の取得
         if(currentDept === '122') {
             data.q_details = {
                 tamakake: parseInt(document.getElementById('q_tamakake').value)||0,
@@ -339,25 +346,26 @@
             data.q_allocation = parseInt(document.getElementById('q-val-manual').value)||1;
         }
 
-        await db.collection("accounting").doc(key).set(data);
+        await db.collection("accounting").doc(key).set({ values: data, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
         alert("保存完了！");
     }
 
-   async function saveStats() {
-    const y = document.getElementById('yearSel').value;
-    const stats = {};
-    [7,8,9,10,11,12,1,2,3,4,5,6].forEach(m => {
-        const row = document.getElementById(`stat-row-${m}`);
-        stats[m] = {
-            yp: parseInt(row.querySelector('.st-yp').value)||0,
-            yr: parseInt(row.querySelector('.st-yr').value)||0,
-            np: parseInt(row.querySelector('.st-np').value)||0,
-            nr: parseInt(row.querySelector('.nj-cell').innerText)||0
-        };
-    });
-    await db.collection("accounting").doc(`stats-${y}`).set(stats);
-    alert("開催予定と実績を保存しました");
-}
+    async function saveStats() {
+        const y = document.getElementById('yearSel').value;
+        const stats = {};
+        [7,8,9,10,11,12,1,2,3,4,5,6].forEach(m => {
+            const row = document.getElementById(`stat-row-${m}`);
+            stats[m] = {
+                yp: parseInt(row.querySelector('.st-yp').value)||0,
+                yr: parseInt(row.querySelector('.st-yr').value)||0,
+                np: parseInt(row.querySelector('.st-np').value)||0,
+                nr: parseInt(row.querySelector('.nj-cell').innerText)||0
+            };
+        });
+        await db.collection("accounting").doc(`stats-${y}`).set(stats);
+        dbData[`stats-${y}`] = stats;
+        alert("予定・実績を保存しました");
+    }
 
     function calculate(skipTableRender = false) {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value;
@@ -365,7 +373,6 @@
         if(!dbData[key]) dbData[key] = {};
         const data = dbData[key];
 
-        // UIへのQデータ反映（初回読み込み時）
         if(!skipTableRender) {
             if(currentDept === '122' && data.q_details) {
                 document.getElementById('q_tamakake').value = data.q_details.tamakake || 0;
@@ -373,7 +380,7 @@
                 document.getElementById('q_fork').value = data.q_details.fork || 0;
                 document.getElementById('q_tailgate').value = data.q_details.tailgate || 0;
                 document.getElementById('q_harness').value = data.q_details.harness || 0;
-            } else if(data.q_allocation) {
+            } else {
                 document.getElementById('q-val-manual').value = data.q_allocation || 1;
             }
         }
@@ -402,14 +409,17 @@
         if(currentDept === '122') {
             q = 0; document.querySelectorAll('.q-sub-input').forEach(i => q += parseInt(i.value) || 0);
             const nj = document.querySelector(`#stat-row-${m} .nj-cell`); if(nj) nj.innerText = q;
+            document.getElementById('q-label-text').innerText = "受講人数(Q)合計";
+            document.getElementById('q-sub-text').innerText = "Q (受講生数)";
         } else {
             q = parseInt(document.getElementById('q-val-manual').value) || 1;
+            document.getElementById('q-label-text').innerText = "配置人数(Q)入力";
+            document.getElementById('q-sub-text').innerText = "Q (配置人数)";
         }
         if(q <= 0) q = 1;
 
         const mq = pq-vq, p = pq/q, v = vq/q, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
         
-        // 逆算
         const targetAddG = parseInt(document.getElementById('seek-g').value) || 0;
         if (currentDept === '122') {
             const needAddQ = m_ > 0 ? Math.ceil(targetAddG / m_) : 0;
@@ -435,10 +445,10 @@
         document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
         
-        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString();
-        document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString();
-        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString();
-        document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString();
+        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString()+" UP";
+        document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString()+" UP";
+        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString()+" UP";
+        document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString()+" UP";
 
         updateCharts(pq, vq, f, profitG, q, m_);
     }
@@ -468,7 +478,7 @@
         if (currentDept === '122') {
             charts.pr = new Chart(ctx2, { type:'bar', data: { labels:years, datasets:[{label:'単価利益M', data:[16293,11958,12674,m], borderColor:'#ef4444', type:'line', yAxisID:'y1', order: 0}, {label:'受講者Q', data:[106,103,146,q], backgroundColor:'#bbf7d0', yAxisID:'y', order: 1}]}, options:{ scales:{y1:{position:'right', beginAtZero:true}}, plugins:{title:{display:true, text:'資格教育：Q(棒)とM(線)'}}, maintainAspectRatio:false } });
         } else {
-            charts.pr = new Chart(ctx2, { type:'line', data: { labels:years, datasets:[{label:'累計利益',data:gData,borderColor:'#10b981'}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'累計利益トレンド'}}} });
+            charts.pr = new Chart(ctx2, { type:'line', data: { labels:years, datasets:[{label:'累計利益トレンド',data:gData,borderColor:'#10b981'}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'年度累計利益推移'}}} });
         }
     }
 </script>
