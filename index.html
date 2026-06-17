@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MQ会計 ストラック表 - 株式会社コプロス 究極確定版</title>
+    <title>MQ会計 ストラック表 - 株式会社コプロス</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -25,7 +25,7 @@
 
         .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
         @media (max-width: 1600px) { .dashboard-grid { grid-template-columns: 400px 1fr; } }
-        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } header { flex-direction: column; } }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card.edit-active { background: var(--edit-bg); border: 2px solid #f59e0b; }
@@ -69,7 +69,6 @@
         .footer-item strong { font-size: 1.6rem; color: #60a5fa; display: block; }
         .footer-item .desc { font-size: 8px; color: #cbd5e1; display: block; }
 
-        /* 水色の入力エリア (資格教育用) */
         .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 15px; }
         .q-entry-box label { font-size: 11px; font-weight: 900; }
         input.q-sub-input { width: 80px; text-align: center; font-weight: 900; border: none; border-bottom: 2px solid #3b82f6; background: transparent; outline: none; }
@@ -129,7 +128,6 @@
                     <table><tbody id="pl-body"></tbody></table>
                 </div>
                 
-                <!-- 【復活】水色の資格教育用入力エリア -->
                 <div id="q-panel" class="q-entry-box" style="display:none;">
                     <div style="display:grid; grid-template-columns:1fr; gap:10px;">
                         <div style="display:flex; justify-content:space-between; align-items:center;"><label>玉掛</label><input type="number" id="q_tamakake" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
@@ -146,7 +144,7 @@
 
                 <div class="goal-seek-area">
                     <strong id="seek-title">目標達成への逆算</strong><br>
-                    利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:100px; text-align:right;"> 円増やすには<br>
+                    利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:100px; text-align:right; font-weight:bold;"> 円増やすには<br>
                     <span id="seek-result" style="font-size:15px; color:var(--primary); font-weight:900;">計算中...</span>
                 </div>
                 <button class="btn-sync" onclick="syncToFirebase()" style="margin-top:15px;">クラウド同期保存</button>
@@ -163,7 +161,6 @@
                 <div class="kpi-box"><span>MQ比率</span><strong id="id-ratio-top">0.0%</strong></div>
                 <div class="kpi-box"><span>損益分岐点売上</span><strong id="id-be-top">¥0</strong></div>
             </div>
-
             <div class="mq-table">
                 <div class="mq-c" style="grid-row:span 3; background:var(--mq-pq);"><span>売上 PQ</span><strong id="m-pq">0</strong></div>
                 <div class="mq-c" style="grid-column:span 2; background:var(--mq-vq);"><span>変動費 VQ</span><strong id="m-vq" style="color:var(--danger)">0</strong></div>
@@ -171,7 +168,6 @@
                 <div class="mq-c" style="background:var(--mq-f);"><span>固定費 F</span><strong id="m-f">0</strong></div>
                 <div class="mq-c" id="g-box"><span>利益 G</span><strong id="m-g">0</strong></div>
             </div>
-
             <div class="pvmq-sim-area">
                 <div class="pvm-grid-box">
                     <div class="pvm-c pvm-p"><span>P (単価)</span><strong id="v-p">0</strong></div>
@@ -183,7 +179,6 @@
                 <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
                 <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.2rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
-
             <div class="sens-grid">
                 <div class="sens-card"><span class="sens-label">単価(P) 5%↑なら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
                 <div class="sens-card"><span class="sens-label">数量(Q) 5%↑なら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
@@ -270,6 +265,23 @@
         document.getElementById('q-panel').style.display = (currentDept === '122') ? 'block' : 'none';
     }
 
+    function importFromPaste() {
+        const text = document.getElementById('pasteArea').value, y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
+        text.split('\n').forEach(line => {
+            const match = masterAccounts.find(a => line.includes(a.name));
+            if (match) {
+                const nums = line.replace(/,/g, '').match(/-?\d+/g) || [];
+                if (nums.length >= 6) {
+                    const b = `${y}-${m}-`; ["121","122","Total"].forEach(d => { if(!dbData[b+d]) dbData[b+d]={}; });
+                    dbData[b+'121'][match.name+"-発生"] = parseInt(nums[nums.length-6]); dbData[b+'121'][match.name+"-累計"] = parseInt(nums[nums.length-5]);
+                    dbData[b+'122'][match.name+"-発生"] = parseInt(nums[nums.length-4]); dbData[b+'122'][match.name+"-累計"] = parseInt(nums[nums.length-3]);
+                    dbData[b+'Total'][match.name+"-発生"] = parseInt(nums[nums.length-2]); dbData[b+'Total'][match.name+"-累計"] = parseInt(nums[nums.length-1]);
+                }
+            }
+        });
+        document.getElementById('paste-drawer').classList.remove('open'); calculate();
+    }
+
     async function syncToFirebase() {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, key = `${y}-${m}-${currentDept}`;
         if(!dbData[key]) dbData[key] = {}; const data = dbData[key];
@@ -289,10 +301,14 @@
     function calculate(skipTableRender = false) {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value, key = `${y}-${m}-${currentDept}`, data = dbData[key] || {};
         if(!skipTableRender) {
-            if(currentDept === '122' && data.q_details) {
-                document.getElementById('q_tamakake').value = data.q_details.tamakake || 0; document.getElementById('q_crane').value = data.q_details.crane || 0;
-                document.getElementById('q_fork').value = data.q_details.fork || 0; document.getElementById('q_tailgate').value = data.q_details.tailgate || 0; document.getElementById('q_harness').value = data.q_details.harness || 0;
-            } else if(data.q_allocation) { document.getElementById('q-val-manual').value = data.q_allocation || 1; }
+            // 月を切り替えた時のリセット処理
+            if(currentDept === '122') {
+                document.getElementById('q_tamakake').value = data.q_details ? data.q_details.tamakake : 0;
+                document.getElementById('q_crane').value = data.q_details ? data.q_details.crane : 0;
+                document.getElementById('q_fork').value = data.q_details ? data.q_details.fork : 0;
+                document.getElementById('q_tailgate').value = data.q_details ? data.q_details.tailgate : 0;
+                document.getElementById('q_harness').value = data.q_details ? data.q_details.harness : 0;
+            } else { document.getElementById('q-val-manual').value = data.q_allocation || 1; }
         }
         let pq = 0, vq = 0, f = 0; masterAccounts.forEach(acc => { if(acc.type === "集計") return; let val = data[acc.name + "-" + type] || 0; if(acc.type === "売上") pq += val; else if(acc.type === "固定") f += val; else vq += val; });
         const totalExp = vq + f, profitG = pq - totalExp;
@@ -317,8 +333,8 @@
         document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio-top').innerText = ratio.toFixed(1) + "%";
         document.getElementById('id-be-top').innerText = "¥" + be.toLocaleString(); document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%"; document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
-        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString(); document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString();
-        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString(); document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString();
+        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString()+" UP"; document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString()+" UP";
+        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString()+" UP"; document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString()+" UP";
         updateCharts(pq, vq, f, profitG, q, m_);
     }
 
