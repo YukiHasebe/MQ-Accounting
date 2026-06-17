@@ -23,10 +23,9 @@
         .controls { display: flex; gap: 10px; flex-wrap: wrap; }
         .controls select, .controls button { padding: 10px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 14px; font-weight: 900; color: var(--primary); cursor: pointer; background: #fff; }
 
-        /* ダッシュボードグリッド */
         .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
         @media (max-width: 1600px) { .dashboard-grid { grid-template-columns: 400px 1fr; } }
-        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } header { flex-direction: column; } }
 
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card.edit-active { background: var(--edit-bg); border: 2px solid #f59e0b; }
@@ -34,7 +33,6 @@
         .tab-btn { flex: 1; padding: 12px; border: none; background: #e5e7eb; cursor: pointer; font-weight: 800; border-radius: 8px; font-size: 12px; }
         .tab-btn.active { background: var(--primary); color: white; }
         
-        /* カードのデザイン：2段表示を徹底 */
         .summary-row, .kpi-row { display: flex; gap: 15px; width: 100%; margin-bottom: 15px; flex-wrap: wrap; }
         .summary-box, .kpi-box { background: white; border: 1px solid #cbd5e1; padding: 15px; border-radius: 15px; text-align: center; flex: 1; min-width: 140px; display: flex; flex-direction: column; justify-content: center; }
         .summary-box span, .kpi-box span { font-size: 11px; font-weight: 900; color: var(--gray); display: block; margin-bottom: 5px; }
@@ -43,47 +41,42 @@
         .kpi-box strong { font-size: 2.2rem; color: var(--primary); }
         .summary-box.alert { border: 3px solid var(--danger); background: #fff1f2; }
 
-        /* ストラック図 */
-        .mq-table { display: grid; grid-template-columns: 240px 140px 240px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; width: fit-content; margin: 0 auto; }
+        .mq-table { display: grid; grid-template-columns: 240px 140px 240px; grid-template-rows: repeat(3, 110px); border: 4px solid var(--border); background: white; margin: 0 auto; }
         .mq-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 10px; }
-        .mq-c strong { font-size: 1.6rem; font-weight: 900; white-space: nowrap; }
+        .mq-c strong { font-size: 1.6rem; font-weight: 900; }
 
-        /* PVMQシミュレーター */
-        .pvmq-sim-area { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 20px; border: 1px solid #cbd5e1; margin-top: 20px; box-sizing: border-box; width: 100%; justify-content: center; }
+        .pvmq-sim-area { display: flex; align-items: center; gap: 15px; padding: 20px; background: white; border-radius: 20px; border: 1px solid #cbd5e1; margin-top: 20px; justify-content: center; }
         .pvm-grid-box { display: grid; grid-template-columns: 160px 160px; grid-template-rows: 80px 80px; border: 3px solid var(--border); }
         .pvm-c { border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; align-items: center; background: white; padding: 5px; }
-        .pvm-c span { font-size: 11px; font-weight: bold; color: #64748b; }
         .pvm-c strong { font-size: 1.5rem; font-weight: 900; }
         .pvm-p { grid-row: span 2; }
         .pvm-v { background: var(--mq-vq) !important; }
         .q-box-large { border: 3px solid var(--border); width: 100px; height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #eff6ff; }
         .q-box-large strong { font-size: 2rem; font-weight: 900; }
 
-        /* 戦略シミュレーション */
         .sens-grid { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .sens-card { background: #1e293b; color: white; padding: 15px; border-radius: 12px; border-left: 5px solid #10b981; text-align: center; }
-        .sens-label { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 5px; }
         .sens-result { font-size: 1.3rem; font-weight: 900; color: #10b981; }
 
-        /* ドロワー（復活） */
         .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 20px 0 0 20px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 40px rgba(0,0,0,0.2); }
         .drawer.open { right: 0 !important; }
         .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 12px; font-weight: 900; }
         #stats-drawer { top: 220px; width: 750px; background: #f0f9ff; right: -770px; }
         #paste-drawer { top: 80px; width: 400px; right: -420px; }
 
-        /* フッター */
         .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; padding: 12px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; }
-        .footer-item span.label { font-size: 10px; color: #94a3b8; font-weight: bold; display: block; margin-bottom: 2px; }
-        .footer-item strong { font-size: 1.6rem; color: #60a5fa; display: block; line-height: 1; }
-        .footer-item .desc { font-size: 8px; color: #cbd5e1; display: block; margin-top: 3px; }
+        .footer-item strong { font-size: 1.6rem; color: #60a5fa; display: block; }
+        .footer-item .desc { font-size: 8px; color: #cbd5e1; display: block; }
 
-        /* 入力エリア */
+        /* 水色の入力エリア (資格教育用) */
+        .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 15px; }
+        .q-entry-box label { font-size: 11px; font-weight: 900; }
+        input.q-sub-input { width: 80px; text-align: center; font-weight: 900; border: none; border-bottom: 2px solid #3b82f6; background: transparent; outline: none; }
+
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         td { padding: 6px 8px; border-bottom: 1px solid #f1f5f9; }
-        input.cell-edit, input.q-sub-input { width: 100%; border: none; text-align: right; font-weight: bold; font-size: 12px; background: transparent; padding: 4px; outline: none; }
-        input.cell-edit:focus { background: white; outline: 2px solid var(--primary); border-radius: 4px; }
+        input.cell-edit { width: 100%; border: none; text-align: right; font-weight: bold; font-size: 12px; background: transparent; outline: none; }
         .btn-sync { background: var(--primary); color: white; border: none; padding: 18px; width: 100%; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 0 #172554; }
         .goal-seek-area { background: #f0fdf4; border: 2px dashed #10b981; padding: 15px; border-radius: 12px; margin-top: 15px; font-size: 12px; }
     </style>
@@ -93,15 +86,15 @@
 <div class="drawer" id="paste-drawer">
     <div class="drawer-handle" onclick="toggleDrawer('paste-drawer')">EXCEL貼り付け</div>
     <h3 style="margin:0; color:var(--primary);">Excelデータ反映</h3>
-    <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; margin-top:10px;" placeholder="Excelをペースト"></textarea>
-    <button onclick="importFromPaste()" class="btn-sync" style="margin-top:10px; font-size:14px;">反映実行</button>
+    <textarea id="pasteArea" style="width:100%; height:200px; border:1px solid #cbd5e1; margin-top:10px;"></textarea>
+    <button onclick="importFromPaste()" class="btn-sync" style="margin-top:10px; font-size:14px;">反映を実行</button>
 </div>
 
 <div class="drawer" id="stats-drawer">
     <div class="drawer-handle" id="stats-handle" onclick="toggleDrawer('stats-drawer')">予定・実績管理</div>
     <h3 style="margin:0; color:var(--primary);">資格教育：開催予定と実績</h3>
     <div style="max-height: 480px; overflow-y: auto; margin-top:10px;">
-        <table class="stats-table" style="width:100%; border-collapse:collapse; background:white;">
+        <table class="stats-table" style="width:100%; border-collapse:collapse; background:white; table-layout: fixed;">
             <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定(回)</th><th style="border-right:3px solid #1e293b">実績(回)</th><th>人数予定(人)</th><th>実績(人)</th></tr></thead>
             <tbody id="stats-body"></tbody>
         </table>
@@ -136,13 +129,14 @@
                     <table><tbody id="pl-body"></tbody></table>
                 </div>
                 
+                <!-- 【復活】水色の資格教育用入力エリア -->
                 <div id="q-panel" class="q-entry-box" style="display:none;">
-                    <div style="display:grid; grid-template-columns:1fr; gap:8px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">玉掛</label><input type="number" id="q_tamakake" class="q-sub-input" value="0" oninput="calculateOnly()" style="text-align:center; width:80px; border-bottom:1px solid #ddd;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">小型移動式クレーン</label><input type="number" id="q_crane" class="q-sub-input" value="0" oninput="calculateOnly()" style="text-align:center; width:80px; border-bottom:1px solid #ddd;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フォークリフト</label><input type="number" id="q_fork" class="q-sub-input" value="0" oninput="calculateOnly()" style="text-align:center; width:80px; border-bottom:1px solid #ddd;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">テールゲート</label><input type="number" id="q_tailgate" class="q-sub-input" value="0" oninput="calculateOnly()" style="text-align:center; width:80px; border-bottom:1px solid #ddd;"></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center;"><label style="font-size:10px; font-weight:bold;">フルハーネス</label><input type="number" id="q_harness" class="q-sub-input" value="0" oninput="calculateOnly()" style="text-align:center; width:80px; border-bottom:1px solid #ddd;"></div>
+                    <div style="display:grid; grid-template-columns:1fr; gap:10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label>玉掛</label><input type="number" id="q_tamakake" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label>小型移動式クレーン</label><input type="number" id="q_crane" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label>フォークリフト</label><input type="number" id="q_fork" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label>テールゲート</label><input type="number" id="q_tailgate" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;"><label>フルハーネス</label><input type="number" id="q_harness" class="q-sub-input" value="0" oninput="calculateOnly()"></div>
                     </div>
                 </div>
 
@@ -152,7 +146,7 @@
 
                 <div class="goal-seek-area">
                     <strong id="seek-title">目標達成への逆算</strong><br>
-                    利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:100px; text-align:right; font-weight:bold;"> 円増やすには<br>
+                    利益をあと <input type="number" id="seek-g" value="1000000" oninput="calculateOnly()" style="width:100px; text-align:right;"> 円増やすには<br>
                     <span id="seek-result" style="font-size:15px; color:var(--primary); font-weight:900;">計算中...</span>
                 </div>
                 <button class="btn-sync" onclick="syncToFirebase()" style="margin-top:15px;">クラウド同期保存</button>
@@ -160,7 +154,6 @@
         </section>
 
         <section style="display:flex; flex-direction:column; align-items:center;">
-            <!-- 上部サマリー：必ず2段、巨大数字 -->
             <div class="summary-row">
                 <div class="summary-box"><span>売上 PQ</span><strong id="card-pq">¥0</strong></div>
                 <div class="summary-box"><span>支出合計 (VQ+F)</span><strong id="card-exp" style="color:var(--danger)">¥0</strong></div>
@@ -171,7 +164,6 @@
                 <div class="kpi-box"><span>損益分岐点売上</span><strong id="id-be-top">¥0</strong></div>
             </div>
 
-            <!-- ストラック表 -->
             <div class="mq-table">
                 <div class="mq-c" style="grid-row:span 3; background:var(--mq-pq);"><span>売上 PQ</span><strong id="m-pq">0</strong></div>
                 <div class="mq-c" style="grid-column:span 2; background:var(--mq-vq);"><span>変動費 VQ</span><strong id="m-vq" style="color:var(--danger)">0</strong></div>
@@ -180,7 +172,6 @@
                 <div class="mq-c" id="g-box"><span>利益 G</span><strong id="m-g">0</strong></div>
             </div>
 
-            <!-- PVMQシミュレーター：巨大数字で復元 -->
             <div class="pvmq-sim-area">
                 <div class="pvm-grid-box">
                     <div class="pvm-c pvm-p"><span>P (単価)</span><strong id="v-p">0</strong></div>
@@ -193,7 +184,6 @@
                 <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.2rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
 
-            <!-- 戦略カード -->
             <div class="sens-grid">
                 <div class="sens-card"><span class="sens-label">単価(P) 5%↑なら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
                 <div class="sens-card"><span class="sens-label">数量(Q) 5%↑なら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
@@ -208,23 +198,15 @@
         </section>
     </div>
 
-    <!-- フッター：解説付き -->
     <div class="footer-bar">
-        <div class="footer-item"><span class="label">安全余裕率</span><strong id="idx-safety">0.0%</strong><span class="desc">あと何％売上が下がっても大丈夫か</span></div>
+        <div class="footer-item"><span class="label">安全余裕率</span><strong id="idx-safety">0.0%</strong><span class="desc">あと何％売下が下がっても大丈夫か</span></div>
         <div class="footer-item"><span class="label">BEP比率</span><strong id="idx-bep">0.0%</strong><span class="desc">損益トントンラインの割合</span></div>
         <div class="footer-item"><span class="label">V vs MQ 比率</span><strong id="idx-vmq">0 : 0</strong><span class="desc">費用構成バランス</span></div>
     </div>
 </div>
 
 <script>
-    const firebaseConfig = { 
-        apiKey: "AIzaSyAvK-_h5NZdJcyPDJgb-iddYdscYaUivto", 
-        authDomain: "mq-accounting-221b3.firebaseapp.com", 
-        projectId: "mq-accounting-221b3", 
-        storageBucket: "mq-accounting-221b3.appspot.com", 
-        messagingSenderId: "684182333946", 
-        appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" 
-    };
+    const firebaseConfig = { apiKey: "AIzaSyAvK-_h5NZdJcyPDJgb-iddYdscYaUivto", authDomain: "mq-accounting-221b3.firebaseapp.com", projectId: "mq-accounting-221b3", storageBucket: "mq-accounting-221b3.appspot.com", messagingSenderId: "684182333946", appId: "1:684182333946:web:b9406d2ee2ceb8382b11c43" };
     firebase.initializeApp(firebaseConfig); const db = firebase.firestore();
 
     const masterAccounts = [
@@ -244,14 +226,11 @@
     let currentDept = '121', dbData = {}, charts = {}, editMode = false;
     Chart.register(ChartDataLabels);
 
-    window.onload = async () => {
-        setupSelectors(); loadLastState(); await refreshData(); setupStatsTable(); calculate();
-    };
+    window.onload = async () => { setupSelectors(); loadLastState(); await refreshData(); setupStatsTable(); calculate(); };
 
     function setupSelectors() {
-        const ys = document.getElementById('yearSel');
+        const ys = document.getElementById('yearSel'), ms = document.getElementById('monthSel');
         [2022, 2023, 2024, 2025, 2026].forEach(y => ys.add(new Option(y + "年度", y)));
-        const ms = document.getElementById('monthSel');
         [7,8,9,10,11,12,1,2,3,4,5,6].forEach(m => ms.add(new Option(m + "月", m)));
     }
 
@@ -264,31 +243,18 @@
     }
 
     function saveLastState() {
-        localStorage.setItem('mq_dept', currentDept);
-        localStorage.setItem('mq_year', document.getElementById('yearSel').value);
-        localStorage.setItem('mq_month', document.getElementById('monthSel').value);
-        localStorage.setItem('mq_type', document.getElementById('calcType').value);
+        localStorage.setItem('mq_dept', currentDept); localStorage.setItem('mq_year', document.getElementById('yearSel').value);
+        localStorage.setItem('mq_month', document.getElementById('monthSel').value); localStorage.setItem('mq_type', document.getElementById('calcType').value);
     }
 
-    async function refreshData() {
-        const snap = await db.collection("accounting").get();
-        snap.forEach(doc => { const d = doc.data(); dbData[doc.id] = d.values || d; });
-    }
+    async function refreshData() { const snap = await db.collection("accounting").get(); snap.forEach(doc => { const d = doc.data(); dbData[doc.id] = d.values || d; }); }
 
     function setupStatsTable() {
-        const months = [7,8,9,10,11,12,1,2,3,4,5,6];
-        const sb = document.getElementById('stats-body'); sb.innerHTML = '';
-        const y = document.getElementById('yearSel').value;
-        const stats = dbData[`stats-${y}`] || {};
+        const months = [7,8,9,10,11,12,1,2,3,4,5,6], sb = document.getElementById('stats-body'), y = document.getElementById('yearSel').value, stats = dbData[`stats-${y}`] || {};
+        sb.innerHTML = '';
         months.forEach(m => {
             const row = stats[m] || { yp:0, yr:0, np:0, nr:0 };
-            sb.innerHTML += `<tr id="stat-row-${m}">
-                <td>${m}月</td>
-                <td><input type="number" class="st-yp" value="${row.yp||0}"></td>
-                <td style="border-right:3px solid #1e293b"><input type="number" class="st-yr" value="${row.yr||0}"></td>
-                <td><input type="number" class="st-np" value="${row.np||0}"></td>
-                <td class="nj-cell" style="font-weight:900; color:var(--primary);">${row.nr||0}</td>
-            </tr>`;
+            sb.innerHTML += `<tr id="stat-row-${m}"><td>${m}月</td><td><input type="number" class="st-yp" value="${row.yp||0}"></td><td style="border-right:3px solid #1e293b"><input type="number" class="st-yr" value="${row.yr||0}"></td><td><input type="number" class="st-np" value="${row.np||0}"></td><td class="nj-cell" style="font-weight:900; color:var(--primary);">${row.nr||0}</td></tr>`;
         });
     }
 
@@ -299,150 +265,72 @@
     function setDept(id, btn) { currentDept = id; saveLastState(); updateTabUI(); calculate(); }
 
     function updateTabUI() {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + currentDept).classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-' + currentDept).classList.add('active');
         document.getElementById('q-manual').style.display = (currentDept === '122') ? 'none' : 'block';
         document.getElementById('q-panel').style.display = (currentDept === '122') ? 'block' : 'none';
     }
 
     async function syncToFirebase() {
-        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value;
-        const key = `${y}-${m}-${currentDept}`;
-        if(!dbData[key]) dbData[key] = {};
-        const data = dbData[key];
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, key = `${y}-${m}-${currentDept}`;
+        if(!dbData[key]) dbData[key] = {}; const data = dbData[key];
         if(currentDept === '122') {
-            data.q_details = {
-                tamakake: parseInt(document.getElementById('q_tamakake').value)||0,
-                crane: parseInt(document.getElementById('q_crane').value)||0,
-                fork: parseInt(document.getElementById('q_fork').value)||0,
-                tailgate: parseInt(document.getElementById('q_tailgate').value)||0,
-                harness: parseInt(document.getElementById('q_harness').value)||0
-            };
-        } else {
-            data.q_allocation = parseInt(document.getElementById('q-val-manual').value)||1;
-        }
+            data.q_details = { tamakake: parseInt(document.getElementById('q_tamakake').value)||0, crane: parseInt(document.getElementById('q_crane').value)||0, fork: parseInt(document.getElementById('q_fork').value)||0, tailgate: parseInt(document.getElementById('q_tailgate').value)||0, harness: parseInt(document.getElementById('q_harness').value)||0 };
+        } else { data.q_allocation = parseInt(document.getElementById('q-val-manual').value)||1; }
         await db.collection("accounting").doc(key).set({ values: data, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
-        alert("保存完了！");
+        alert("クラウド同期保存が完了しました！");
     }
 
     async function saveStats() {
-        const y = document.getElementById('yearSel').value;
-        const stats = {};
-        [7,8,9,10,11,12,1,2,3,4,5,6].forEach(m => {
-            const row = document.getElementById(`stat-row-${m}`);
-            stats[m] = {
-                yp: parseInt(row.querySelector('.st-yp').value)||0,
-                yr: parseInt(row.querySelector('.st-yr').value)||0,
-                np: parseInt(row.querySelector('.st-np').value)||0,
-                nr: parseInt(row.querySelector('.nj-cell').innerText)||0
-            };
-        });
-        await db.collection("accounting").doc(`stats-${y}`).set(stats);
-        dbData[`stats-${y}`] = stats; alert("予定・実績を保存しました");
+        const y = document.getElementById('yearSel').value, stats = {};
+        [7,8,9,10,11,12,1,2,3,4,5,6].forEach(m => { const row = document.getElementById(`stat-row-${m}`); stats[m] = { yp: parseInt(row.querySelector('.st-yp').value)||0, yr: parseInt(row.querySelector('.st-yr').value)||0, np: parseInt(row.querySelector('.st-np').value)||0, nr: parseInt(row.querySelector('.nj-cell').innerText)||0 }; });
+        await db.collection("accounting").doc(`stats-${y}`).set(stats); dbData[`stats-${y}`] = stats; alert("予定・実績を保存しました");
     }
 
     function calculate(skipTableRender = false) {
-        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value;
-        const key = `${y}-${m}-${currentDept}`;
-        if(!dbData[key]) dbData[key] = {};
-        const data = dbData[key];
-
+        const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value, key = `${y}-${m}-${currentDept}`, data = dbData[key] || {};
         if(!skipTableRender) {
             if(currentDept === '122' && data.q_details) {
-                document.getElementById('q_tamakake').value = data.q_details.tamakake || 0;
-                document.getElementById('q_crane').value = data.q_details.crane || 0;
-                document.getElementById('q_fork').value = data.q_details.fork || 0;
-                document.getElementById('q_tailgate').value = data.q_details.tailgate || 0;
-                document.getElementById('q_harness').value = data.q_details.harness || 0;
-            } else if(data.q_allocation) {
-                document.getElementById('q-val-manual').value = data.q_allocation || 1;
-            }
+                document.getElementById('q_tamakake').value = data.q_details.tamakake || 0; document.getElementById('q_crane').value = data.q_details.crane || 0;
+                document.getElementById('q_fork').value = data.q_details.fork || 0; document.getElementById('q_tailgate').value = data.q_details.tailgate || 0; document.getElementById('q_harness').value = data.q_details.harness || 0;
+            } else if(data.q_allocation) { document.getElementById('q-val-manual').value = data.q_allocation || 1; }
         }
-
-        let pq = 0, vq = 0, f = 0;
-        masterAccounts.forEach(acc => {
-            if(acc.type === "集計") return;
-            let val = data[acc.name + "-" + type] || 0;
-            if(acc.type === "売上") pq += val; else if(acc.type === "固定") f += val; else vq += val;
-        });
-
+        let pq = 0, vq = 0, f = 0; masterAccounts.forEach(acc => { if(acc.type === "集計") return; let val = data[acc.name + "-" + type] || 0; if(acc.type === "売上") pq += val; else if(acc.type === "固定") f += val; else vq += val; });
         const totalExp = vq + f, profitG = pq - totalExp;
-        data[`**支出合計**-${type}`] = totalExp; data[`**部門損益**-${type}`] = profitG;
-
         if (!skipTableRender) {
             const plBody = document.querySelector('#pl-body'); plBody.innerHTML = '';
             masterAccounts.forEach(acc => {
-                let val = data[acc.name + "-" + type] || 0;
-                const isTotal = acc.type === "集計";
-                const tag = (acc.type === "売上") ? "tag-p" : (acc.type === "固定" ? "tag-f" : "tag-v");
+                let val = data[acc.name + "-" + type] || 0; const isTotal = acc.type === "集計", tag = (acc.type === "売上") ? "tag-p" : (acc.type === "固定" ? "tag-f" : "tag-v");
                 plBody.innerHTML += `<tr class="${isTotal?'row-total':''}"><td><span class="tag ${tag}">${acc.type[0]}</span>${acc.name}</td><td style="text-align:right;"><input type="text" class="cell-edit" value="${val.toLocaleString()}" ${isTotal?'readonly':''} onfocus="this.value=this.value.replace(/,/g,'')" onblur="updateVal('${acc.name}','${type}',this.value)"></td></tr>`;
             });
         }
-
         let q = 1; if(currentDept === '122') { q = 0; document.querySelectorAll('.q-sub-input').forEach(i => q += parseInt(i.value) || 0); const nj = document.querySelector(`#stat-row-${m} .nj-cell`); if(nj) nj.innerText = q; } else { q = parseInt(document.getElementById('q-val-manual').value) || 1; }
-        if(q <= 0) q = 1;
-
-        const mq = pq-vq, p = pq/q, v = vq/q, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
-        
+        if(q <= 0) q = 1; const mq = pq-vq, p = pq/q, v = vq/q, m_ = p-v, ratio = pq>0?(mq/pq)*100:0, be = ratio>0?Math.round(f/(ratio/100)):0;
         const targetAddG = parseInt(document.getElementById('seek-g').value) || 0;
-        if (currentDept === '122') {
-            const needAddQ = m_ > 0 ? Math.ceil(targetAddG / m_) : 0;
-            document.getElementById('seek-result').innerHTML = `あと <strong>${needAddQ.toLocaleString()}人</strong> の受講生が必要です`;
-        } else {
-            const needM_ = Math.ceil(targetAddG / q);
-            document.getElementById('seek-result').innerHTML = `1人あたりあと <strong>${needM_.toLocaleString()}円</strong> 稼ぐ必要があります`;
-        }
-
-        document.getElementById('card-pq').innerText = "¥"+pq.toLocaleString();
-        document.getElementById('card-exp').innerText = "¥"+totalExp.toLocaleString();
-        document.getElementById('card-g').innerText = "¥"+profitG.toLocaleString();
-        document.getElementById('box-g').className = profitG < 0 ? 'summary-box alert' : 'summary-box';
+        document.getElementById('seek-result').innerHTML = (currentDept === '122') ? `あと <strong>${(m_>0?Math.ceil(targetAddG/m_):0).toLocaleString()}人</strong> の受講生が必要です` : `1人あたりあと <strong>${Math.ceil(targetAddG/q).toLocaleString()}円</strong> 稼ぐ必要があります`;
+        document.getElementById('card-pq').innerText = "¥"+pq.toLocaleString(); document.getElementById('card-exp').innerText = "¥"+totalExp.toLocaleString();
+        document.getElementById('card-g').innerText = "¥"+profitG.toLocaleString(); document.getElementById('box-g').className = profitG < 0 ? 'summary-box alert' : 'summary-box';
         document.getElementById('m-pq').innerText = pq.toLocaleString(); document.getElementById('m-vq').innerText = vq.toLocaleString();
         document.getElementById('m-mq').innerText = mq.toLocaleString(); document.getElementById('m-f').innerText = f.toLocaleString();
         document.getElementById('m-g').innerText = profitG.toLocaleString(); document.getElementById('g-box').style.background = profitG>=0?'var(--mq-g)':'var(--mq-vq)';
         document.getElementById('v-p').innerText = Math.round(p).toLocaleString(); document.getElementById('v-v').innerText = Math.round(v).toLocaleString();
         document.getElementById('v-m').innerText = Math.round(m_).toLocaleString(); document.getElementById('v-q').innerText = q.toLocaleString();
-        document.getElementById('v-mq').innerText = mq.toLocaleString(); 
-        document.getElementById('id-ratio-top').innerText = ratio.toFixed(1) + "%";
-        document.getElementById('id-be-top').innerText = "¥" + be.toLocaleString();
-        document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
-        document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%";
-        document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
-        
-        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString()+" UP";
-        document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString()+" UP";
-        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString()+" UP";
-        document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString()+" UP";
-
+        document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio-top').innerText = ratio.toFixed(1) + "%";
+        document.getElementById('id-be-top').innerText = "¥" + be.toLocaleString(); document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
+        document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%"; document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
+        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString(); document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString();
+        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString(); document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString();
         updateCharts(pq, vq, f, profitG, q, m_);
     }
 
-    function updateVal(name, type, val) {
-        const key = `${document.getElementById('yearSel').value}-${document.getElementById('monthSel').value}-${currentDept}`;
-        if(!dbData[key]) dbData[key] = {}; dbData[key][name+"-"+type] = parseInt(val.replace(/,/g,'')) || 0; calculate(false);
-    }
+    function updateVal(name, type, val) { const key = `${document.getElementById('yearSel').value}-${document.getElementById('monthSel').value}-${currentDept}`; if(!dbData[key]) dbData[key] = {}; dbData[key][name+"-"+type] = parseInt(val.replace(/,/g,'')) || 0; calculate(false); }
 
     function updateCharts(pq, vq, f, g, q, m) {
-        const years = ['2022','2023','2024','2025'];
-        const curM = document.getElementById('monthSel').value;
-        const gData = [], fData = [], vData = [];
-        years.forEach(y => {
-            const targetM = (y === '2025') ? curM : '6';
-            const d = dbData[`${y}-${targetM}-${currentDept}`] || {};
-            gData.push(d["**部門損益**-累計"] || 0);
-            fData.push(masterAccounts.filter(a=>a.type==="固定").reduce((s,a)=>s+(d[a.name+"-累計"]||0), 0));
-            vData.push(masterAccounts.filter(a=>a.type==="変動").reduce((s,a)=>s+(d[a.name+"-累計"]||0), 0));
-        });
-        if(charts.st) charts.st.destroy();
-        charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: years, datasets: [{ label: '利益', data: gData, backgroundColor: '#10b981' }, { label: '固定費', data: fData, backgroundColor: '#94a3b8' }, { label: '変動費', data: vData, backgroundColor: '#3b82f6' }]}, options: { plugins: { title: { display: true, text: '年度別累計構造推移' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
-        
-        if(charts.pr) charts.pr.destroy();
-        const ctx2 = document.getElementById('chart2').getContext('2d');
-        if (currentDept === '122') {
-            charts.pr = new Chart(ctx2, { type:'bar', data: { labels:years, datasets:[{label:'単価利益M', data:[16293,11958,12674,m], borderColor:'#ef4444', type:'line', yAxisID:'y1', order: 0}, {label:'受講者Q', data:[106,103,146,q], backgroundColor:'#bbf7d0', yAxisID:'y', order: 1}]}, options:{ scales:{y1:{position:'right', beginAtZero:true}}, plugins:{title:{display:true, text:'資格教育：Q(棒)とM(線)'}}, maintainAspectRatio:false } });
-        } else {
-            charts.pr = new Chart(ctx2, { type:'line', data: { labels:years, datasets:[{label:'累計利益トレンド',data:gData,borderColor:'#10b981'}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'年度累計利益推移'}}} });
-        }
+        const years = ['2022','2023','2024','2025'], curM = document.getElementById('monthSel').value, gData = [], fData = [], vData = [];
+        years.forEach(y => { const targetM = (y === '2025') ? curM : '6', d = dbData[`${y}-${targetM}-${currentDept}`] || {}; gData.push(d["**部門損益**-累計"] || 0); fData.push(masterAccounts.filter(a=>a.type==="固定").reduce((s,a)=>s+(d[a.name+"-累計"]||0), 0)); vData.push(masterAccounts.filter(a=>a.type==="変動").reduce((s,a)=>s+(d[a.name+"-累計"]||0), 0)); });
+        if(charts.st) charts.st.destroy(); charts.st = new Chart(document.getElementById('stChart'), { type: 'bar', data: { labels: years, datasets: [{ label: '利益', data: gData, backgroundColor: '#10b981' }, { label: '固定費', data: fData, backgroundColor: '#94a3b8' }, { label: '変動費', data: vData, backgroundColor: '#3b82f6' }]}, options: { plugins: { title: { display: true, text: '年度別累計構造推移' } }, scales: { x: { stacked: true }, y: { stacked: true } }, maintainAspectRatio: false } });
+        if(charts.pr) charts.pr.destroy(); const ctx2 = document.getElementById('chart2').getContext('2d');
+        if (currentDept === '122') { charts.pr = new Chart(ctx2, { type:'bar', data: { labels:years, datasets:[{label:'単価利益M', data:[16293,11958,12674,m], borderColor:'#ef4444', type:'line', yAxisID:'y1', order: 0}, {label:'受講者Q', data:[106,103,146,q], backgroundColor:'#bbf7d0', yAxisID:'y', order: 1}]}, options:{ scales:{y1:{position:'right', beginAtZero:true}}, plugins:{title:{display:true, text:'資格教育：Q(棒)とM(線)'}}, maintainAspectRatio:false } }); }
+        else { charts.pr = new Chart(ctx2, { type:'line', data: { labels:years, datasets:[{label:'累計利益トレンド',data:gData,borderColor:'#10b981'}]}, options:{maintainAspectRatio:false, plugins:{title:{display:true,text:'年度累計利益推移'}}} }); }
     }
 </script>
 </body>
