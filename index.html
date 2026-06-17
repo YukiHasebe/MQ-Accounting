@@ -20,12 +20,11 @@
 
         header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 25px; border-radius: 12px; border-bottom: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 15px; }
         .header-title h1 { margin: 0; font-size: clamp(20px, 5vw, 26px); font-weight: 900; color: var(--primary); letter-spacing: 2px; }
-        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
         .controls select, .controls button { padding: 10px 15px; border-radius: 8px; border: 2px solid var(--primary); font-size: 14px; font-weight: 900; color: var(--primary); cursor: pointer; background: #fff; }
 
         .dashboard-grid { display: grid; grid-template-columns: 430px 1fr 450px; gap: 20px; align-items: start; }
         @media (max-width: 1600px) { .dashboard-grid { grid-template-columns: 400px 1fr; } }
-        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } header { flex-direction: column; } }
 
         .card { background: white; border-radius: 15px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .card.edit-active { background: var(--edit-bg); border: 2px solid #f59e0b; }
@@ -61,8 +60,12 @@
         .drawer { position: fixed; right: -820px; background: white; border: 3px solid var(--primary); padding: 25px; border-radius: 20px 0 0 20px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; box-shadow: -10px 0 40px rgba(0,0,0,0.2); }
         .drawer.open { right: 0 !important; }
         .drawer-handle { position: absolute; left: -45px; width: 45px; height: 110px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; cursor: pointer; border-radius: 12px 0 0 12px; font-size: 12px; font-weight: 900; }
-        #stats-drawer { top: 220px; width: 750px; background: #f0f9ff; right: -770px; }
+        #stats-drawer { top: 220px; width: 780px; background: #f0f9ff; right: -800px; }
         #paste-drawer { top: 80px; width: 400px; right: -420px; }
+
+        .stats-table { width: 100%; border-collapse: collapse; background: white; table-layout: fixed; }
+        .stats-table th, .stats-table td { border: 1px solid #cbd5e1; height: 45px; text-align: center; font-size: 12px; }
+        .stats-table input { width: 85%; border: 1px solid #ddd; border-radius: 4px; padding: 4px; text-align: center; font-weight: bold; background: #fff; }
 
         .footer-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; display: flex; padding: 12px 0; z-index: 500; border-top: 4px solid var(--success); }
         .footer-item { text-align: center; flex: 1; border-right: 1px solid #334155; }
@@ -70,7 +73,6 @@
         .footer-item .desc { font-size: 8px; color: #cbd5e1; display: block; }
 
         .q-entry-box { background: #eff6ff; padding: 15px; border-radius: 12px; border: 2px solid #bfdbfe; margin-top: 15px; }
-        .q-entry-box label { font-size: 11px; font-weight: 900; }
         input.q-sub-input { width: 80px; text-align: center; font-weight: 900; border: none; border-bottom: 2px solid #3b82f6; background: transparent; outline: none; }
 
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
@@ -91,10 +93,12 @@
 
 <div class="drawer" id="stats-drawer">
     <div class="drawer-handle" id="stats-handle" onclick="toggleDrawer('stats-drawer')">予定・実績管理</div>
-    <h3 style="margin:0; color:var(--primary);">資格教育：開催予定と実績</h3>
-    <div style="max-height: 480px; overflow-y: auto; margin-top:10px;">
-        <table class="stats-table" style="width:100%; border-collapse:collapse; background:white; table-layout: fixed;">
-            <thead><tr style="background:#f1f5f9;"><th>月</th><th>開催予定(回)</th><th style="border-right:3px solid #1e293b">実績(回)</th><th>人数予定(人)</th><th>実績(人)</th></tr></thead>
+    <h3 style="margin:0; color:var(--primary); padding-bottom:10px;">資格教育：開催予定と実績</h3>
+    <div style="max-height: 480px; overflow-y: auto;">
+        <table class="stats-table">
+            <thead style="position: sticky; top:0; z-index: 10; background:#f1f5f9;">
+                <tr><th>月</th><th>開催予定(回)</th><th style="border-right:3px solid #1e293b">実績(回)</th><th>人数予定(人)</th><th>実績(人)</th></tr>
+            </thead>
             <tbody id="stats-body"></tbody>
         </table>
     </div>
@@ -121,7 +125,7 @@
             </div>
             <div class="card" id="main-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <span style="font-size:12px; font-weight:bold;">勘定科目内訳 (全表示)</span>
+                    <span style="font-size:12px; font-weight:bold;">勘定科目内訳</span>
                     <button onclick="toggleEditMode()" style="font-size:10px; cursor:pointer;">編集切替</button>
                 </div>
                 <div style="max-height: 450px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
@@ -161,6 +165,7 @@
                 <div class="kpi-box"><span>MQ比率</span><strong id="id-ratio-top">0.0%</strong></div>
                 <div class="kpi-box"><span>損益分岐点売上</span><strong id="id-be-top">¥0</strong></div>
             </div>
+
             <div class="mq-table">
                 <div class="mq-c" style="grid-row:span 3; background:var(--mq-pq);"><span>売上 PQ</span><strong id="m-pq">0</strong></div>
                 <div class="mq-c" style="grid-column:span 2; background:var(--mq-vq);"><span>変動費 VQ</span><strong id="m-vq" style="color:var(--danger)">0</strong></div>
@@ -168,6 +173,7 @@
                 <div class="mq-c" style="background:var(--mq-f);"><span>固定費 F</span><strong id="m-f">0</strong></div>
                 <div class="mq-c" id="g-box"><span>利益 G</span><strong id="m-g">0</strong></div>
             </div>
+
             <div class="pvmq-sim-area">
                 <div class="pvm-grid-box">
                     <div class="pvm-c pvm-p"><span>P (単価)</span><strong id="v-p">0</strong></div>
@@ -179,6 +185,7 @@
                 <div style="font-size:35px; font-weight:900; color:#cbd5e1;">=</div>
                 <div style="padding-left:15px;"><span>MQ合計</span><br><strong style="font-size:2.2rem; color:var(--primary);" id="v-mq">0</strong></div>
             </div>
+
             <div class="sens-grid">
                 <div class="sens-card"><span class="sens-label">単価(P) 5%↑なら</span><strong class="sens-result" id="sens-p">¥0 UP</strong></div>
                 <div class="sens-card"><span class="sens-label">数量(Q) 5%↑なら</span><strong class="sens-result" id="sens-q">¥0 UP</strong></div>
@@ -301,14 +308,10 @@
     function calculate(skipTableRender = false) {
         const y = document.getElementById('yearSel').value, m = document.getElementById('monthSel').value, type = document.getElementById('calcType').value, key = `${y}-${m}-${currentDept}`, data = dbData[key] || {};
         if(!skipTableRender) {
-            // 月を切り替えた時のリセット処理
-            if(currentDept === '122') {
-                document.getElementById('q_tamakake').value = data.q_details ? data.q_details.tamakake : 0;
-                document.getElementById('q_crane').value = data.q_details ? data.q_details.crane : 0;
-                document.getElementById('q_fork').value = data.q_details ? data.q_details.fork : 0;
-                document.getElementById('q_tailgate').value = data.q_details ? data.q_details.tailgate : 0;
-                document.getElementById('q_harness').value = data.q_details ? data.q_details.harness : 0;
-            } else { document.getElementById('q-val-manual').value = data.q_allocation || 1; }
+            if(currentDept === '122' && data.q_details) {
+                document.getElementById('q_tamakake').value = data.q_details.tamakake || 0; document.getElementById('q_crane').value = data.q_details.crane || 0;
+                document.getElementById('q_fork').value = data.q_details.fork || 0; document.getElementById('q_tailgate').value = data.q_details.tailgate || 0; document.getElementById('q_harness').value = data.q_details.harness || 0;
+            } else if(data.q_allocation) { document.getElementById('q-val-manual').value = data.q_allocation || 1; }
         }
         let pq = 0, vq = 0, f = 0; masterAccounts.forEach(acc => { if(acc.type === "集計") return; let val = data[acc.name + "-" + type] || 0; if(acc.type === "売上") pq += val; else if(acc.type === "固定") f += val; else vq += val; });
         const totalExp = vq + f, profitG = pq - totalExp;
@@ -333,8 +336,8 @@
         document.getElementById('v-mq').innerText = mq.toLocaleString(); document.getElementById('id-ratio-top').innerText = ratio.toFixed(1) + "%";
         document.getElementById('id-be-top').innerText = "¥" + be.toLocaleString(); document.getElementById('idx-safety').innerText = pq>0 ? (((pq-be)/pq)*100).toFixed(1)+"%" : "0.0%";
         document.getElementById('idx-bep').innerText = pq>0 ? ((be/pq)*100).toFixed(1)+"%" : "0.0%"; document.getElementById('idx-vmq').innerText = `${Math.round(100-ratio)} : ${Math.round(ratio)}`;
-        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString()+" UP"; document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString()+" UP";
-        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString()+" UP"; document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString()+" UP";
+        document.getElementById('sens-p').innerText = "¥"+Math.round(pq*0.05).toLocaleString(); document.getElementById('sens-q').innerText = "¥"+Math.round(mq*0.05).toLocaleString();
+        document.getElementById('sens-v').innerText = "¥"+Math.round(vq*0.05).toLocaleString(); document.getElementById('sens-f').innerText = "¥"+Math.round(f*0.05).toLocaleString();
         updateCharts(pq, vq, f, profitG, q, m_);
     }
 
